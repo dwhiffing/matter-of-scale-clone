@@ -1,0 +1,70 @@
+// each key represents a different part of a property instance
+{
+  buildings: [
+    // propertyInstance 1
+    [
+      // building
+      {name, type, amount, baseCost, baseIncome, cost(), income(), unlocked()}
+    ]
+  ]
+  properties: [
+    // propertyInstance 1
+    {name, type, money, income, color, buildingCurrency, buildingCurrencyName, researchCurrency, researchCurrencyName}
+  ]
+  // responsible for managing interface and tick
+  interface: {multi, timerId}
+  
+  research: []
+}
+
+{
+  
+}
+
+constants: {
+  properties: [
+    {name: "hamlet", color: "maroon", currency: "deer", research: "venison", baseCost: 10, baseIncome: 1},
+    {name: "village", color: "silver", currency: "lamb", research: "wool", baseCost: 50, baseIncome: 2},
+    {name: "town", color: "red", currency: "brick", research: "marble", baseCost: 200, baseIncome: 5},
+    {name: "city", color: "gray", currency: "iron", research: "steel", baseCost: 1000, baseIncome: 10},
+    {name: "castle", color: "green", currency: "soldier", research: "captain", baseCost: 10000, baseIncome: 20},
+    {name: "county", color: "yellow", currency: "gold", research: "platinum", baseCost: 20000, baseIncome: 50},
+    {name: "duchy", color: "aqua", currency: "energy", research: "circuit", baseCost: 50000, baseIncome: 100},
+    {name: "archduchy", color: "black", currency: "ship", research: "plane", baseCost: 100000, baseIncome: 200},
+    {name: "kingdom", color: "navy", currency: "machine", research: "factory", baseCost: 200000, baseIncome: 500},
+    {name: "empire", color: "fuchsia", currency: "research", research: "idea", baseCost: 1000000, baseIncome: 1000},
+    {name: "planet", color: "blue", currency: "starship", research: "FTL Drive", baseCost: 1000000, baseIncome: 1000},
+    {name: "system", color: "purple", currency: "wormhole", research: "gateway", baseCost: 1000000, baseIncome: 1000},
+    {name: "quadrant", color: "olive", currency: "software", research: "AI", baseCost: 1000000, baseIncome: 1000},
+    {name: "galaxy", color: "green", currency: "portal", research: "archway", baseCost: 1000000, baseIncome: 1000},
+    {name: "universe", color: "teal", currency: "matter", research: "force", baseCost: 1000000, baseIncome: 1000},
+    {name: "multiverse", color: "black", currency: "existence", research: "transcendance", baseCost: 1000000, baseIncome: 1000}
+  ],
+  buildings: [
+    ['Bloodhound', 'Spearman', 'Archer', 'Tracker', 'Woodsman', 'Pathfinder', 'Scout', 'Trapper', 'Wellspring', 'River'],
+    ['Shepherd', 'Sheepdog', 'Fence-Maker', 'Wolf-hunter', 'Farmhand', 'Shearer', 'Carver', 'Smoker', 'Roaster', 'Breeder'],
+    ['Digger', 'River Guide', 'Bridge Builder', 'Baker', 'Heater', 'Shaper', 'Trailblazer', 'Mixer', 'Sculptor', 'Mason'],
+    ['Coal Miner', 'Cart Mover', 'Tracklayer', 'Foreman', 'Prospector', 'Blacksmith', 'Ironmonger', 'Smithy', 'Smelter', 'Ironworks'],
+    ['Recruiter', 'Weaponsmith', 'Armorsmith', 'Fletcher', 'Sergeant', 'Propagandist', 'Major', 'Logician', 'Major Major Major', 'General'],
+    ['Panner', 'Tool salesman', 'Money Changer', 'Trader', 'Goldforge', 'Goldsmith', 'Designer', 'Gem Cutter', 'Jeweler', 'Banker'],
+    ['Engineer', 'Coal Plant', 'Oil Plant', 'Wire Extruder', 'Powerline', 'Utility Worker', 'Solar Fields', 'Solar Tower', 'Nuclear Plant', 'Fusion Plant'],
+    ['Sailor', 'Shipwright', 'Sailor', 'Foreman', 'Navigator', 'Commandant', 'Admiral', 'Canal', 'Drydock', 'Wetdock'],
+    ['Worker', 'Repairman', 'Conveyor', 'Manager', 'Break Room', 'Machinist', 'Toolsmith', 'Robot', 'Automation', 'Air Conditioner'],
+    ['Intern', 'Undergraduate', 'Graduate', 'Postgraduate', 'Biologist', 'Chemist', 'Physicist', 'Mathematician', 'University', 'Research Grants'],
+    ['Astronaut', 'Astrophysicist', 'Launch Center', 'ROCKETS!!!', 'Space Elevator', 'Space Station', 'Mass Driver', 'Bot Swarm', 'Asteroids', 'Space Shipyard'],
+    ['Theorist', 'Deep Field Scanner', 'Gravity Observatory', 'Zero Point Drive', 'Hyperspanner', 'Sonic Screwdriver', 'Negative Energy', 'Exotic Matter', 'Space Cutter', 'Time Theory'],
+    ['Logician', 'Programmer', 'Mathematician', 'Compiler', 'COBOL', 'C', 'C++', 'Java', 'D', 'JavaScript'],
+    ['Field Jammer', 'Space Folder', 'Tear Sealer', 'Schism Guide', 'Crusher', 'Wayfinder', 'Quantum Tunnel', 'Matter Gate', 'Slipstream', 'Traveler'],
+    ['Lepton Builder', 'Quark Font', 'Neutrino Guide', 'Proton Decayer', 'State Binder', 'Force Splicer', 'Gravity Hole', 'Magrathea', 'Energy Shaper', 'Reality Splitter'],
+    ['Singularity', 'Netherman', 'Phaseshifter', 'Selfsplitter', 'Ascendant', 'Transcendant', 'Beyonder', 'Starchild', 'Planewalker', 'Timeshifter']
+  ],
+  research: [
+    {name: "discount", current: 0, increment: 0.05, max: 0.75, cost: 5, description: "NAME buildings cost NEXT (from CURRENT) less"},
+    {name: "startingCurrency", current: 0, increment: 200, max: 2000, cost: 5, description: "NAMEs start with NEXT (from CURRENT) CURRENCY"},
+    {name: "startingIncome", current: 0, increment: 5, max: 50, cost: 5, description: "NAMEs start with NEXT (from CURRENT) income"},
+    {name: "upgradeSpeed", current: 0, increment: 0.15, max: 2, cost: 5, description: "NAMEs generate upgrade points NEXT (from CURRENT) faster"},
+    {name: "extra", current: 1, increment: 1, max: 5, cost: 5, description: "You can have NEXT (from CURRENT) NAMEs active at once"},
+    {name: "autoComplete", current: -1, increment: 120, max: 120, cost: 5, description: "Auto Completes NAMEs after NEXT (from CURRENT) seconds"},
+    {name: "autoDiscount", current: -2.5, increment: 0.05, max: 0, cost: 5, description: "Auto-purchased buildings cost NEXT (from CURRENT)"}
+  ]
+}
