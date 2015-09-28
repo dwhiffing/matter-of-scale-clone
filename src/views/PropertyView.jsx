@@ -3,15 +3,12 @@ import {Link} from "react-router"
 import { buyBuilding } from "actions/InterfaceActions"
 import _ from "numeral"
 
-import InstanceActions from 'actions/InstanceActions'
 import BuildingsView from 'views/BuildingsView'
-import BuildingActions from 'actions/BuildingActions'
 
-import { mapStateKeysToProps, mapActionCreatorsToProps } from 'utils/reduxHelpers'
+import { mapStateKeysToProps } from 'utils/reduxHelpers'
 import { connect } from 'react-redux'
 
 const stateToConnect = mapStateKeysToProps(['ui', 'instances', 'buildings'])
-const actionsToConnect = mapActionCreatorsToProps([InstanceActions, BuildingActions])
 
 const PropertyHandler = React.createClass({
   render() {
@@ -86,4 +83,4 @@ const PropertyHandler = React.createClass({
   }
 })
 
-export default connect(stateToConnect, actionsToConnect)(PropertyHandler)
+export default connect(stateToConnect)(PropertyHandler)

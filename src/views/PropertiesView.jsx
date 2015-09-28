@@ -3,11 +3,9 @@ import { Link } from "react-router"
 import _ from "numeral"
 import Constants from 'utils/Constants'
 
-import InstanceActions from 'actions/InstanceActions'
 import BuildingsView from 'views/BuildingsView'
-import BuildingActions from 'actions/BuildingActions'
 
-import { mapStateKeysToProps, mapActionCreatorsToProps } from 'utils/reduxHelpers'
+import { mapStateKeysToProps } from 'utils/reduxHelpers'
 import { connect } from 'react-redux'
 
 const stateToConnect = mapStateKeysToProps(['properties', 'instances'])
