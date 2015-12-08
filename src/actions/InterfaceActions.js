@@ -3,7 +3,7 @@ import { actionCreatorFactory } from 'utils/reduxHelpers'
 /**
 * InterfaceActions
 * contains async actions for dispatching to multiple reducers based on meta logic
-* 
+*
 */
 
 export function startTicking() {
@@ -21,7 +21,7 @@ export function startTicking() {
 export function stopTicking() {
   return (dispatch, getState) => {
     const { timerId } = getState().ui
-    
+
     // clear the interval
     if (timerId !== null) {
       clearInterval(timerId)
@@ -33,9 +33,9 @@ export function stopTicking() {
 export function buyBuilding([instanceKey, buildingKey]) {
   return (dispatch, getState) => {
     const instance = getState().instances[instanceKey]
-    const building = getState().buildings[instanceKey][buildingKey]
+    const building = getState().buildings[buildingKey]
     let cost = building.cost()
-
+    
     if (cost <= instance.money) {
       dispatch({type: 'ADD_BUILDING', payload: {instanceKey, buildingKey}})
       dispatch({type: 'DEDUCT_CURRENCY', payload: {instanceKey, cost}})

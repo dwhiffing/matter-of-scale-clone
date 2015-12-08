@@ -1,86 +1,94 @@
 import React from "react"
-import {Link} from "react-router"
-import { buyBuilding } from "actions/InterfaceActions"
 import _ from "numeral"
+import Constants from 'utils/Constants'
 
-import BuildingsView from 'views/BuildingsView'
+import BuildingView from 'views/BuildingView'
 
 import { mapStateKeysToProps } from 'utils/reduxHelpers'
 import { connect } from 'react-redux'
 
-const stateToConnect = mapStateKeysToProps(['ui', 'instances', 'buildings'])
+const stateToConnect = mapStateKeysToProps(['properties', 'instances'])
 
-const PropertyHandler = React.createClass({
+const PropertyView = React.createClass({
   render() {
-    
-    let paramInstance = this.props.params.instance
-    let property = this.props.instances[paramInstance]
-    let buildings = this.props.buildings[paramInstance]
-
-    if (!property) return false
-    let {name, money, income, progress, currency, goal, upgradePoints} = property
-    let {multi} = this.props.ui
-    progress = progress || 0
-
-    let classes1 = "regular center m0 col col-4 py1"
-    let classes2 = "center col m0 py1"
-
+    let {instances, properties} = this.props
+    let propertiesArr = Object.keys(properties).map(i => properties[i]).concat([])
+    let instancesArr = Object.keys(instances).map(i => instances[i]).concat([])
     return (
-      <div className="properties-wrap center">
-        
-        <h1 className="center m1">
-          {name.toUpperCase()}
-        </h1>
+      <div className="properties-wrap">
+        {propertiesArr.map((obj, i) => {
+          if (!instancesArr[i] || instancesArr[i].length == 0) return false
 
-        {progress >= 100 &&
-          <button onClick={this.props.finishProperty}>Complete Level</button>
-        }
+          let {next, name, currencyName, researchName, research, color} = obj
+          next = next > 0 ? `(left: ${next})` : ""
 
-        <h3 className="regular px2 m1">
-          {progress > 100 ? 100 : _(progress).format("0,0")}%: get {goal} income
-        </h3>
-        
-        <h4 className={classes1}>
-          {_(money).format("0,0")} {currency}
-        </h4>
+          let income = 0, money = 0
+          instancesArr.forEach(i => {
+            income += i.income
+            money += i.money
+          })
 
-        <h4 className={classes1}>
-          {income} {currency}/sec
-        </h4>
+          return (
+            <div className="px1 mb2 h2 black" key={i}>
 
-        <h4 className={classes1}>
-          {_(upgradePoints).format("0,0.00")}U
-        </h4>
+              <span className="caps">
+                {name}s
+              </span>
 
-        <h5 className={`col-1 ${classes2}`}>
-          Up
-        </h5>
+              {i !== 0 &&
+                <span className="h6 gray">
+                  {next}
+                </span>
+              }
 
-        <h5 className={`col-4 ${classes2}`}>
-          Building
-        </h5>
-        
-        <h5 className={`col-1 ${classes2}`}>
-          #
-        </h5>
-        
-        <h5 className={`col-2 ${classes2}`}>
-          Cost ({currency})
-        </h5>
-        
-        <h5 className={`col-2 ${classes2}`}>
-          Income
-        </h5>
+              <div className="px1 h4">
 
-        <h5 className={`col-2 ${classes2}`}>
-          Total Income ({currency})
-        </h5>
+                <span className={`h4 ${color} shadow caps`}>
+                  {currencyName}:
+                </span>
 
-        <BuildingsView buildings={buildings} index={parseInt(paramInstance)} dispatch={this.props.dispatch} money={money} multi={multi} upgradePoints={upgradePoints} paramInstance={paramInstance} />
-        
+                <span className="h3"> {_(money).format("0,0")} </span>
+                <span className="h5"> ({income}/sec) </span>
+
+              </div>
+
+              <div className="px1 h4">
+
+                <span className={`h5 ${color} shadow caps`}>
+                  {researchName}:
+                </span>
+
+                <span className="h5">
+                  {research}
+                </span>
+
+                <a onClick={() => this.props.history.push(`/research/${i}`)} className="m1 h4 blue">
+                  RESEARCH
+                </a>
+
+              </div>
+
+              <div className='px2 h3'>
+                Instances:
+              </div>
+
+              <ul className="px3 clearfix">
+                {instancesArr.map((obj, i) => {
+                  return (
+                    <li key={i} className="bar-wrap col col-12 left-align">
+                      <a onClick={() => this.props.history.push(`/property/${i}`)}>
+                        {_(obj.money).format("0,0")} | {obj.income}/s
+                      </a>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          )
+        })}
       </div>
     )
   }
 })
 
-export default connect(stateToConnect)(PropertyHandler)
+export default connect(stateToConnect)(PropertyView)
