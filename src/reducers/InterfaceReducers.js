@@ -1,5 +1,4 @@
 import { reducerCreator } from 'utils/reduxHelpers'
-import u from 'updeep'
 
 const initialState = {
   multi: 1,
@@ -9,15 +8,11 @@ const initialState = {
 const InterfaceReducer = {
 
   toggleMultiplier(state, action) {
-    return u({
-      multi: state.multi < 100 ? state.multi * 10 : 1
-    }, state)
+    return Object.assign({}, state, {multi: state.multi < 100 ? state.multi * 10 : 1})
   },
 
   startTicking(state, action) {
-    return u({
-      timerId: action.payload.timerId
-    }, state)
+    return Object.assign({}, state, {timerId: action.payload.timerId})
   },
 
   clearSave(state, action) {

@@ -1,23 +1,11 @@
 export default {
-  properties: [
-    {name: "hamlet", color: "maroon", currency: "deer", research: "venison"},
-    {name: "village", color: "silver", currency: "lamb", research: "wool"},
-    {name: "town", color: "red", currency: "brick", research: "marble"},
-    {name: "city", color: "gray", currency: "iron", research: "steel"},
-    {name: "castle", color: "green", currency: "soldier", research: "captain"},
-    {name: "county", color: "yellow", currency: "gold", research: "platinum"},
-    {name: "duchy", color: "aqua", currency: "energy", research: "circuit"},
-    {name: "archduchy", color: "black", currency: "ship", research: "plane"},
-    {name: "kingdom", color: "navy", currency: "machine", research: "factory"},
-    {name: "empire", color: "fuchsia", currency: "research", research: "idea"},
-    {name: "planet", color: "blue", currency: "starship", research: "FTL Drive"},
-    {name: "system", color: "purple", currency: "wormhole", research: "gateway"},
-    {name: "quadrant", color: "olive", currency: "software", research: "AI"},
-    {name: "galaxy", color: "green", currency: "portal", research: "archway"},
-    {name: "universe", color: "teal", currency: "matter", research: "force"},
-    {name: "multiverse", color: "black", currency: "existence", research: "transcendance"}
-  ],
-  buildings: [
+  name: ["hamlet", "village", "town", "city", "castle", "county", "duchy", "archduchy", "kingdom", "empire", "planet", "system", "quadrant", "galaxy", "universe", "multiverse"],
+  color: ["maroon", "silver", "red", "gray", "green", "yellow", "aqua", "black", "navy", "fuchsia", "blue", "purple", "olive", "green", "teal", "black"],
+  currency: ["deer", "lamb", "brick", "iron", "soldier", "gold", "energy", "ship", "machine", "research", "starship", "wormhole", "software", "portal", "matter", "existence"],
+  researchNames: ["venison", "wool", "marble", "steel", "captain", "platinum", "circuit", "plane", "factory", "idea", "FTL Drive", "gateway", "AI", "archway", "force", "transcendence"],
+  baseCost: [10, 50, 200, 1000, 10000, 20000, 50000, 100000, 200000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000],
+  baseIncome: [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 1000, 1000, 1000, 1000, 1000, 1000 ],
+  building: [
     ['Bloodhound', 'Spearman', 'Archer', 'Tracker', 'Woodsman', 'Pathfinder', 'Scout', 'Trapper', 'Wellspring', 'River'],
     ['Shepherd', 'Sheepdog', 'Fence-Maker', 'Wolf-hunter', 'Farmhand', 'Shearer', 'Carver', 'Smoker', 'Roaster', 'Breeder'],
     ['Digger', 'River Guide', 'Bridge Builder', 'Baker', 'Heater', 'Shaper', 'Trailblazer', 'Mixer', 'Sculptor', 'Mason'],
@@ -43,23 +31,5 @@ export default {
     {name: "extra", current: 1, increment: 1, max: 5, cost: 5, description: "You can have NEXT (from CURRENT) NAMEs active at once"},
     {name: "autoComplete", current: -1, increment: 120, max: 120, cost: 5, description: "Auto Completes NAMEs after NEXT (from CURRENT) seconds"},
     {name: "autoDiscount", current: -2.5, increment: 0.05, max: 0, cost: 5, description: "Auto-purchased buildings cost NEXT (from CURRENT)"}
-  ],
-  baseData: [
-    [10, 1],
-    [50, 2],
-    [200, 5],
-    [1000, 10],
-    [10000, 20],
-    [20000, 50],
-    [50000, 100],
-    [100000, 200],
-    [200000, 500],
-    [1000000, 1000],
-    [1000000, 1000],
-    [1000000, 1000],
-    [1000000, 1000],
-    [1000000, 1000],
-    [1000000, 1000],
-    [1000000, 1000]
   ]
 }
