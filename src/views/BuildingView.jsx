@@ -1,46 +1,53 @@
 import React from "react"
-import { buyBuilding, buyUpgrade } from "actions/InterfaceActions"
-import _ from "numeral"
+import _ from "lodash"
 
 export default React.createClass({
   render() {
     if (!this.props.building) return false
-    let {building, index, multi, upgradePoints, paramInstance, money, dispatch} = this.props
-    let buttonClass = building.cost()*multi > money ? "bg-red" : "bg-green"
-    let upgradeClass = building.upgrades+1 > upgradePoints || building.count == 0 ? "bg-red" : "bg-green"
-    let upgradeNext = Math.pow(2, building.upgrades+1)
+
+    let {building, clickUpgrade, clickBuy, unlockBuilding} = this.props
+    let buttonClass = this.props.canAffordBuy ? "bg-green" : "bg-red"
+    let upgradeClass = this.props.canAffordUpgrade ? "bg-green" : "bg-red"
+    let showUpgradeButton = building.count > 0
+
+    let percent = building.autoBuyAmount / (building.research('autoCost') * building.cost())
+    if (percent > 0)console.log(percent)
+
+    if (!building.unlocked() && this.props.canAffordBuy) {
+      _.defer(() => unlockBuilding())
+    }
+
     return (
-      <div key={`building-${building.index}`} className={`bar-wrap col col-12 right-align ${building.unlocked ? "" : "muted"}`}>
-        {building.count > 0 &&
-          <button className={`regular rounded h5 white col col-1 ${upgradeClass}`}
-            onClick={() => dispatch(buyUpgrade([index, i]))}>
-
-            {building.upgrades+1}U x{upgradeNext}
-
+      <div
+      className={`bar-wrap col col-12 right-align ${building.unlocked() ? "" : "muted"}`}>
+        {showUpgradeButton &&
+          <button
+          className={`button py2 white col col-2 ${upgradeClass}`}
+          onClick={clickUpgrade}>
+            {building.upgrades()}U x{Math.pow(2, building.upgrades())}
           </button>
         }
 
-        <button type="button" className={`button py2 col col-4 ${buttonClass} ${building.count > 0 ? 'col' : 'col-5'}`}
-          onClick={() => dispatch(buyBuilding([paramInstance, building.index]))}>
-
-          {building.unlocked ? building.name : "????"}
+        <button
+        className={`button relative py2 col col-3 ${buttonClass} ${showUpgradeButton ? '' : 'col-5'}`}
+        type="button" onClick={clickBuy}>
+          {building.unlocked() ? building.name : "????"}
+          {building.autoBuyAmount > 0 &&
+            <div style={{background: 'rgba(1,1,0,0.2)', position: 'absolute', top: 0, bottom: 0, left: 0, right: 100 - percent * 100 + '%'}} />
+          }
         </button>
 
-        <h4 className="regular center m0 p1 col col-1">
+        <h4 className="m0 p1 regular center col col-1">
           {building.count}
         </h4>
 
-        <h4 className="regular m0 p1 col col-2">
-          {building.cost()
-             * multi}
+
+        <h4 className="m0 p1 regular col col-3">
+          {building.cost() * this.props.multi}
         </h4>
 
-        <h4 className="regular center m0 p1 col col-2">
+        <h4 className="m0 p1 regular center col col-3">
           {building.baseIncome}
-        </h4>
-
-        <h4 className="regular m0 p1 col col-2">
-          {building.income()}
         </h4>
       </div>
     )

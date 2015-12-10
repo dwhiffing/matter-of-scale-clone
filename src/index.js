@@ -18,9 +18,9 @@ ReactDOM.render(
   <Provider store={store}>
     <Router>
       <Route path="/" component={ApplicationHandler}>
-        <Route path="/properties" component={PropertyView} />
+        <Route path="/property" component={PropertyView} />
         <Route path="/research/:property" component={ResearchView} />
-        <Route path="/property/:instance" component={InstanceView} />
+        <Route path="/instance/:instance" component={InstanceView} />
       </Route>
     </Router>
   </Provider>,

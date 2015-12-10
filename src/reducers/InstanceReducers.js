@@ -9,52 +9,59 @@ const InstanceReducers = {
 
   createInstance(state, action) {
     const id = Object.keys(state).length
-    const buildings = store.getState().buildings
     const property = store.getState().properties[action.payload]
-    const buildingsArr = Object.keys(buildings).map(o => buildings[o]).slice(id, id + 10)
+    let buildings = function() {
+      const id = Object.keys(state).length
+      const buildings = store.getState().buildings
+      return Object.keys(buildings).map(o => buildings[o]).slice(id*10, id*10 + 9)
+    }
+    let nth = Object.keys(state).map(i => state[i]).filter(obj => obj.type == property.id).length + 1
     return Object.assign({}, state, {[id]: {
       id: id,
+      type: property.id,
       name: property.name,
       color: property.color,
-      currency: property.currency,
-      research: property.research,
-      buildings: buildingsArr,
+      currencyName: property.currencyName,
+      researchName: property.researchName,
+      autoComplete: 0,
+      complete: false,
+      goal: 10 * nth,
+      money: property.researchTypes.startMoney.current,
+      buildings: buildings,
       income() {
-        return this.buildings.reduce((o, i) => buildings[o].income() + o, 0)
+        const property = store.getState().properties[action.payload]
+        return buildings().reduce((a, b) => a + b.income(), 0) + property.researchTypes.passiveIncome.current
       },
-      upgradePoints: 10,
-      goal: 5000,
-      money: 100,
+      autoCompleteDuration() {
+        const property = store.getState().properties[action.payload]
+        return property.researchTypes.autoComplete.current
+      },
     }})
   },
 
-  deductCurrency(state, action) {
-    let {instanceKey, cost} = action.payload
+  updateInstance(state, action) {
+    const {instanceKey, update} = action.payload
     return u({
-      [instanceKey]: {
-        money: m => m - cost
-      }
-    }, state)
-  },
-
-  deductUpgradeCurrency(state, action) {
-    let {instanceKey, cost} = action.payload
-    return u({
-      [instanceKey]: {
-        upgradePoints: m => m - cost
-      }
+      [instanceKey]: update
     }, state)
   },
 
   doTick(state, action) {
-    let thing = u.map((obj) => {
-      return u({
+    // autobuy needs to subtract from income
+    return u.map((obj) => {
+      if (obj.complete) return obj
+      const progress = obj.income() / obj.goal * 100
+      let newObj = {}
+      if (progress >= 100) {
+        newObj = {
+          autoComplete: c => c + 0.5
+        }
+      }
+      return u(Object.assign(newObj, {
         money: m => m + obj.income(),
-        upgradePoints: m => m + 0.05,
-        progress: obj.income() / obj.goal * 100
-      }, obj)
+        progress: progress
+      }), obj)
     }, state)
-    return thing
   }
 
 }

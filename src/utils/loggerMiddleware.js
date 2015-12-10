@@ -43,12 +43,12 @@ export default ({getState}) => next => action => {
   const time = new Date();
 
   const formattedTime = `${time.getHours()}:${pad(time.getMinutes())}:${pad(time.getSeconds())}`;
-  
-  const message = `${action.type}:${action.payload}`;
+
+  const message = `${action.type}:${JSON.stringify(action.payload)}`;
 
   const payload = action.payload ? action.payload : action.meta
   const shouldLog = action.type && action.type !== "DO_TICK"
-  
+
   if (!shouldLog) return returnValue
 
   if (type === 'SUCCESS') {
