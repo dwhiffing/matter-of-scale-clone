@@ -1,29 +1,33 @@
 import React from "react"
-import { buyBuilding } from "actions/InterfaceActions"
-import _ from "numeral"
-
-import BuildingView from 'views/BuildingView'
-
+import numeral from "numeral"
+import _ from "lodash"
+import { buyBuilding, buyUpgrade } from "actions/BuildingActions"
+import { completeInstance, triggerInstance } from "actions/InstanceActions"
+import { updateProperty } from "actions/PropertyActions"
 import { mapStateKeysToProps } from 'utils/reduxHelpers'
 import { connect } from 'react-redux'
+import BuildingView from 'views/BuildingView'
 
-const stateToConnect = mapStateKeysToProps(['ui', 'instances', 'buildings'])
+const stateToConnect = mapStateKeysToProps(['ui', 'instances', 'buildings', 'properties'])
 
 const InstanceView = React.createClass({
   render() {
+    let instance = this.props.instances[this.props.params.instance]
+    if (!instance) return false
 
-    let paramInstance = this.props.params.instance
-    let property = this.props.instances[paramInstance]
-    let buildings = Object.keys(this.props.buildings).map(i => this.props.buildings[i]).slice(0, 9)
+    if (instance.complete) {
+      _.defer(() => this.props.history.push('/property'))
+    }
 
-    if (!property) return false
-    let {name, money, income, progress, currency, goal, upgradePoints} = property
+    let {dispatch} = this.props
+    let {id, type, name, money, income, currencyName, goal} = instance
+    let {upgrades} = this.props.properties[type]
     let {multi} = this.props.ui
-    progress = progress || 0
 
-    let classes1 = "regular center m0 col col-4 py1"
-    let classes2 = "center col m0 py1"
+    const progress = instance.progress || 0
+    const percent = progress > 100 ? 100 : numeral(progress).format("0,0")
 
+    let classes = "center col m0 py1"
     return (
       <div className="properties-wrap center">
 
@@ -32,65 +36,71 @@ const InstanceView = React.createClass({
         </h1>
 
         {progress >= 100 &&
-          <button onClick={this.props.finishProperty}>Complete Level</button>
+          <div>
+            <button onClick={() => {this.props.dispatch(completeInstance(id))}}>
+              Complete Level
+            </button>
+            <div>
+              {instance.autoComplete}/{instance.autoCompleteDuration()}
+            </div>
+          </div>
         }
 
+        <button onClick={() => {this.props.dispatch(triggerInstance(id))}}>
+          triggerInstance
+        </button>
+
         <h3 className="regular px2 m1">
-          {progress > 100 ? 100 : _(progress).format("0,0")}%: get {goal} income
+          {percent}%: get {goal} income
         </h3>
 
-        <h4 className={classes1}>
-          {_(money).format("0,0")} {currency}
+        <h4 className={`m0 py1 center col regular col-4`}>
+          {numeral(money).format("0,0")} {currencyName}
         </h4>
 
-        <h4 className={classes1}>
-          {income} {currency}/sec
+        <h4 className={`m0 py1 center col regular col-4`}>
+          {income()} {currencyName}/sec
         </h4>
 
-        <h4 className={classes1}>
-          {_(upgradePoints).format("0,0.00")}U
+        <h4 className={`m0 py1 center col regular col-4`}>
+          {numeral(upgrades).format("0,0.00")}U
         </h4>
 
-        <h5 className={`col-1 ${classes2}`}>
-          Up
-        </h5>
-
-        <h5 className={`col-4 ${classes2}`}>
+        <h5 className={`m0 py1 center col col-4`}>
           Building
         </h5>
 
-        <h5 className={`col-1 ${classes2}`}>
+        <h5 className={`m0 py1 center col col-2`}>
           #
         </h5>
 
-        <h5 className={`col-2 ${classes2}`}>
-          Cost ({currency})
+        <h5 className={`m0 py1 center col col-3`}>
+          Cost ({currencyName})
         </h5>
 
-        <h5 className={`col-2 ${classes2}`}>
+        <h5 className={`m0 py1 center col col-3`}>
           Income
         </h5>
 
-        <h5 className={`col-2 ${classes2}`}>
-          Total Income ({currency})
-        </h5>
-        <div className="clearfix">
-
-        {buildings.map((obj, index) => {
-          return (
-            <BuildingView key={index}
-              building={obj}
-              index={parseInt(paramInstance)}
-              dispatch={this.props.dispatch}
-              money={money}
-              multi={multi}
-              upgradePoints={upgradePoints}
-              paramInstance={paramInstance}>
-            </BuildingView>
-          )
-        })}
-
-      </div>
+        <div>
+          {instance.buildings().map((building, index) => {
+            const id = this.props.params.instance
+            const canAffordUpgrade = building.upgrades()+1 <= upgrades || building.count == 0
+            const canAffordBuy = (building.cost() * multi) <= money
+            return (
+              <BuildingView
+                key={index}
+                building={building}
+                multi={multi}
+                canAffordBuy={canAffordBuy}
+                canAffordUpgrade={canAffordUpgrade}
+                unlockBuilding={() => dispatch(updateProperty(instance.type, {unlockedBuildings: u => u.concat([index])}))}
+                clickUpgrade={() => dispatch(buyUpgrade([instance.type, index, building.upgrades()]))}
+                clickBuy={() => dispatch(buyBuilding([id, id*10 + index]))}>
+              </BuildingView>
+            )
+          })}
+        </div>
       </div>
     )
   }

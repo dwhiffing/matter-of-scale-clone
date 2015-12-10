@@ -1,88 +1,117 @@
 import React from "react"
-import _ from "numeral"
+import numeral from "numeral"
 import Constants from 'utils/Constants'
-
-import BuildingView from 'views/BuildingView'
-
+import { completeInstance } from "actions/InstanceActions"
 import { mapStateKeysToProps } from 'utils/reduxHelpers'
 import { connect } from 'react-redux'
 
-const stateToConnect = mapStateKeysToProps(['properties', 'instances'])
+const stateToConnect = mapStateKeysToProps(['properties'])
+const format = (string, format) => {
+  return numeral(string).format(format)
+}
 
 const PropertyView = React.createClass({
   render() {
-    let {instances, properties} = this.props
-    let propertiesArr = Object.keys(properties).map(i => properties[i]).concat([])
-    let instancesArr = Object.keys(instances).map(i => instances[i]).concat([])
+    let {properties} = this.props
+    let propertiesArr = Object.keys(properties).map(i => properties[i])
+    let last
+
     return (
       <div className="properties-wrap">
-        {propertiesArr.map((obj, i) => {
-          if (!instancesArr[i] || instancesArr[i].length == 0) return false
+        {propertiesArr.map((property, i) => {
+          let lastClone = Object.assign({}, last)
+          if (!lastClone || !property.unlocked) return false
+          last = property
 
-          let {next, name, currencyName, researchName, research, color} = obj
-          next = next > 0 ? `(left: ${next})` : ""
+          const instances = property.instances().filter(i => !i.complete)
+          const completed = property.instances().filter(i => i.complete)
 
-          let income = 0, money = 0
-          instancesArr.forEach(i => {
-            income += i.income
-            money += i.money
-          })
+          const clickResearch = () => {
+            this.props.history.push(`/research/${property.id}`)
+          }
 
           return (
-            <div className="px1 mb2 h2 black" key={i}>
+            <div className="px1 mb1 h2 black" key={i}>
 
               <span className="caps">
-                {name}s
+                {property.name}s
               </span>
 
               {i !== 0 &&
                 <span className="h6 gray">
-                  {next}
+                  {lastClone.next > 0 ? `(${lastClone.name}s til next ${property.name}: ${lastClone.next})` : ""}
                 </span>
               }
 
-              <div className="px1 h4">
+              {instances.length > 0 &&
+                <div>
+                  <div className="px1 h5 col col-6">
+                    <span className={`${property.color} caps`}>
+                      {property.currencyName}:
+                    </span>
+                    {format(property.money(), "0,0")} => {property.income()}/s
+                  </div>
 
-                <span className={`h4 ${color} shadow caps`}>
-                  {currencyName}:
-                </span>
+                  <div className="px1 h5 col col-6">
+                    <span className={`${property.color} caps`}>
+                      Upgrades:
+                    </span>
+                    {format(property.upgrades, "0,0.00")}
+                  </div>
 
-                <span className="h3"> {_(money).format("0,0")} </span>
-                <span className="h5"> ({income}/sec) </span>
+                  <div className="px1 h5 col col-6">
+                    <span className={`${property.color} caps`}>
+                      {property.researchName}:
+                    </span>
+                    {property.research}
+                  </div>
 
-              </div>
+                  <div className="px1 h5 col col-6">
+                    <a onClick={clickResearch} className="m1 h4 blue">
+                      research
+                    </a>
+                  </div>
 
-              <div className="px1 h4">
+                  <div className='px2 h3'>
+                    Instances: (completed: {completed.length})
+                  </div>
 
-                <span className={`h5 ${color} shadow caps`}>
-                  {researchName}:
-                </span>
+                  <ul className="px3 clearfix">
+                    {instances.map((obj, i) => {
 
-                <span className="h5">
-                  {research}
-                </span>
+                      const clickInstance = () => {
+                        this.props.history.push(`/instance/${obj.id}`)
+                      }
 
-                <a onClick={() => this.props.history.push(`/research/${i}`)} className="m1 h4 blue">
-                  RESEARCH
-                </a>
+                      const clickComplete = () => {
+                        this.props.dispatch(completeInstance(obj.id))
+                      }
 
-              </div>
+                      return (
+                        <li key={i} className="bar-wrap col col-12 left-align">
 
-              <div className='px2 h3'>
-                Instances:
-              </div>
+                          <a onClick={clickInstance}>
+                            {format(obj.money, "0,0")} => {obj.income()}/s
+                          </a>
 
-              <ul className="px3 clearfix">
-                {instancesArr.map((obj, i) => {
-                  return (
-                    <li key={i} className="bar-wrap col col-12 left-align">
-                      <a onClick={() => this.props.history.push(`/property/${i}`)}>
-                        {_(obj.money).format("0,0")} | {obj.income}/s
-                      </a>
-                    </li>
-                  )
-                })}
-              </ul>
+                          {obj.progress >= 100 &&
+                            <span className="px1">
+                              <span className="h5 px1">
+                                {obj.autoComplete}/{obj.autoCompleteDuration()}
+                              </span>
+                              <button onClick={clickComplete}>
+                                Complete Level
+                              </button>
+                            </span>
+                          }
+
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
+              }
+
             </div>
           )
         })}

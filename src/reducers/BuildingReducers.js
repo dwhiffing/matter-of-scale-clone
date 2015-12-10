@@ -10,49 +10,60 @@ const buildingReducers = {
   createInstance(state, action) {
     let type = action.payload
     let id = Object.keys(state).length
+    let property = () => store.getState().properties[type]
     let newThing = Constants.building[type].map((building, index) => {
       return {
-        id: id,
+        id: id + index,
         name: building,
         baseCost: Constants.baseCost[index],
         baseIncome: Constants.baseIncome[index],
-        unlocked: index <= 4,
         index: index,
-        upgrades: 1,
-        count: 0,
+        count: index === 0 ? 1 : 0,
+        autoBuyAmount: 0,
+        research: (key) => property().researchTypes[key].current,
+        unlocked: () => property().unlockedBuildings.indexOf(index) > -1,
+        costMultiplier: () => property().autoBuyCostMultiplier,
+        upgrades() {
+          return property().upgradedBuildings[index]
+        },
         cost() {
           let pow = 1.1 - 0.008 * index
-          let count_eff = Math.max(this.count, 0)
-          return Math.floor(this.baseCost * Math.pow(pow, count_eff))
+          let ignore = this.research('ignoreCost')
+          let discount = this.research('discount')
+          let count_eff = Math.max(this.count - ignore, 0)
+          return Math.floor(this.baseCost * Math.pow(pow, count_eff) * (1 - discount))
         },
         income() {
-          return this.baseIncome * this.count * this.upgrades
+          return this.baseIncome * this.count * this.upgrades()
         }
       }
-    }).reduce((o, v, i) => {o[i] = v; return o}, {})
+    }).reduce((o, v, i) => {o[i+id] = v; return o}, {})
     return Object.assign({}, state, newThing)
   },
 
-  addBuilding(state, action) {
-    const {buildingKey} = action.payload
+  updateBuilding(state, action) {
+    const {buildingKey, update} = action.payload
     return u({
-      [buildingKey]: {
-        count: m => m + 1
-      }
-    }, state)
-  },
-
-  upgradeBuilding(state, action) {
-    const id = action.payload
-    return u({
-      [buildingKey]: {
-        upgrades: m => m + 1
-      }
+      [buildingKey]: update
     }, state)
   },
 
   doTick(state, action) {
-    return state
+    return u.map(obj => {
+      let autoBuyCost = obj.cost() * obj.research('autoCost')
+      let amount = obj.research(`autoBuy-${obj.index}`) * autoBuyCost
+      let newObj = {
+        autoBuyAmount: a => a + amount
+      }
+      let count = 0
+      let property = store.getState().properties[obj.type]
+      if (obj.autoBuyAmount >= autoBuyCost) {
+        console.log(autoBuyCost)
+        newObj.autoBuyAmount = 0
+        newObj.count = c => c + 1
+      }
+      return u(newObj, obj)
+    }, state)
   }
 
 }
