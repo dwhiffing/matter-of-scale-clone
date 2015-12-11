@@ -85,7 +85,7 @@ const InstanceView = React.createClass({
         <div>
           {instance.buildings().map((building, index) => {
             const id = this.props.params.instance
-            const canAffordUpgrade = building.upgrades()+1 <= upgrades || building.count == 0
+            const canAffordUpgrade = building.upgrades() <= upgrades || building.count == 0
             const canAffordBuy = (building.cost() * multi) <= money
             return (
               <BuildingView

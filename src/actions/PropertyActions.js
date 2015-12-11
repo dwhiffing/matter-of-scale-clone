@@ -18,8 +18,8 @@ export const unlockBuilding = (id, index) => {
 
 export function buyResearch(propertyKey, researchKey) {
   return (dispatch, getState) => {
-
-    const research = getState().properties[propertyKey].researchTypes[researchKey]
+    const property = getState().properties[propertyKey]
+    const research = property.researchTypes[researchKey]
 
     // TODO: needs to deduct currency and only purchase if sufficient funds
 
@@ -33,9 +33,14 @@ export function buyResearch(propertyKey, researchKey) {
       }))
     }
 
-    // if they upgraded for extra hamlets, ensure they get created
     if (researchKey == 'extra') {
       dispatch(createMissingInstances(0))
+    }
+
+    if (researchKey == 'incrementCost') {
+      dispatch(updateProperty(propertyKey,{
+        toCompleteUntilNextInstance: property.research('incrementCost')
+      }))
     }
   }
 }

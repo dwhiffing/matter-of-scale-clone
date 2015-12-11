@@ -26,7 +26,7 @@ const PropertyReducers = {
 
   completeInstance(state, action) {
     const {id, type} = action.payload
-
+    const property = state[type]
     let update = {
       [type]: {
         toCompleteUntilNextInstance: sub(1),
@@ -35,10 +35,10 @@ const PropertyReducers = {
     }
 
     // add research currency and update next property unlock
-    if (state[type].toCompleteUntilNextInstance <= 1) {
+    if (property.toCompleteUntilNextInstance <= 1) {
       update = {
         [type]:  {
-          toCompleteUntilNextInstance: add(type + 2),
+          toCompleteUntilNextInstance: property.research('incrementCost'),
           researchMoney: add(1)
         },
         [type + 1]:  {

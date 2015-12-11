@@ -14,7 +14,7 @@ export default (property, state) => {
     autoComplete: 0,
     complete: false,
     goal: 10 * nth,
-    money: property.researchTypes.startMoney.current,
+    money: property.research("startMoney"),
     buildings() {
       const start = this.id*10
       const buildings = store.getState().buildings
@@ -24,12 +24,12 @@ export default (property, state) => {
       return store.getState().properties[this.type]
     },
     income() {
-      const passiveIncome = this.property().researchTypes.passiveIncome.current
+      const passiveIncome = this.property().research("passiveIncome")
       const buildingIncome = this.buildings().reduce((a, b) => a + b.income(), 0)
       return buildingIncome + passiveIncome
     },
     autoCompleteDuration() {
-      return this.property().researchTypes.autoComplete.current
+      return this.property().research("autoComplete")
     }
   }
 }
