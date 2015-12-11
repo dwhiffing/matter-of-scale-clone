@@ -1,3 +1,4 @@
+import { updateProperty } from 'actions/PropertyActions'
 import { updateInstance } from 'actions/InstanceActions'
 import { flashMessage } from 'actions/InterfaceActions'
 import { add, sub } from 'utils/helpers'

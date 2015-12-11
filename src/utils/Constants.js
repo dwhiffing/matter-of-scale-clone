@@ -25,6 +25,7 @@ export default {
     passiveIncome: {rank: 0, current: 0, increment: 5, max: 50, description: "NAMEs have NEXT (CURRENT) passive income"},
     upgradeRate: {rank: 0, current: 0, increment: 0.2, max: 2, description: "NAMEs generate upgrade points NEXT (CURRENT) faster"},
     autoComplete: {rank: 0, current: 60, increment: -5, min: 5, description: "Auto Completes NAMEs after NEXT (CURRENT) seconds"},
+    incrementCost: {rank: 0, current: 4, increment: -1, min: 1, description: "Finish NEXT (CURRENT) NAMEs before getting next"},
     autoCost: {rank: 0, current: 2.5, increment: -0.1, min: 1, description: "Lower AutoBuy cost multiplier to NEXT (CURRENT)"}
   },
   otherResearch: {

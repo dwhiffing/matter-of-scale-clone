@@ -42,7 +42,7 @@ export function createMissingInstances(propertyKey) {
     const prop = getState().properties[propertyKey]
     const instances = Object.values(getState().instances)
 
-    const amountNeeded = propertyKey == 0 ? prop.researchTypes.extra.current : prop.toBuild + prop.instances().length
+    const amountNeeded = propertyKey == 0 ? prop.research("extra") : prop.toBuild + prop.instances().length
     const incomplete = i => i.type == propertyKey && !i.complete
     const amountToBuild = amountNeeded - instances.filter(incomplete).length
 
@@ -52,7 +52,8 @@ export function createMissingInstances(propertyKey) {
 
 export function triggerInstance(instanceKey) {
   return (dispatch, getState) => {
-    const income = getState().instances[instanceKey].property().researchTypes.activeIncome.current
+    const instance = getState().instances[instanceKey]
+    const income = instance.property().research("activeIncome")
     dispatch(updateInstance(instanceKey, {
       money: add(income)
     }))
