@@ -1,46 +1,60 @@
-import { actionCreatorFactory } from 'utils/reduxHelpers'
+import { updateProperty } from 'actions/PropertyActions'
+import { add, sub } from 'utils/helpers'
 
-export function completeInstance(instanceKey) {
+export const createInstance = (id, count=1) => ({
+  type: 'CREATE_INSTANCE',
+  payload: {
+    type: id,
+    count: count
+  }
+})
+
+export const updateInstance = (id, update) => ({
+  type: 'UPDATE_INSTANCE',
+  payload: {
+    instanceKey: id,
+    update: update
+  }
+})
+
+export const completeInstance = (id, type) => ({
+  type: 'COMPLETE_INSTANCE',
+  payload: {
+    id: id,
+    type: type
+  }
+})
+
+export function markInstanceComplete(instanceKey) {
   return (dispatch, getState) => {
-    let instances = getState().instances
-    let instance
-    let propertyKey
-    let properties = Object.keys(getState().properties).map(o => getState().properties[o])
-    if (typeof instanceKey != 'undefined') {
-      instance = instances[instanceKey]
-      propertyKey = instance.type
+    let instance = getState().instances[instanceKey]
 
-      dispatch({type: 'UPDATE_INSTANCE', payload: {instanceKey: instanceKey, update: { complete: true, autoComplete: -1,money: 0 }}})
-      dispatch({type: 'UPDATE_PROPERTY', payload: {propertyKey, update: {next: n => n - 1}}})
-      properties = Object.keys(getState().properties).map(o => getState().properties[o])
+    dispatch(completeInstance(instanceKey, instance.type))
+    // should correct this to a single call (hamlets fail to create when finishing without this line)
+    dispatch(createMissingInstances(instance.type))
+    // this one is fine
+    dispatch(createMissingInstances(instance.type+1))
+  }
+}
 
-      if (properties.filter(i => i.next == 0).length > 0) {
-        dispatch({type: 'CREATE_INSTANCE', payload: propertyKey+1})
-        dispatch({type: 'UPDATE_PROPERTY', payload: {propertyKey: propertyKey, update: {next: n => 2+instance.type, research: r => r+1}}})
-        dispatch({type: 'UPDATE_PROPERTY', payload: {propertyKey: propertyKey+1, update: {unlocked: true}}})
-      } else {
-        dispatch({type: 'UPDATE_PROPERTY', payload: {propertyKey: propertyKey, update: {research: r => r+1}}})
-      }
-    }
+export function createMissingInstances(propertyKey) {
+  return (dispatch, getState) => {
+    const prop = getState().properties[propertyKey]
+    const instances = Object.values(getState().instances)
 
-    if ((instanceKey && propertyKey == 0) || !instanceKey) {
-      let instances = getState().instances
-      let hamlets = Object.keys(instances).map(i => instances[i]).filter(i => i.type == 0 && !i.complete)
-      let properties = Object.keys(getState().properties).map(o => getState().properties[o])
-      while (hamlets.length < properties[0].researchTypes.extra.current) {
-        dispatch({type: 'CREATE_INSTANCE', payload: 0})
-        instances = getState().instances
-        hamlets = Object.keys(instances).map(i => instances[i]).filter(i => i.type == 0 && !i.complete)
-      }
-    }
+    const amountNeeded = propertyKey == 0 ? prop.researchTypes.extra.current : prop.toBuild + prop.instances().length
+    const incomplete = i => i.type == propertyKey && !i.complete
+    const amountToBuild = amountNeeded - instances.filter(incomplete).length
+
+    dispatch(createInstance(propertyKey, amountToBuild))
   }
 }
 
 export function triggerInstance(instanceKey) {
   return (dispatch, getState) => {
-    const instances = getState().instances
-    const instance = instances[instanceKey]
-    const income = getState().properties[instance.type].researchTypes.activeIncome.current
-    dispatch({type: 'UPDATE_INSTANCE', payload: {instanceKey: instanceKey, update: { money: m => m + income }}})
+    const income = getState().instances[instanceKey].property().researchTypes.activeIncome.current
+    dispatch(updateInstance(instanceKey, {
+      money: add(income)
+    }))
   }
 }

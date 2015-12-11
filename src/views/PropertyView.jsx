@@ -1,8 +1,8 @@
 import React from "react"
 import numeral from "numeral"
 import Constants from 'utils/Constants'
-import { completeInstance } from "actions/InstanceActions"
-import { mapStateKeysToProps } from 'utils/reduxHelpers'
+import { markInstanceComplete } from "actions/InstanceActions"
+import { mapStateKeysToProps } from 'utils/helpers'
 import { connect } from 'react-redux'
 
 const stateToConnect = mapStateKeysToProps(['properties'])
@@ -13,7 +13,7 @@ const format = (string, format) => {
 const PropertyView = React.createClass({
   render() {
     let {properties} = this.props
-    let propertiesArr = Object.keys(properties).map(i => properties[i])
+    let propertiesArr = Object.values(properties)
     let last
 
     return (
@@ -30,6 +30,8 @@ const PropertyView = React.createClass({
             this.props.history.push(`/research/${property.id}`)
           }
 
+          let next = lastClone.toCompleteUntilNextInstance
+
           return (
             <div className="px1 mb1 h2 black" key={i}>
 
@@ -39,7 +41,7 @@ const PropertyView = React.createClass({
 
               {i !== 0 &&
                 <span className="h6 gray">
-                  {lastClone.next > 0 ? `(${lastClone.name}s til next ${property.name}: ${lastClone.next})` : ""}
+                  {next > 0 ? `(${lastClone.name}s til next ${property.name}: ${next})` : ""}
                 </span>
               }
 
@@ -84,7 +86,7 @@ const PropertyView = React.createClass({
                       }
 
                       const clickComplete = () => {
-                        this.props.dispatch(completeInstance(obj.id))
+                        this.props.dispatch(markInstanceComplete(obj.id))
                       }
 
                       return (
@@ -94,7 +96,7 @@ const PropertyView = React.createClass({
                             {format(obj.money, "0,0")} => {obj.income()}/s
                           </a>
 
-                          {obj.progress >= 100 &&
+                          {obj.progress >= 100 || true &&
                             <span className="px1">
                               <span className="h5 px1">
                                 {obj.autoComplete}/{obj.autoCompleteDuration()}

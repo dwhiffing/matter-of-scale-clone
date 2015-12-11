@@ -1,29 +1,47 @@
-import { actionCreatorFactory } from 'utils/reduxHelpers'
+import { updateInstance } from 'actions/InstanceActions'
+import { flashMessage } from 'actions/InterfaceActions'
+import { add, sub } from 'utils/helpers'
 
-export function buyBuilding([instanceKey, buildingKey]) {
+export const updateBuilding = (id, update) => ({
+  type: 'UPDATE_BUILDING',
+  payload: {
+    buildingKey: id,
+    update: update
+  }
+})
+
+export const buyBuilding = (buildingKey, instanceKey, cost) => ({
+  type: 'BUY_BUILDING',
+  payload: {
+    buildingKey,
+    instanceKey,
+    cost: cost
+  }
+})
+
+export function attemptBuildingPurchase([instanceKey, buildingKey, cost]) {
   return (dispatch, getState) => {
-    const instance = getState().instances[instanceKey]
-    const building = getState().buildings[buildingKey]
-    let cost = building.cost()
-
-    if (cost <= instance.money) {
-      dispatch({type: 'UPDATE_BUILDING', payload: {buildingKey, update: {count: c => c + 1}}})
-      dispatch({type: 'UPDATE_INSTANCE', payload: {instanceKey, update: {money: m => m - cost}}})
+    const money = getState().instances[instanceKey].money
+    if (cost <= money) {
+      dispatch(buyBuilding(buildingKey, instanceKey, cost))
     } else {
-      dispatch({type: 'FLASH_MESSAGE', payload: `PURCHASE_ERROR: ${cost - instance.money} short`})
+      dispatch(flashMessage(`PURCHASE_ERROR: ${cost - money} money short`))
     }
   }
 }
 
 export function buyUpgrade([propertyKey, buildingKey, cost]) {
   return (dispatch, getState) => {
-    const property = getState().properties[propertyKey]
-    const building = getState().buildings[buildingKey]
+    const upgrades = getState().properties[propertyKey].upgrades
+    const { count, index } = getState().buildings[buildingKey]
 
-    if (property.upgrades >= cost && building.count > 0) {
-      dispatch({type: 'UPDATE_PROPERTY', payload: {propertyKey, update: {upgrades: u => u - cost, upgradedBuildings: {[building.index]: t => t + 1}}}})
+    if (upgrades >= cost && count > 0) {
+      dispatch(updateProperty(propertyKey, {
+        upgrades: sub(cost),
+        upgradedBuildings: {[index]: add(1)}
+      }))
     } else {
-      dispatch({type: 'FLASH_MESSAGE', payload: `PURCHASE_ERROR: ${building.upgrades()+1 - property.upgrades} short`})
+      dispatch(flashMessage(`PURCHASE_ERROR: ${cost - upgrades} upgrade points short`))
     }
   }
 }

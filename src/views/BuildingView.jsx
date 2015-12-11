@@ -11,7 +11,6 @@ export default React.createClass({
     let showUpgradeButton = building.count > 0
 
     let percent = building.autoBuyAmount / (building.research('autoCost') * building.cost())
-    if (percent > 0)console.log(percent)
 
     if (!building.unlocked() && this.props.canAffordBuy) {
       _.defer(() => unlockBuilding())

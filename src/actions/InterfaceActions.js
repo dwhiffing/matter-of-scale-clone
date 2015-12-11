@@ -1,5 +1,3 @@
-import { actionCreatorFactory } from 'utils/reduxHelpers'
-
 export function startTicking() {
   return (dispatch, getState) => {
     const { timerId } = getState().ui
@@ -21,5 +19,14 @@ export function stopTicking() {
       clearInterval(timerId)
       dispatch({type: 'STOP_TICKING', payload: timerId})
     }
+  }
+}
+
+export function flashMessage(message) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: 'FLASH_MESSAGE',
+      payload: message
+    })
   }
 }
