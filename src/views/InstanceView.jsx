@@ -1,10 +1,10 @@
 import React from "react"
 import numeral from "numeral"
 import _ from "lodash"
-import { buyBuilding, buyUpgrade } from "actions/BuildingActions"
-import { completeInstance, triggerInstance } from "actions/InstanceActions"
-import { updateProperty } from "actions/PropertyActions"
-import { mapStateKeysToProps } from 'utils/reduxHelpers'
+import { attemptBuildingPurchase, buyUpgrade } from "actions/BuildingActions"
+import { markInstanceComplete, triggerInstance } from "actions/InstanceActions"
+import { unlockBuilding } from "actions/PropertyActions"
+import { mapStateKeysToProps } from 'utils/helpers'
 import { connect } from 'react-redux'
 import BuildingView from 'views/BuildingView'
 
@@ -37,7 +37,7 @@ const InstanceView = React.createClass({
 
         {progress >= 100 &&
           <div>
-            <button onClick={() => {this.props.dispatch(completeInstance(id))}}>
+            <button onClick={() => {this.props.dispatch(markInstanceComplete(id))}}>
               Complete Level
             </button>
             <div>
@@ -59,7 +59,7 @@ const InstanceView = React.createClass({
         </h4>
 
         <h4 className={`m0 py1 center col regular col-4`}>
-          {income()} {currencyName}/sec
+          {instance.income()} {currencyName}/sec
         </h4>
 
         <h4 className={`m0 py1 center col regular col-4`}>
@@ -94,9 +94,9 @@ const InstanceView = React.createClass({
                 multi={multi}
                 canAffordBuy={canAffordBuy}
                 canAffordUpgrade={canAffordUpgrade}
-                unlockBuilding={() => dispatch(updateProperty(instance.type, {unlockedBuildings: u => u.concat([index])}))}
+                unlockBuilding={() => {dispatch(unlockBuilding(instance.type, index))}}
                 clickUpgrade={() => dispatch(buyUpgrade([instance.type, index, building.upgrades()]))}
-                clickBuy={() => dispatch(buyBuilding([id, id*10 + index]))}>
+                clickBuy={() => dispatch(attemptBuildingPurchase([id, id*10 + index, building.cost()]))}>
               </BuildingView>
             )
           })}

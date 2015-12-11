@@ -1,7 +1,12 @@
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
-
 import logger from 'utils/loggerMiddleware'
-import thunk from 'utils/thunkMiddleware'
+
+const thunk = function thunkMiddleware({ dispatch, getState }) {
+  return next => action =>
+    typeof action === 'function' ?
+      action(dispatch, getState) :
+      next(action);
+}
 
 // combine all reducers into a single object
 import * as reducers from '../reducers'

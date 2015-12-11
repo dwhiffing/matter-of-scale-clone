@@ -1,23 +1,23 @@
 import React from "react"
 import { connect } from 'react-redux'
 import { startTicking, stopTicking } from "actions/InterfaceActions"
-import { completeInstance } from "actions/InstanceActions"
-import { mapStateKeysToProps } from 'utils/reduxHelpers'
+import { markInstanceComplete, createInstance } from "actions/InstanceActions"
+import { mapStateKeysToProps } from 'utils/helpers'
 
 const AppHandler = React.createClass({
 
   componentDidMount() {
     this.props.dispatch(startTicking())
-    this.props.dispatch({type: "CREATE_INSTANCE", payload: 0})
+    this.props.dispatch(createInstance(0))
   },
 
   componentDidUpdate() {
     // This shouldnt go here but I don't know where else to put it
     let instances = this.props.instances
-    instances = Object.keys(instances).map(i => instances[i])
+    instances = Object.values(instances)
     let autoCompletedInstances = instances.filter(i => i.autoComplete >= i.autoCompleteDuration())
     let dispatch = this.props.dispatch
-    autoCompletedInstances.forEach(i => dispatch(completeInstance(i.id)))
+    autoCompletedInstances.forEach(i => dispatch(markInstanceComplete(i.id)))
   },
 
   render() {

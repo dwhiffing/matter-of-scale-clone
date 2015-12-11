@@ -1,4 +1,4 @@
-import { reducerCreator } from 'utils/reduxHelpers'
+import { reducerCreator } from 'utils/helpers'
 
 const initialState = {
   multi: 1,

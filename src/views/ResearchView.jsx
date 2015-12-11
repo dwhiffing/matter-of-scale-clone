@@ -2,7 +2,7 @@ import React from "react"
 import numeral from "numeral"
 import Constants from 'utils/Constants'
 import { buyResearch } from "actions/PropertyActions"
-import { mapStateKeysToProps } from 'utils/reduxHelpers'
+import { mapStateKeysToProps } from 'utils/helpers'
 import { connect } from 'react-redux'
 
 const stateToConnect = mapStateKeysToProps(['properties'])

@@ -1,24 +1,41 @@
-import { completeInstance } from 'actions/InstanceActions'
+import { createMissingInstances } from 'actions/InstanceActions'
 
-export function updateProperty(propertyKey, updates) {
+export const updateProperty = (id, update) => ({
+  type: 'UPDATE_PROPERTY',
+  payload: {
+    propertyKey: id,
+    update: update
+  }
+})
+
+export const unlockBuilding = (id, index) => {
   return (dispatch, getState) => {
-    dispatch({type: 'UPDATE_PROPERTY', payload: {propertyKey, update: updates}})
+    dispatch(updateProperty(id, {
+      unlockedBuildings: u => u.concat([index])
+    }))
   }
 }
 
 export function buyResearch(propertyKey, researchKey) {
   return (dispatch, getState) => {
-    const properties = getState().properties
-    const property = properties[propertyKey]
-    const research = property.researchTypes[researchKey]
+
+    const research = getState().properties[propertyKey].researchTypes[researchKey]
+
+    // TODO: needs to deduct currency and only purchase if sufficient funds
+
+    // ensure that the research isn't maxed out
     if (research.current < research.max || research.current > research.min) {
-      dispatch({type: 'UPDATE_PROPERTY', payload: {propertyKey, update: {researchTypes:{[researchKey]: {
-        current: +(research.current+research.increment).toPrecision(3),
-        rank: r => r + 1
-      }}}}})
+      dispatch(updateProperty(propertyKey, {
+        researchTypes: { [researchKey]: {
+          current: +(research.current+research.increment).toPrecision(3),
+          rank: r => r + 1
+        }}
+      }))
     }
+
+    // if they upgraded for extra hamlets, ensure they get created
     if (researchKey == 'extra') {
-      dispatch(completeInstance())
+      dispatch(createMissingInstances(0))
     }
   }
 }
