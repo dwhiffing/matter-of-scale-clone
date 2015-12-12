@@ -18,18 +18,18 @@ export default {
     ['Singularity', 'Netherman', 'Phaseshifter', 'Selfsplitter', 'Ascendant', 'Transcendant', 'Beyonder', 'Starchild', 'Planewalker', 'Timeshifter']
   ],
   research: {
-    discount: {rank: 0, current: 0, increment: 0.05, max: 0.5, description: "NAME buildings cost NEXT (CURRENT) less"},
-    ignoreCost: {rank: 0, current: 0, increment: 1, max: 10, description: "NAME buildings ignore NEXT (CURRENT) buildings when computing cost"},
-    startMoney: {rank: 0, current: 0, increment: 200, max: 2000, description: "NAMEs start with NEXT (CURRENT) CURRENCY"},
-    activeIncome: {rank: 0, current: 1, increment: 1, max: 5, description: "NAMEs generate NEXT (CURRENT) when clicking"},
-    passiveIncome: {rank: 0, current: 0, increment: 5, max: 50, description: "NAMEs have NEXT (CURRENT) passive income"},
-    upgradeRate: {rank: 0, current: 0, increment: 0.2, max: 2, description: "NAMEs generate upgrade points NEXT (CURRENT) faster"},
-    autoComplete: {rank: 0, current: 60, increment: -5, min: 5, description: "Auto Completes NAMEs after NEXT (CURRENT) seconds"},
-    incrementCost: {rank: 0, current: 4, increment: -1, min: 1, description: "Finish NEXT (CURRENT) NAMEs before getting next"},
-    autoCost: {rank: 0, current: 2.5, increment: -0.1, min: 1, description: "Lower AutoBuy cost multiplier to NEXT (CURRENT)"}
+    discount: {rank: 0, current: 0, increment: 0.05, max: 0.5, description: (o) => `${o.n} buildings cost ${o.p} less`},
+    ignoreCost: {rank: 0, current: 0, increment: 1, max: 10, description: (o) => `${o.n} buildings ignore ${o.p} buildings when computing cost`},
+    startMoney: {rank: 0, current: 0, increment: 200, max: 2000, description: (o) => `${o.n}s start with ${o.p} ${o.c}`},
+    activeIncome: {rank: 0, current: 1, increment: 1, max: 5, description: (o) => `${o.n}s generate ${o.p} when clicking`},
+    passiveIncome: {rank: 0, current: 0, increment: 5, max: 50, description: (o) => `${o.n}s have ${o.p} passive income`},
+    upgradeRate: {rank: 0, current: 0, increment: 0.2, max: 2, description: (o) => `${o.n}s generate upgrade points ${o.p} faster`},
+    autoComplete: {rank: 0, current: 60, increment: -5, min: 5, description: (o) => `Auto Completes ${o.n}s after ${o.p} seconds`},
+    incrementCost: {rank: 0, current: 4, increment: -1, min: 1, description: (o) => `Finish ${o.p} ${o.n}s before getting next`},
+    autoCost: {rank: 0, current: 2.5, increment: -0.1, min: 1, description: (o) => `Lower AutoBuy cost multiplier to ${o.p}`}
   },
   otherResearch: {
-    extraHamlets: {rank: 0, current: 1, increment: 1, max: 5, description: "You can have NEXT (CURRENT) NAMEs active at once"},
-    autoBuy: {rank: 0, current: 0, increment: 0.05, max: 0.5,description: `AutoBuy NEXT of BUILDING per tick (CURRENT)`}
+    extraHamlets: {rank: 0, current: 1, increment: 1, max: 5, description: (o) => `You can have ${o.p} ${o.n}s active at once`},
+    autoBuy: {rank: 0, current: 0, increment: 0.05, max: 0.5,description: (o) => `AutoBuy ${o.p} of ${o.b} per tick`}
   }
 }

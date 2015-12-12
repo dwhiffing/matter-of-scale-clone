@@ -44,3 +44,9 @@ export function buyResearch(propertyKey, researchKey) {
     }
   }
 }
+
+
+export const PropertyThunks = {
+  unlockBuilding,
+  buyResearch
+}

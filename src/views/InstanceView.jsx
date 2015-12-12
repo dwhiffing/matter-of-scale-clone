@@ -1,33 +1,23 @@
 import React from "react"
-import numeral from "numeral"
 import _ from "lodash"
-import { attemptBuildingPurchase, buyUpgrade } from "actions/BuildingActions"
-import { markInstanceComplete, triggerInstance } from "actions/InstanceActions"
-import { unlockBuilding } from "actions/PropertyActions"
-import { mapStateKeysToProps } from 'utils/helpers'
-import { connect } from 'react-redux'
-import BuildingView from 'views/BuildingView'
+import { format as f } from "utils/helpers"
 
-const stateToConnect = mapStateKeysToProps(['ui', 'instances', 'buildings', 'properties'])
+import BuildingLineItem from 'views/components/BuildingLineItem'
 
-const InstanceView = React.createClass({
+export default React.createClass({
   render() {
-    let instance = this.props.instances[this.props.params.instance]
-    if (!instance) return false
+    const instance = this.props.instances[this.props.params.instance]
 
+    if (!instance) return false
     if (instance.complete) {
       _.defer(() => this.props.history.push('/property'))
     }
 
-    let {dispatch} = this.props
-    let {id, type, name, money, income, currencyName, goal} = instance
-    let {upgrades} = this.props.properties[type]
-    let {multi} = this.props.ui
+    const { doBuildingPurchase, doUpgradePurchase, unlockBuilding} = this.props
+    const { id, type, name, money, income, currencyName, goal } = instance
+    const availableUpgrades = this.props.properties[type].upgrades
+    const multi = this.props.ui.multi
 
-    const progress = instance.progress || 0
-    const percent = progress > 100 ? 100 : numeral(progress).format("0,0")
-
-    let classes = "center col m0 py1"
     return (
       <div className="properties-wrap center">
 
@@ -35,9 +25,9 @@ const InstanceView = React.createClass({
           {name.toUpperCase()}
         </h1>
 
-        {progress >= 100 &&
+        {instance.progress >= 100 && // if instance is complete
           <div>
-            <button onClick={() => {this.props.dispatch(markInstanceComplete(id))}}>
+            <button onClick={() => {this.props.markInstanceComplete(id)}}>
               Complete Level
             </button>
             <div>
@@ -46,58 +36,56 @@ const InstanceView = React.createClass({
           </div>
         }
 
-        <button onClick={() => {this.props.dispatch(triggerInstance(id))}}>
+        <button onClick={() => {this.props.triggerInstance(id)}}>
           triggerInstance
         </button>
 
         <h3 className="regular px2 m1">
-          {percent}%: get {goal} income
+          {f(instance.progress, "0,0")}%: get {goal} income
         </h3>
 
-        <h4 className={`m0 py1 center col regular col-4`}>
-          {numeral(money).format("0,0")} {currencyName}
+        <h4 className="center col m0 py1 regular col-4">
+          {f(money, "0,0")} {currencyName}
         </h4>
 
-        <h4 className={`m0 py1 center col regular col-4`}>
+        <h4 className="center col m0 py1 regular col-4">
           {instance.income()} {currencyName}/sec
         </h4>
 
-        <h4 className={`m0 py1 center col regular col-4`}>
-          {numeral(upgrades).format("0,0.00")}U
+        <h4 className="center col m0 py1 regular col-4">
+          {f(availableUpgrades, "0,0.00")}U
         </h4>
 
-        <h5 className={`m0 py1 center col col-4`}>
+        <h5 className="center col m0 py1 col-4">
           Building
         </h5>
 
-        <h5 className={`m0 py1 center col col-2`}>
+        <h5 className="center col m0 py1 col-2">
           #
         </h5>
 
-        <h5 className={`m0 py1 center col col-3`}>
+        <h5 className="center col m0 py1 col-3">
           Cost ({currencyName})
         </h5>
 
-        <h5 className={`m0 py1 center col col-3`}>
+        <h5 className="center col m0 py1 col-3">
           Income
         </h5>
 
         <div>
           {instance.buildings().map((building, index) => {
-            const id = this.props.params.instance
-            const canAffordUpgrade = building.upgrades() <= upgrades || building.count == 0
-            const canAffordBuy = (building.cost() * multi) <= money
             return (
-              <BuildingView
-                key={index}
+              <BuildingLineItem key={index}
                 building={building}
+                instance={instance}
+                index={index}
+                type={type}
                 multi={multi}
-                canAffordBuy={canAffordBuy}
-                canAffordUpgrade={canAffordUpgrade}
-                unlockBuilding={() => {dispatch(unlockBuilding(instance.type, index))}}
-                clickUpgrade={() => dispatch(buyUpgrade([instance.type, index, building.upgrades()]))}
-                clickBuy={() => dispatch(attemptBuildingPurchase([id, id*10 + index, building.cost()]))}>
-              </BuildingView>
+                availableUpgrades={availableUpgrades}
+                doUpgradePurchase={doUpgradePurchase}
+                doBuildingPurchase={doBuildingPurchase}
+                unlockBuilding={unlockBuilding}>
+              </BuildingLineItem>
             )
           })}
         </div>
@@ -105,5 +93,3 @@ const InstanceView = React.createClass({
     )
   }
 })
-
-export default connect(stateToConnect)(InstanceView)

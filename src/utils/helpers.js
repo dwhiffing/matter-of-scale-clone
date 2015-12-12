@@ -1,6 +1,7 @@
 import { createAction, handleActions } from 'redux-actions'
 import store from 'utils/reduxStore'
 import _ from 'lodash'
+import numeral from 'numeral'
 import updeep from 'updeep'
 
 export const add = (i=1) => n => n + i
@@ -23,6 +24,15 @@ export const constantize = (string) => {
           .replace(/\W+/g, '_')
           .replace(/([a-z\d])([A-Z])/g, '$1_$2')
           .toUpperCase()
+}
+
+export const format = (string, format) => {
+  return numeral(string).format(format)
+}
+
+export const percentify = (n) => {
+  if (n % 1 === 0) return n
+  return numeral(n*100).format('0') + '%'
 }
 
 /**

@@ -27,26 +27,24 @@ export const completeInstance = (id, type) => ({
 
 export function markInstanceComplete(instanceKey) {
   return (dispatch, getState) => {
-    let instance = getState().instances[instanceKey]
+    const type = getState().instances[instanceKey].type
 
-    dispatch(completeInstance(instanceKey, instance.type))
-    // should correct this to a single call (hamlets fail to create when finishing without this line)
-    dispatch(createMissingInstances(instance.type))
-    // this one is fine
-    dispatch(createMissingInstances(instance.type+1))
+    dispatch(completeInstance(instanceKey, type))
+    dispatch(createMissingInstances(type+1))
+
+    if (type == 0) {
+      dispatch(createMissingInstances(0))
+    }
   }
 }
 
-export function createMissingInstances(propertyKey) {
+export function createMissingInstances(key) {
   return (dispatch, getState) => {
-    const prop = getState().properties[propertyKey]
-    const instances = Object.values(getState().instances)
+    const prop = getState().properties[key]
+    const count = prop.instances().length
+    const missing = key == 0 ? prop.research("extra") - count : prop.toBuild
 
-    const amountNeeded = propertyKey == 0 ? prop.research("extra") : prop.toBuild + prop.instances().length
-    const incomplete = i => i.type == propertyKey && !i.complete
-    const amountToBuild = amountNeeded - instances.filter(incomplete).length
-
-    dispatch(createInstance(propertyKey, amountToBuild))
+    dispatch(createInstance(key, missing))
   }
 }
 
@@ -58,4 +56,11 @@ export function triggerInstance(instanceKey) {
       money: add(income)
     }))
   }
+}
+
+
+export const InstanceThunks = {
+  createInstance,
+  markInstanceComplete,
+  triggerInstance
 }

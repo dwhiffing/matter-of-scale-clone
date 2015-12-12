@@ -24,6 +24,7 @@
     "test": "env NODE_PATH=$NODE_PATH:$PWD/src mocha --require ./test/index.js --compilers js:babel/register  ./test/**/*Test.js"
   },
   "dependencies": {
+    "classnames": "^2.2.1",
     "lodash": "^3.10.1",
     "numeral": "^1.5.3",
     "react": "^0.14.0-rc1",

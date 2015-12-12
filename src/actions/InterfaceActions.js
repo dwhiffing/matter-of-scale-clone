@@ -1,3 +1,14 @@
+export const clearSave = () => {
+  return (dispatch) => {
+    dispatch({type: "CLEAR_SAVE"})
+  }
+}
+export const toggleMuliplier = () => {
+  return (dispatch) => {
+    dispatch({type: "TOGGLE_MULTIPLIER"})
+  }
+}
+
 export function startTicking() {
   return (dispatch, getState) => {
     const { timerId } = getState().ui
@@ -29,4 +40,11 @@ export function flashMessage(message) {
       payload: message
     })
   }
+}
+
+export const InterfaceThunks = {
+  stopTicking,
+  startTicking,
+  toggleMuliplier,
+  clearSave
 }

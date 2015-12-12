@@ -4,7 +4,7 @@ import ReactDOM from "react-dom"
 import React from "react"
 import store from 'utils/reduxStore'
 
-import ApplicationHandler from "views/ApplicationHandler"
+import ApplicationView from "views/ApplicationView"
 import PropertyView from "views/PropertyView"
 import InstanceView from "views/InstanceView"
 import ResearchView from "views/ResearchView"
@@ -17,7 +17,7 @@ import "index.css"
 ReactDOM.render(
   <Provider store={store}>
     <Router>
-      <Route path="/" component={ApplicationHandler}>
+      <Route path="/" component={ApplicationView}>
         <Route path="/property" component={PropertyView} />
         <Route path="/research/:property" component={ResearchView} />
         <Route path="/instance/:instance" component={InstanceView} />
