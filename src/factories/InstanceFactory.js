@@ -13,6 +13,7 @@ export default (property, state) => {
     researchName: property.researchName,
     autoComplete: 0,
     complete: false,
+    progress: 0,
     goal: 10 * nth,
     money: property.research("startMoney"),
     buildings() {

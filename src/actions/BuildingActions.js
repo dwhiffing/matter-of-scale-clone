@@ -20,7 +20,7 @@ export const buyBuilding = (buildingKey, instanceKey, cost) => ({
   }
 })
 
-export function attemptBuildingPurchase([instanceKey, buildingKey, cost]) {
+export function doBuildingPurchase(buildingKey, instanceKey, cost) {
   return (dispatch, getState) => {
     const money = getState().instances[instanceKey].money
     if (cost <= money) {
@@ -31,7 +31,7 @@ export function attemptBuildingPurchase([instanceKey, buildingKey, cost]) {
   }
 }
 
-export function buyUpgrade([propertyKey, buildingKey, cost]) {
+export function doUpgradePurchase(propertyKey, buildingKey, cost) {
   return (dispatch, getState) => {
     const upgrades = getState().properties[propertyKey].upgrades
     const { count, index } = getState().buildings[buildingKey]
@@ -45,4 +45,9 @@ export function buyUpgrade([propertyKey, buildingKey, cost]) {
       dispatch(flashMessage(`PURCHASE_ERROR: ${cost - upgrades} upgrade points short`))
     }
   }
+}
+
+export const BuildingThunks = {
+  doBuildingPurchase,
+  doUpgradePurchase
 }
