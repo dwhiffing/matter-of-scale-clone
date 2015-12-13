@@ -1,6 +1,6 @@
 import { updateProperty } from 'actions/PropertyActions'
 import { updateInstance } from 'actions/InstanceActions'
-import { flashMessage } from 'actions/InterfaceActions'
+import { flashMessage, changeUpgradePoints } from 'actions/InterfaceActions'
 import { add, sub } from 'utils/helpers'
 
 export const updateBuilding = (id, update) => ({
@@ -11,36 +11,38 @@ export const updateBuilding = (id, update) => ({
   }
 })
 
-export const buyBuilding = (buildingKey, instanceKey, cost) => ({
+export const buyBuilding = (buildingKey, instanceKey, cost, count) => ({
   type: 'BUY_BUILDING',
   payload: {
     buildingKey,
     instanceKey,
-    cost: cost
+    cost: cost,
+    count: count
   }
 })
 
 export function doBuildingPurchase(buildingKey, instanceKey, cost) {
   return (dispatch, getState) => {
-    const money = getState().instances[instanceKey].money
-    if (cost <= money) {
-      dispatch(buyBuilding(buildingKey, instanceKey, cost))
+    const { instances, ui } = getState()
+    const money = instances[instanceKey].money
+    const count = ui.multi
+    if (cost * count <= money) {
+      dispatch(buyBuilding(buildingKey, instanceKey, cost, count))
     } else {
       dispatch(flashMessage(`PURCHASE_ERROR: ${cost - money} money short`))
     }
   }
 }
 
-export function doUpgradePurchase(propertyKey, buildingKey, cost) {
+export function doUpgradePurchase(instanceKey, buildingKey, cost) {
   return (dispatch, getState) => {
-    const upgrades = getState().properties[propertyKey].upgrades
-    const { count, index } = getState().buildings[buildingKey]
-
+    const upgrades = getState().ui.upgrades
+    const { count, index } = getState().instances[instanceKey].buildings()[buildingKey]
     if (upgrades >= cost && count > 0) {
-      dispatch(updateProperty(propertyKey, {
-        upgrades: sub(cost),
+      dispatch(updateInstance(instanceKey, {
         upgradedBuildings: {[index]: add(1)}
       }))
+      dispatch(changeUpgradePoints(0 - cost))
     } else {
       dispatch(flashMessage(`PURCHASE_ERROR: ${cost - upgrades} upgrade points short`))
     }

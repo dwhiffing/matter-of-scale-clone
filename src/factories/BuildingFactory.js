@@ -68,9 +68,20 @@ const helpers = {
     return this.baseIncome * this.count * this.upgrades()
   },
 
+  // computes how much an instance will earn from this building set per tick per building
+  incomeForSingle() {
+    return this.baseIncome * this.upgrades()
+  },
+
   // amount income is multiplied by
   upgrades() {
-    return this.getProperty().upgradedBuildings[this.index]
+    return this.getInstance().upgradedBuildings[this.index]
+  },
+
+  // amount income is multiplied by
+  upgradeCost() {
+    const num = this.upgrades() * (1-this.research('upgradeCost'))
+    return Math.floor(num * 100) / 100
   },
 
   // amount spent by instance last tick to increment autoBuyAmount

@@ -22,6 +22,9 @@ export default (id, property, nth) => {
     // the computed progress towards the current goal for display purposes
     progress: 0,
 
+    // income multiplier for buildings - this should be on this instance
+    upgradedBuildings: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+
     // the goal for this instance (just income goals for now, this should have more variety)
     goal: GoalFactory(property.id, nth),
 
@@ -54,7 +57,7 @@ export const rehydrate = (instance) => {
 
     // the research name of this instance (venison, wool .etc)
     researchName: property.researchName,
-    
+
   }, rehydratedInstance)
 
 }

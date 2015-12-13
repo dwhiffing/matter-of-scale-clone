@@ -3,6 +3,7 @@ import { reducerCreator } from 'utils/helpers'
 const initialState = {
   multi: 1,
   saveSlot: 1,
+  upgrades: 0,
   tickTimeout: null,
   autobuyTimeout: null
 }
@@ -11,8 +12,8 @@ const InterfaceReducer = {
 
   rehydrate(state, action) {
     if (action.key === 'ui') {
-      const {multi, saveSlot} = action.payload
-      return Object.assign({multi, saveSlot}, state)
+      const {multi, saveSlot, upgrades} = action.payload
+      return Object.assign({}, state, {multi, saveSlot, upgrades})
     }
     return state
   },
@@ -24,6 +25,11 @@ const InterfaceReducer = {
   startTicking(state, action) {
     const {tickTimeout, autobuyTimeout} = action.payload
     return Object.assign({}, state, {tickTimeout, autobuyTimeout})
+  },
+
+  changeUpgradePoints(state, action) {
+    const num = state.upgrades + action.payload
+    return Object.assign({}, state, {upgrades: Math.round(num*100) / 100})
   },
 
   clearSave(state, action) {

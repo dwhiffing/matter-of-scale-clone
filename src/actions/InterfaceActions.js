@@ -3,9 +3,16 @@ export const clearSave = () => {
     dispatch({type: "CLEAR_SAVE"})
   }
 }
+
 export const toggleMuliplier = () => {
   return (dispatch) => {
     dispatch({type: "TOGGLE_MULTIPLIER"})
+  }
+}
+
+export const changeUpgradePoints = (upgrades) => {
+  return (dispatch) => {
+    dispatch({type: "CHANGE_UPGRADE_POINTS", payload: upgrades})
   }
 }
 
@@ -46,5 +53,6 @@ export const InterfaceThunks = {
   stopTicking,
   startTicking,
   toggleMuliplier,
-  clearSave
+  clearSave,
+  changeUpgradePoints
 }
