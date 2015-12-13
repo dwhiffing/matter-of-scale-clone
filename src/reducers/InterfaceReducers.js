@@ -27,7 +27,11 @@ const InterfaceReducer = {
   },
 
   clearSave(state, action) {
-    localStorage.removeItem('save')
+    localStorage.removeItem('reduxPersist:buildings')
+    localStorage.removeItem('reduxPersist:instances')
+    localStorage.removeItem('reduxPersist:properties')
+    localStorage.removeItem('reduxPersist:ui')
+    window.location.reload()
     return state
   }
 

@@ -17,6 +17,7 @@ export default React.createClass({
     const { id, type, name, money, income, currencyName, goal } = instance
     const availableUpgrades = this.props.properties[type].upgrades
     const multi = this.props.ui.multi
+    
     return (
       <div className="properties-wrap center">
 

@@ -1,27 +1,17 @@
 import store from 'utils/reduxStore'
-import Constants from 'utils/Constants'
 import GoalFactory from 'factories/GoalFactory'
 import { sampleArray, diceRoll, getRandom } from 'utils/helpers'
+import u from 'updeep'
 
 export default (id, property, nth) => {
 
+  // these properties are persisted to localStorage
   return {
+
     id: id,
 
     // what level of property this instance is
     type: property.id,
-
-    // the display name of this instance
-    name: property.name,
-
-    // the display color of this instance
-    color: property.color,
-
-    // the currency name of this instance (deer, sheep .etc)
-    currencyName: property.currencyName,
-
-    // the research name of this instance (venison, wool .etc)
-    researchName: property.researchName,
 
     // amount accumulated toward auto completion when progress is 100
     autoComplete: 0,
@@ -46,9 +36,32 @@ export default (id, property, nth) => {
   }
 }
 
-export const helpers = {
+export const rehydrate = (instance) => {
+
+  let rehydratedInstance = u(instance, helpers)
+
+  const property = rehydratedInstance.property()
+  return Object.assign({}, {
+
+    // the display name of this instance
+    name: property.name,
+
+    // the display color of this instance
+    color: property.color,
+
+    // the currency name of this instance (deer, sheep .etc)
+    currencyName: property.currencyName,
+
+    // the research name of this instance (venison, wool .etc)
+    researchName: property.researchName,
+    
+  }, rehydratedInstance)
+
+}
+
+const helpers = {
+
   // get the buildings that belong to this instance
-  // TODO: this shouldn't need to be computed
   buildings() {
     const start = this.id*10
     return Object.values(store.getState().buildings).slice(start, start + 10)

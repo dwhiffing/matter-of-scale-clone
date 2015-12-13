@@ -1,7 +1,9 @@
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
-import {startTicking} from 'actions/InterfaceActions'
-import {persistStore, autoRehydrate} from 'redux-persist'
+import { persistStore, autoRehydrate } from 'redux-persist'
+import { startTicking} from 'actions/InterfaceActions'
 import logger from 'utils/loggerMiddleware'
+import { toObj } from 'utils/helpers'
+import _ from 'lodash'
 
 const thunk = function thunkMiddleware({ dispatch, getState }) {
   return next => action =>
@@ -15,22 +17,54 @@ import * as reducers from '../reducers'
 export const combinedReducers = combineReducers(reducers)
 
 // guide to redux middleware: http://gaearon.github.io/redux/docs/advanced/Middleware.html
-let finalCreateStore = compose(
+const composedStore = compose(
   applyMiddleware(logger, thunk)
 )(createStore)
 
-const initialState = {}
+// persist to local storage with redux-persist
+const PersistedStore = autoRehydrate()(composedStore)(combinedReducers)
 
-const rehydrateAction = (key, data) => {
-  return {
-    type: 'REHYDRATE',
-    key: key,
-    payload: data
-  }
+const omitNested = (obj, omit) => {
+  return Object.values(obj).map(t => _.omit(t, omit)).reduce(toObj, {})
 }
 
-const store = autoRehydrate()(finalCreateStore)(combinedReducers)
-persistStore(store, {rehydrateAction}, () => {
-  store.dispatch(startTicking())
-})
-export default store
+// TODO: For some reason, debounces longer than this fail
+persistStore(PersistedStore, {
+  debounce: 90,
+  transforms: [{
+    in: (state) => {
+      // interface omitted keys
+      if (state.multi) {
+        return _.omit(state, ['tickTimeout', 'autobuyTimeout'] )
+      }
+      // instance omitted keys
+      if (state[0].autoBuy) {
+        return omitNested(state, ['name','color','currencyName','researchName'])
+      }
+      // property omitted keys
+      else if (state[0].upgradedBuildings) {
+        return omitNested(state, ['name','color','currencyName','researchName','buildingNames'])
+      }
+      // building omitted keys
+      else {
+        return omitNested(state, ['name','baseCost','baseIncome'])
+      }
+    },
+    out: (raw) => {
+      return raw
+    },
+  }],
+  rehydrateAction: (key, data) => {
+    return {
+      type: 'REHYDRATE',
+      key: key,
+      payload: data
+    }
+  },
+}, () => {
+    // start the game once data has loaded
+    PersistedStore.dispatch(startTicking())
+  }
+)
+
+export default PersistedStore

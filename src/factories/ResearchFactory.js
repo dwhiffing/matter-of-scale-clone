@@ -1,18 +1,4 @@
-import Constants from 'utils/Constants'
-
-export default (id) => {
-  const buildingNames = Constants.building[id]
-  let researchTypes = research
-  if (id === 0) {
-    researchTypes = Object.assign({
-      extra: specialResearch.extraHamlets
-    }, researchTypes)
-  }
-  buildingNames.forEach((b, i) => {
-    researchTypes['autoBuy-'+i] = specialResearch.autoBuy
-  })
-  return researchTypes
-}
+import {arrayFromRange} from 'utils/helpers'
 
 const research = {
   discount: {
@@ -99,4 +85,19 @@ const specialResearch = {
     max: 0.5,
     description: "AutoBuy {value} of {building} per tick"
   }
+}
+
+
+export default (id) => {
+  // TODO: clean this up a bit
+  let researchTypes = research
+  if (id === 0) {
+    researchTypes = Object.assign({
+      extra: specialResearch.extraHamlets
+    }, researchTypes)
+  }
+  [0,1,2,3,4,5,6,7,8,9].forEach((b, i) => {
+    researchTypes['autoBuy-'+i] = specialResearch.autoBuy
+  })
+  return researchTypes
 }
