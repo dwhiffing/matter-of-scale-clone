@@ -22,8 +22,7 @@ const InstanceReducers = {
 
     const newInstances = _.times(count, () => {
       const nth = Object.values(state).filter(obj => obj.type == property.id).length + 1
-      const instance = Object.assign(helpers, InstanceFactory(id, property, nth))
-      instance.goal.setInstance(instance)
+      const instance = u(InstanceFactory(id, property, nth), helpers)
       return instance
     })
 
@@ -84,7 +83,7 @@ const InstanceReducers = {
       if (instance.complete) return instance
 
       // get next income and compute progress toward income goal
-      const progress = instance.goal.progress()
+      const progress = instance.goalProgress()
       return u({
         progress: progress,
         autoComplete: c => progress < 100 ? c : c + 0.5
