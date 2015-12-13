@@ -2,6 +2,7 @@ import store from 'utils/reduxStore'
 import Constants from 'utils/Constants'
 import numeral from "numeral"
 import { titleify } from 'utils/helpers'
+import ResearchFactory from 'factories/ResearchFactory'
 
 // name: 'hamlet village town city castle kingdom empire planet galaxy universe'.split(' '),
 // color: 'maroon silver red gray yellow aqua navy green purple black'.split(' '),
@@ -10,21 +11,6 @@ import { titleify } from 'utils/helpers'
 
 export default () => {
   return Constants.name.map((name, id) => {
-
-    const buildingNames = Constants.building[id]
-
-    // TODO: This needs to be cleaned up
-    let researchTypes = Constants.research
-    if (id === 0) {
-      researchTypes = Object.assign({
-        extra: Constants.specialResearch.extraHamlets
-      }, researchTypes)
-    }
-    buildingNames.forEach((b, i) => {
-      researchTypes['autoBuy-'+i] = Constants.specialResearch.autoBuy
-    })
-    // end cleanup
-
     return {
 
       id: id,
@@ -41,13 +27,13 @@ export default () => {
       researchName: Constants.researchNames[id],
 
       // building display names
-      buildingNames: buildingNames,
+      buildingNames: Constants.building[id],
 
       // accumulated research currency from instance completion
       researchMoney: 0,
 
       // current research levels and rates
-      researchTypes: researchTypes,
+      researchTypes: ResearchFactory(id),
 
       // buildings player has afforded at some point
       unlockedBuildings: [0],
@@ -130,12 +116,19 @@ export const helpers = {
     const current = percentify(research.current)
     const next = percentify(research.current + research.increment)
 
-    return research.description({
+    const replaceString = (obj, string) => {
+      Object.keys(obj).forEach(name => {
+        string = string.replace(`{${name}}`, obj[name])
+      })
+      return string
+    }
+
+    return replaceString({
       name: titleify(this.name),
       currency: titleify(this.currencyName),
       building: titleify(buildingName),
       value: this.researchComplete(key) ? current : `${next} (${current})`
-    })
+    }, research.description)
   },
 
   // short hand for get instances
