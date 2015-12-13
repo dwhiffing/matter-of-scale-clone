@@ -1,46 +1,83 @@
 import store from 'utils/reduxStore'
 import Constants from 'utils/Constants'
 
-export default (type) => {
+export default (id, type) => {
   return Constants.building[type].map((name, index) => ({
+
     name: name,
+
+    // index of this building within its instance
     index: index,
+
+    // base cost for a single, unmodified building
     baseCost: Constants.baseCost[index],
+
+    // base income for a single, unmodified building
     baseIncome: Constants.baseIncome[index],
+
+    // amount of this building purchased
     count: index === 0 ? 1 : 0,
-    autoBuyAmount: 0,
-    getProperty() {
-      return store.getState().properties[type]
-    },
-    research(key) {
-      return this.getProperty().research(key)
-    },
+
+    // has the player ever been able to afford this building?
     unlocked() {
       return this.getProperty().unlockedBuildings.indexOf(index) > -1
     },
-    costMultiplier() {
-      return this.getProperty().autoBuyCostMultiplier
+
+    // computes cost of next building purchase
+    cost() {
+      const discount = 1 - this.research('discount')
+      const countCost = Math.max(this.count - this.research('ignoreCost'), 0)
+      const pow = Math.pow(1.1 - this.index * .008, countCost)
+      return Math.floor(this.baseCost * pow * discount)
     },
-    autoBuyComplete() {
-      return this.autoBuyAmount >= this.autoBuyCost()
+
+    // computes how much an instance will earn from this building set per tick
+    income() {
+      return this.baseIncome * this.count * this.upgrades()
     },
-    autoBuyCost() {
-      return this.cost() * this.research('autoCost')
-    },
-    autoBuyIncrement() {
-      return this.research(`autoBuy-${this.index}`) * this.autoBuyCost()
-    },
+
+    // amount income is multiplied by
     upgrades() {
       return this.getProperty().upgradedBuildings[index]
     },
-    cost() {
-      const discount = 1 - this.research('discount')
-      const count = Math.max(this.count - this.research('ignoreCost'), 0)
-      const pow = Math.pow(1.1 - this.index * .008, count)
-      return Math.floor(this.baseCost * pow * discount)
+
+    // amount currenty accumulated toward the next auto buy
+    autoBuyAmount: 0,
+
+    // amount spent by instance last tick to increment autoBuyAmount
+    autoBuyFromLastTick() {
+      return this.getInstance().autoBuy[index]
     },
-    income() {
-      return this.baseIncome * this.count * this.upgrades()
+
+    // have we accumulated enough to purchase the next building
+    autoBuyComplete() {
+      return this.autoBuyAmount + this.autoBuyFromLastTick() >= this.autoBuyCost()
+    },
+
+    // amount you must accumulate from auto buy to get a new building
+    autoBuyCost() {
+      return this.cost() * this.research('autoCost')
+    },
+
+    // most you can accumulate in a single tick
+    autoBuyIncrement() {
+      return this.research(`autoBuy-${this.index}`) * this.autoBuyCost()
+    },
+
+    // short-hand to instance
+    getInstance() {
+      return store.getState().instances[id]
+    },
+
+    // short-hand to property
+    getProperty() {
+      return store.getState().properties[type]
+    },
+
+    // short-hand to property research
+    research(key) {
+      return this.getProperty().research(key)
     }
+
   }))
 }

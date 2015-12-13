@@ -2,7 +2,8 @@ import { reducerCreator } from 'utils/helpers'
 
 const initialState = {
   multi: 1,
-  timerId: null
+  tickTimeout: null,
+  autobuyTimeout: null
 }
 
 const InterfaceReducer = {
@@ -12,7 +13,8 @@ const InterfaceReducer = {
   },
 
   startTicking(state, action) {
-    return Object.assign({}, state, {timerId: action.payload.timerId})
+    const {tickTimeout, autobuyTimeout} = action.payload
+    return Object.assign({}, state, {tickTimeout, autobuyTimeout})
   },
 
   clearSave(state, action) {

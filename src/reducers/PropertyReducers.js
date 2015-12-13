@@ -15,10 +15,14 @@ const PropertyReducers = {
   },
 
   createInstance(state, action) {
-    const property = state[action.payload.type]
+    const { id, type } = action.payload
+    const property = state[type]
 
+    // deduct build queue if instance was created by completing an instance
     if (property.toBuild > 0 && property.id !== 0) {
-      return shallowUpdate(property.id, {toBuild: sub(1)}, state)
+      return shallowUpdate(property.id, {
+        toBuild: sub(1)
+      }, state)
     } else {
       return state
     }
@@ -27,6 +31,8 @@ const PropertyReducers = {
   completeInstance(state, action) {
     const {id, type} = action.payload
     const property = state[type]
+
+    // update research currency and next instance tick
     let update = {
       [type]: {
         toCompleteUntilNextInstance: sub(1),
@@ -34,7 +40,7 @@ const PropertyReducers = {
       }
     }
 
-    // add research currency and update next property unlock
+    // if next is complete, reset it and queue an instance of the next level
     if (property.toCompleteUntilNextInstance <= 1) {
       update = {
         [type]:  {
@@ -53,8 +59,10 @@ const PropertyReducers = {
 
   doTick(state, action) {
     return u.map((property) => {
+
+      // increment upgrade points once per tick for each instance
       const rate = property.upgradeRate
-      const instanceCount = property.instances().length
+      const instanceCount = property.getInstances().length
       const amount = (rate + rate * property.research("upgradeRate")) * instanceCount
 
       return u({

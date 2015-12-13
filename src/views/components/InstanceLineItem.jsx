@@ -10,7 +10,7 @@ export default ({instance, clickInstance, clickComplete}) => {
         {format(instance.money, "0,0")} => {instance.income()}/s
       </a>
 
-      {instance.progress >= 100 || true &&
+      {instance.progress >= 100 &&
         <span className="px1">
           <span className="h5 px1">
             {instance.autoComplete}/{instance.autoCompleteDuration()}
