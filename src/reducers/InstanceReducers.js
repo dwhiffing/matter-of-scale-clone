@@ -1,6 +1,5 @@
-import Constants from 'utils/Constants'
 import store from 'utils/reduxStore'
-import InstanceFactory, {helpers} from 'factories/InstanceFactory'
+import InstanceFactory, { rehydrate } from 'factories/InstanceFactory'
 import { add, sub, pushToObj, shallowUpdate, reducerCreator, clamp } from 'utils/helpers'
 import u from 'updeep'
 
@@ -10,7 +9,7 @@ const InstanceReducers = {
 
   rehydrate(state, action) {
     if (action.key === 'instances') {
-      return u.map((instance) => u(instance, helpers), action.payload)
+      return u.map((instance) => rehydrate(instance), action.payload)
     }
     return state
   },
@@ -22,7 +21,7 @@ const InstanceReducers = {
 
     const newInstances = _.times(count, () => {
       const nth = Object.values(state).filter(obj => obj.type == property.id).length + 1
-      const instance = u(InstanceFactory(id, property, nth), helpers)
+      const instance = rehydrate(InstanceFactory(id, property, nth))
       return instance
     })
 

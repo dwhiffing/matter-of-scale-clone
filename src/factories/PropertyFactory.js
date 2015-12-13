@@ -1,33 +1,22 @@
 import store from 'utils/reduxStore'
-import Constants from 'utils/Constants'
 import numeral from "numeral"
+import u from 'updeep'
 import { titleify } from 'utils/helpers'
+import { buildingNames } from 'factories/BuildingFactory'
 import ResearchFactory from 'factories/ResearchFactory'
 
-// name: 'hamlet village town city castle kingdom empire planet galaxy universe'.split(' '),
-// color: 'maroon silver red gray yellow aqua navy green purple black'.split(' '),
-// currency: 'deer lamb brick iron soldier gold machine starship matter existence'.split(' '),
-// researchNames: 'venison wool marble steel captain platinum circuit anti-matter AI transcendence'.split(' '),
+const name = ['hamlet', 'village', 'town', 'city', 'castle', 'kingdom', 'empire', 'planet', 'galaxy', 'universe']
+const color = ['maroon', 'silver', 'red', 'gray', 'yellow', 'aqua', 'navy', 'green', 'purple', 'black']
+const currency = ['deer', 'lamb', 'brick', 'iron', 'soldier', 'gold', 'machine', 'starship', 'matter', 'existence']
+const researchNames = ['venison', 'wool', 'marble', 'steel', 'captain', 'platinum', 'circuit', 'anti-matter', 'AI', 'transcendence']
 
 export default () => {
-  return Constants.name.map((name, id) => {
+
+  // these properties are persisted to local storage
+  return name.map((name, id) => {
     return {
 
       id: id,
-
-      name: name,
-
-      // display color
-      color: Constants.color[id],
-
-      // building currency display name
-      currencyName: Constants.currency[id],
-
-      // research currency display name
-      researchName: Constants.researchNames[id],
-
-      // building display names
-      buildingNames: Constants.building[id],
 
       // accumulated research currency from instance completion
       researchMoney: 0,
@@ -55,13 +44,35 @@ export default () => {
 
       // has player has reached this property type?
       unlocked: id == 0,
-
     }
   })
 }
 
+export const rehydrate = (property) => {
 
-export const helpers = {
+  let rehydratedProperty = u(property, helpers)
+
+  return Object.assign({}, {
+
+    name: name[property.id],
+
+    // display color
+    color: color[property.id],
+
+    // building currency display name
+    currencyName: currency[property.id],
+
+    // research currency display name
+    researchName: researchNames[property.id],
+
+    // building display names
+    buildingNames: buildingNames[property.id],
+
+  }, rehydratedProperty)
+}
+
+const helpers = {
+
   // computed income for this property
   income() {
     return this.getInstances().reduce((a, b) => a + b.income(), 0)

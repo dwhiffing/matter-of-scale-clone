@@ -1,28 +1,5 @@
 import { sampleArray, diceRoll, getRandom } from 'utils/helpers'
-import Constants from 'utils/Constants'
-
-export default (type, nth) => {
-  let newGoal = Object.assign({
-    init(type, nth) {
-      // the possible building types based on progression, varies from 0-1, to 0-9 as nth increases
-      const buildingTypes = Math.min(50, Math.ceil(nth))*2
-      this.building = Math.min(8, Math.floor(diceRoll(0, buildingTypes) / 10) + diceRoll(0, 1))
-      this.buildingIncome = Constants.baseIncome[this.building]
-      this.buildingName = Constants.building[type][this.building]
-
-      // the possible amounts based on progression, earlier types double in qutatity every 10 instances
-      this.amount = diceRoll(this.amountScale(nth) * 10, this.amountScale(nth) * 20)
-    },
-  }, sampleArray(goals, 1))
-
-  newGoal.init(type, nth)
-  return {
-    type: newGoal.type,
-    amount: newGoal.amount,
-    building: newGoal.building,
-    description: newGoal.description()
-  }
-}
+import { baseIncome, buildingNames} from 'factories/BuildingFactory'
 
 const goals = [
   {
@@ -30,34 +7,56 @@ const goals = [
     amountScale(nth) {
       return Math.min(20, Math.ceil(nth / 10))
     },
-    description() {
-      return `get ${this.amount} income`
+    getDescription(amount, building) {
+      return `get ${amount} income`
     }
   }, {
     type: 1,
     amountScale(nth) {
       return Math.min(100, Math.ceil(nth / 5)) * 10
     },
-    description() {
-      return `get ${this.amount} money`
+    getDescription(amount, building) {
+      return `get ${amount} money`
     }
   }, {
     type: 2,
-    amountScale(nth) {
+    amountScale(nth, building) {
       const amountClamp = (5 - Math.min(5, Math.ceil(nth / 10)))
-      return Math.max(5, (5 - Math.floor(this.building / 2)) - amountClamp)
+      return Math.max(5, (5 - Math.floor(building / 2)) - amountClamp)
     },
-    description() {
-      return `get ${this.amount} ${this.buildingName}`
+    getDescription(amount, building) {
+      return `get ${amount} ${building}`
     }
   }, {
     type: 3,
-    amountScale(nth) {
+    amountScale(nth, building) {
       const amountClamp = Math.min(1, Math.ceil(nth / 20))
-      return (5 - Math.floor(this.building / 2)) * amountClamp * this.buildingIncome
+      return (5 - Math.floor(building / 2)) * amountClamp * baseIncome[building]
     },
-    description() {
-      return `get ${this.amount} income with ${this.buildingName}`
+    getDescription(amount, building) {
+      return `get ${amount} income with ${building}`
     }
   }
 ]
+
+export default (type, nth) => {
+  let goal = sampleArray(goals, 1)
+
+  // how far have we progressed into the building levels?
+  const buildingTypes = Math.min(50, Math.ceil(nth))*2
+
+  // grab a random one of the available buildings
+  const building = Math.min(8, Math.floor(diceRoll(0, buildingTypes) / 10) + diceRoll(0, 1))
+
+  // the possible amounts based on progression, earlier types double in qutatity every 10 instances
+  const name = buildingNames[type][building]
+  const scale = goal.amountScale(nth, building)
+  const amount = diceRoll(scale * 10, scale * 20)
+
+  return {
+    type: goal.type,
+    building: building,
+    amount: amount,
+    description: goal.getDescription(amount, name)
+  }
+}

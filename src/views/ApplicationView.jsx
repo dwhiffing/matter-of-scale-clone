@@ -13,17 +13,18 @@ const actionsToMap = Object.assign({}, InterfaceThunks, PropertyThunks, Instance
 
 const ApplicationView = React.createClass({
 
-  componentDidMount() {
-  },
-
   componentDidUpdate() {
-    // TODO: This should be done in the InstanceReducer when incrementing the autoComplete time
-    // However, it will require several other parts of the instance logic to be rewritten
+    // ensure there is always at least one hamlet
     if (this.props.ui.tickTimeout && Object.keys(this.props.instances).length === 0) {
       this.props.createInstance(0)
     }
-    let instances = Object.values(this.props.instances)
-    let autoCompletedInstances = instances.filter(i => i.progress >= 100 && !i.complete && i.autoComplete >= i.autoCompleteDuration())
+
+    // TODO: This should be done in the InstanceReducer when incrementing the autoComplete time
+    // However, it will require several other parts of the instance logic to be rewritten
+    const instances = Object.values(this.props.instances)
+    const autoCompletedInstances = instances.filter(i => {
+      return i.progress >= 100 && !i.complete && i.autoComplete >= i.autoCompleteDuration()
+    })
     autoCompletedInstances.forEach(i => this.props.markInstanceComplete(i.id))
   },
 
@@ -40,11 +41,9 @@ const ApplicationView = React.createClass({
             Clear Save
           </button>
 
-          {this.props.properties[1].unlocked || true &&
-            <a className="col h6 m0 p1 col-8" onClick={() => this.props.history.push("/property")}>
-              View Properties
-            </a>
-          }
+          <a className="col h6 m0 p1 col-8" onClick={() => this.props.history.push("/property")}>
+            View Properties
+          </a>
 
           <button className="col h6 m0 p1 col-1" onClick={this.props.toggleMuliplier}>
             x{this.props.ui.multi}

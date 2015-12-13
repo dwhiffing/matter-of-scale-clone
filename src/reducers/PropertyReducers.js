@@ -1,16 +1,15 @@
-import Constants from 'utils/Constants'
 import store from 'utils/reduxStore'
-import PropertyFactory, {helpers} from 'factories/PropertyFactory'
+import PropertyFactory, { rehydrate } from 'factories/PropertyFactory'
 import { add, sub, toObj, shallowUpdate, reducerCreator } from 'utils/helpers'
 import u from 'updeep'
 
-const initialState = u.map((prop) => u(prop, helpers), PropertyFactory().reduce(toObj, {}))
+const initialState = u.map((property) => rehydrate(property), PropertyFactory().reduce(toObj, {}))
 
 const PropertyReducers = {
 
   rehydrate(state, action) {
     if (action.key === 'properties') {
-      return u.map((property) => u(property, helpers), action.payload)
+      return u.map((property) => rehydrate(property), action.payload)
     }
     return state
   },
