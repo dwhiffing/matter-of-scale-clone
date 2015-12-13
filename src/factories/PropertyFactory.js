@@ -33,6 +33,9 @@ export default () => {
       // accumulated upgrade points
       upgrades: 0,
 
+      // instances of this type completed so far
+      completed: 0,
+
       // income multiplier for buildings - this should be on this instance
       upgradedBuildings: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 

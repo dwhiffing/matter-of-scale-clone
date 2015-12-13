@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import u from 'updeep'
 import BuildingFactory, { rehydrate } from 'factories/BuildingFactory'
-import { add, pushToObj, shallowUpdate, reducerCreator } from 'utils/helpers'
+import { add, pushToObj, shallowUpdate, reducerCreator, toObj } from 'utils/helpers'
 
 const initialState = {}
 
@@ -40,9 +40,23 @@ const buildingReducers = {
     return pushToObj(state, ...newBuildingSet)
   },
 
-  // TODO: Should remove buildings when instances are completed
   completeInstance(state, action) {
-    return state
+    const id = action.payload.id*10
+
+    // TODO: helper for array from range
+    const arr = [id, id+1, id+2, id+3, id+4, id+5, id+6, id+7, id+8, id+9]
+
+    // omit the buildings from the store
+    const omittedState = Object.values(
+      u.omit(arr, state)
+    ).reduce(toObj, {})
+
+    // update the id to reflect the index so that buildings remain mapped properly
+    return u.map((building, index) => {
+      return u({
+        instanceId: Math.floor(index / 10)
+      }, building)
+    }, omittedState)
   },
 
   doTick(state, action) {

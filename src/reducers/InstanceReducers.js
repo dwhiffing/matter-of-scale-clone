@@ -1,6 +1,6 @@
 import store from 'utils/reduxStore'
 import InstanceFactory, { rehydrate } from 'factories/InstanceFactory'
-import { add, sub, pushToObj, shallowUpdate, reducerCreator, clamp } from 'utils/helpers'
+import { add, sub, pushToObj, shallowUpdate, reducerCreator, clamp, toObj } from 'utils/helpers'
 import u from 'updeep'
 
 const initialState = {}
@@ -37,13 +37,15 @@ const InstanceReducers = {
   completeInstance(state, action) {
     const instanceKey = action.payload.id
 
-    // mark an instance as complete and remove it from money/income computation
-    // TODO: should remove completed instances so things dont get slow later on
-    return shallowUpdate(instanceKey, {
-      complete: true,
-      autoComplete: -1,
-      money: 0
-    }, state)
+    // omit the instace from the store
+    const omittedState = Object.values(
+      u.omit(instanceKey, state)
+    ).reduce(toObj, {})
+
+    // update the id to reflect the index so that buildings remain mapped properly
+    return u.map((instance, index) => {
+      return u({id: index}, instance)
+    }, omittedState)
   },
 
   buyBuilding(state, action) {

@@ -20,7 +20,6 @@ export default React.createClass({
           // end cleanup
 
           const instances = property.getInstances()
-          const completed = property.completedInstances()
           const next = lastClone.toCompleteUntilNextInstance
 
           return (
@@ -58,7 +57,7 @@ export default React.createClass({
                   </div>
 
                   <div className='px2 h3'>
-                    Instances: (completed: {completed.length})
+                    Instances: (completed: {property.completed})
                   </div>
 
                   <ul className="px3 clearfix">
