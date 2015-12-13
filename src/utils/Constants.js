@@ -1,21 +1,21 @@
 export default {
-  name: 'hamlet, village, town, city, castle, kingdom, empire, planet, galaxy, universe'.split(', '),
-  color: 'maroon, silver, red, gray, yellow, aqua, navy, green, purple, black'.split(', '),
-  currency: 'deer, lamb, brick, iron, soldier, gold, machine, starship, matter, existence'.split(', '),
-  researchNames: 'venison, wool, marble, steel, captain, platinum, circuit, anti-matter, AI, transcendence'.split(', '),
+  name: 'hamlet village town city castle kingdom empire planet galaxy universe'.split(' '),
+  color: 'maroon silver red gray yellow aqua navy green purple black'.split(' '),
+  currency: 'deer lamb brick iron soldier gold machine starship matter existence'.split(' '),
+  researchNames: 'venison wool marble steel captain platinum circuit anti-matter AI transcendence'.split(' '),
   baseCost: [10, 50, 200, 1000, 10000, 20000, 50000, 100000, 200000, 1000000],
   baseIncome: [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000],
   building: [
-    'Bloodhound, Spearman, Archer, Tracker, Woodsman, Pathfinder, Scout, Trapper, Wellspring, River'.split(', '),
-    'Shepherd, Sheepdog, Fence-Maker, Wolf-hunter, Farmhand, Shearer, Carver, Smoker, Roaster, Breeder'.split(', '),
-    'Digger, River Guide, Bridge Builder, Baker, Heater, Shaper, Trailblazer, Mixer, Sculptor, Mason'.split(', '),
-    'Coal Miner, Cart Mover, Tracklayer, Foreman, Prospector, Blacksmith, Ironmonger, Smithy, Smelter, Ironworks'.split(', '),
-    'Recruiter, Weaponsmith, Armorsmith, Fletcher, Sergeant, Propagandist, Major, Logician, Major Major Major, General'.split(', '),
-    'Panner, Tool salesman, Money Changer, Trader, Goldforge, Goldsmith, Designer, Gem Cutter, Jeweler, Banker'.split(', '),
-    'Engineer, Coal Plant, Oil Plant, Wire Extruder, Powerline, Utility Worker, Solar Fields, Solar Tower, Nuclear Plant, Fusion Plant'.split(', '),
-    'Astronaut, Astrophysicist, Launch Center, Rockets, Space Elevator, Space Station, Mass Driver, Bot Swarm, Asteroids, Space Shipyard'.split(', '),
-    'Lepton Builder, Quark Font, Neutrino Guide, Proton Decayer, State Binder, Force Splicer, Gravity Hole, Magrathea, Energy Shaper, Reality Splitter'.split(', '),
-    'Singularity, Netherman, Phaseshifter, Selfsplitter, Ascendant, Transcendant, Beyonder, Starchild, Planewalker, Timeshifter'.split(', ')
+    'Bloodhound Spearman Archer Tracker Woodsman Pathfinder Scout Trapper Wellspring River'.split(' '),
+    'Shepherd Sheepdog Fence-Maker Wolf-hunter Farmhand Shearer Carver Smoker Roaster Breeder'.split(' '),
+    'Digger River-Guide Bridge-Builder Baker Heater Shaper Trailblazer Mixer Sculptor Mason'.split(' '),
+    'Coal-Miner Cart-Mover Tracklayer Foreman Prospector Blacksmith Ironmonger Smithy Smelter Ironworks'.split(' '),
+    'Recruiter Weaponsmith Armorsmith Fletcher Sergeant Propagandist Major Logician Major-Major-Major General'.split(' '),
+    'Panner Tool-Salesman Money-Changer Trader Goldforge Goldsmith Designer Gem-Cutter Jeweler Banker'.split(' '),
+    'Engineer Coal-Plant Oil-Plant Wire-Extruder Powerline Utility-Worker Solar-Fields Solar-Tower Nuclear-Plant Fusion-Plant'.split(' '),
+    'Astronaut Astrophysicist Launch-Center Rockets Space-Elevator Space-Station Mass-Driver Bot-Swarm Asteroids Space-Shipyard'.split(' '),
+    'Lepton-Builder Quark-Font Neutrino-Guide Proton-Decayer State-Binder Force-Splicer Gravity-Hole Magrathea Energy-Shaper Reality-Splitter'.split(' '),
+    'Singularity Netherman Phaseshifter Selfsplitter Ascendant Transcendant Beyonder Starchild Planewalker Timeshifter'.split(' ')
   ],
   research: {
     discount: {
