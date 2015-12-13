@@ -23,13 +23,6 @@ const research = {
     max: 2000,
     description: "{name}s start with {value} {currency}"
   },
-  activeIncome: {
-    rank: 0,
-    current: 1,
-    increment: 1,
-    max: 5,
-    description: "{name}s generate {value} when clicking"
-  },
   passiveIncome: {
     rank: 0,
     current: 0,
@@ -37,13 +30,13 @@ const research = {
     max: 50,
     description: "{name}s have {value} passive income"
   },
-  upgradeRate: {
+  upgradeCost: {
     rank: 0,
     current: 0,
     percent: true,
-    increment: 0.2,
-    max: 2,
-    description: "{name}s generate upgrade points {value} faster"
+    increment: 0.1,
+    max: 0.5,
+    description: "{name}s upgrades cost {value} less"
   },
   autoComplete: {
     rank: 0,

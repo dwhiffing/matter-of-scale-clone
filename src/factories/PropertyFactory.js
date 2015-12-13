@@ -27,17 +27,8 @@ export default () => {
       // buildings player has afforded at some point
       unlockedBuildings: [0],
 
-      // upgrade points accumulated per tick per instance
-      upgradeRate: 0.005,
-
-      // accumulated upgrade points
-      upgrades: 0,
-
       // instances of this type completed so far
       completed: 0,
-
-      // income multiplier for buildings - this should be on this instance
-      upgradedBuildings: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 
       // how many instances are queued up to be created next instance
       toBuild: 0,

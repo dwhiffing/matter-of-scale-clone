@@ -62,20 +62,6 @@ const PropertyReducers = {
     }
 
     return u(update, state)
-  },
-
-  doTick(state, action) {
-    return u.map((property) => {
-
-      // increment upgrade points once per tick for each instance
-      const rate = property.upgradeRate
-      const instanceCount = property.getInstances().length
-      const amount = (rate + rate * property.research("upgradeRate")) * instanceCount
-
-      return u({
-        upgrades: add(amount)
-      }, property)
-    }, state)
   }
 }
 

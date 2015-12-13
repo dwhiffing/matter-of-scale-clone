@@ -49,11 +49,11 @@ const InstanceReducers = {
   },
 
   buyBuilding(state, action) {
-    const {instanceKey, cost} = action.payload
+    const {instanceKey, cost, count} = action.payload
 
     // deduct cost of building when purchased
     return shallowUpdate(instanceKey, {
-      money: sub(cost)
+      money: sub(cost * count)
     }, state)
   },
 

@@ -21,11 +21,11 @@ const buildingReducers = {
   },
 
   buyBuilding(state, action) {
-    const {buildingKey} = action.payload
+    const {buildingKey, count} = action.payload
 
     // add 1 to building count when purchase is successful
     return shallowUpdate(buildingKey, {
-      count: add(1)
+      count: add(count)
     }, state)
   },
 

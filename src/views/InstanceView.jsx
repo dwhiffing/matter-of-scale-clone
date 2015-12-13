@@ -8,16 +8,15 @@ export default React.createClass({
   render() {
     const instance = this.props.instances[this.props.params.instance]
 
-    if (!instance) return false
-    if (instance.complete) {
+    if (!instance) {
       _.defer(() => this.props.history.push('/property'))
+      return false
     }
 
     const { doBuildingPurchase, doUpgradePurchase, unlockBuilding} = this.props
     const { id, type, name, money, income, currencyName, goal } = instance
-    const availableUpgrades = this.props.properties[type].upgrades
-    const multi = this.props.ui.multi
-    
+    const {upgrades, multi} = this.props.ui
+
     return (
       <div className="properties-wrap center">
 
@@ -36,24 +35,26 @@ export default React.createClass({
           </div>
         }
 
-        <button onClick={() => {this.props.triggerInstance(id)}}>
-          triggerInstance
-        </button>
-
         <h3 className="regular px2 m1">
           {f(instance.progress, "0,0")}%: {goal.description}
         </h3>
 
-        <h4 className="center col m0 py1 regular col-4">
+        <h4 className="center col m0 py1 regular col-3">
           {f(money, "0,0")} {currencyName}
         </h4>
 
-        <h4 className="center col m0 py1 regular col-4">
+        <h4 className="center col m0 py1 regular col-3">
           {instance.income()} {currencyName}/sec
         </h4>
 
-        <h4 className="center col m0 py1 regular col-4">
-          {f(availableUpgrades, "0,0.00")}U
+        <h4 className="center col m0 py1 regular col-3">
+          {instance.property().researchMoney} {instance.property().researchName}
+        </h4>
+
+        <h4 className="center col m0 py1 regular col-3">
+          <a className="m1 h4 blue" onClick={() => this.props.history.push(`/research/${instance.type}`)}>
+            research
+          </a>
         </h4>
 
         <h5 className="center col m0 py1 col-4">
@@ -64,12 +65,16 @@ export default React.createClass({
           #
         </h5>
 
-        <h5 className="center col m0 py1 col-3">
+        <h5 className="center col m0 py1 col-2">
           Cost ({currencyName})
         </h5>
 
-        <h5 className="center col m0 py1 col-3">
-          Income
+        <h5 className="center col m0 py1 col-2">
+          Income / Building
+        </h5>
+
+        <h5 className="center col m0 py1 col-2">
+          Income / Tick
         </h5>
 
         <div>
@@ -81,7 +86,7 @@ export default React.createClass({
                 index={index}
                 type={type}
                 multi={multi}
-                availableUpgrades={availableUpgrades}
+                upgrades={upgrades}
                 doUpgradePurchase={doUpgradePurchase}
                 doBuildingPurchase={doBuildingPurchase}
                 unlockBuilding={unlockBuilding}>

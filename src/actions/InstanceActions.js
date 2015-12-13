@@ -58,18 +58,7 @@ export function createMissingInstances(key) {
   }
 }
 
-export function triggerInstance(instanceKey) {
-  return (dispatch, getState) => {
-    const instance = getState().instances[instanceKey]
-    const income = instance.property().research("activeIncome")
-    dispatch(updateInstance(instanceKey, {
-      money: add(income)
-    }))
-  }
-}
-
 export const InstanceThunks = {
   createInstance,
-  markInstanceComplete,
-  triggerInstance
+  markInstanceComplete
 }

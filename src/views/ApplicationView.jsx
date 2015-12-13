@@ -1,7 +1,7 @@
 import React from "react"
 import _ from "lodash"
 import { connect } from 'react-redux'
-import { mapStateKeysToProps } from 'utils/helpers'
+import { mapStateKeysToProps, format } from 'utils/helpers'
 
 import { InterfaceThunks } from "actions/InterfaceActions"
 import { InstanceThunks } from "actions/InstanceActions"
@@ -37,15 +37,19 @@ const ApplicationView = React.createClass({
 
         <div className="fixed bottom-0 left-0 right-0 bg-white clearfix">
 
-          <button className="col h6 m0 p1 col-1" onClick={this.props.clearSave}>
+          <button className="col h6 m0 py2 col-3" onClick={this.props.clearSave}>
             Clear Save
           </button>
 
-          <a className="col h6 m0 p1 col-8" onClick={() => this.props.history.push("/property")}>
+          <button className="col h6 m0 py2 col-3" onClick={() => this.props.history.push("/property")}>
             View Properties
-          </a>
+          </button>
 
-          <button className="col h6 m0 p1 col-1" onClick={this.props.toggleMuliplier}>
+          <button className="col h6 m0 py2 col-4" onClick={() => {this.props.changeUpgradePoints(0.05)}}>
+            Get U ({format(this.props.ui.upgrades,'0.00')}U)
+          </button>
+
+          <button className="col h6 m0 py2 col-2" onClick={this.props.toggleMuliplier}>
             x{this.props.ui.multi}
           </button>
 

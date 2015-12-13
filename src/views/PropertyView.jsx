@@ -41,20 +41,12 @@ export default React.createClass({
                     {f(property.money(), "0,0")} => {property.income()}/s
                   </Section>
 
-                  <Section color={property.color} title="Upgrades:">
-                    {f(property.upgrades, "0,0.00")}
-                  </Section>
-
                   <Section color={property.color} title={`${property.researchName}:`}>
                     {property.researchMoney}
-                  </Section>
-
-                  <div className="px1 h5 col col-6">
-                    <a className="m1 h4 blue"
-                      onClick={() => history.push(`/research/${property.id}`)}>
-                      research
+                    <a className="m1 h4 blue" onClick={() => history.push(`/research/${property.id}`)}>
+                      (research)
                     </a>
-                  </div>
+                  </Section>
 
                   <div className='px2 h3'>
                     Instances: (completed: {property.completed})

@@ -42,7 +42,7 @@ persistStore(PersistedStore, {
         return omitNested(state, ['name','color','currencyName','researchName'])
       }
       // property omitted keys
-      else if (state[0].upgradedBuildings) {
+      else if (state[0].unlockedBuildings) {
         return omitNested(state, ['name','color','currencyName','researchName','buildingNames'])
       }
       // building omitted keys
