@@ -1,4 +1,6 @@
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
+import {startTicking} from 'actions/InterfaceActions'
+import {persistStore, autoRehydrate} from 'redux-persist'
 import logger from 'utils/loggerMiddleware'
 
 const thunk = function thunkMiddleware({ dispatch, getState }) {
@@ -13,8 +15,22 @@ import * as reducers from '../reducers'
 export const combinedReducers = combineReducers(reducers)
 
 // guide to redux middleware: http://gaearon.github.io/redux/docs/advanced/Middleware.html
-let finalCreateStore = compose(applyMiddleware(logger, thunk)(createStore))
+let finalCreateStore = compose(
+  applyMiddleware(logger, thunk)
+)(createStore)
 
 const initialState = {}
 
-export default finalCreateStore(combinedReducers, initialState)
+const rehydrateAction = (key, data) => {
+  return {
+    type: 'REHYDRATE',
+    key: key,
+    payload: data
+  }
+}
+
+const store = autoRehydrate()(finalCreateStore)(combinedReducers)
+persistStore(store, {rehydrateAction}, () => {
+  store.dispatch(startTicking())
+})
+export default store

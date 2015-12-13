@@ -55,6 +55,18 @@ export const titleify = (str) => {
   return str.replace(/\w\S*/g, t => t.charAt(0).toUpperCase() + t.substr(1).toLowerCase())
 }
 
+export const getRandom = (min, max) => {
+  return Math.random() * (max - min) + min
+}
+
+export const diceRoll = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+export const sampleArray = (arr, num) => {
+  return arr[diceRoll(0, arr.length-1)]
+}
+
 /**
 *
 * This allows for extra default transforms on all reducers

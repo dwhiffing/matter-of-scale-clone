@@ -1,11 +1,18 @@
 import _ from 'lodash'
 import u from 'updeep'
-import BuildingFactory from 'factories/BuildingFactory'
+import BuildingFactory, {helpers} from 'factories/BuildingFactory'
 import { add, pushToObj, shallowUpdate, reducerCreator } from 'utils/helpers'
 
 const initialState = {}
 
 const buildingReducers = {
+
+  rehydrate(state, action) {
+    if (action.key === 'buildings') {
+      return u.map((building) => u(building, helpers), action.payload)
+    }
+    return state
+  },
 
   updateBuilding(state, action) {
     const {buildingKey, update} = action.payload
@@ -27,7 +34,7 @@ const buildingReducers = {
     let { id, type, count } = action.payload
 
     const newBuildingSet = _.times(count, () => {
-      return BuildingFactory(id, type)
+      return u.map(b => u(b, helpers), BuildingFactory(id, type))
     })
 
     return pushToObj(state, ...newBuildingSet)

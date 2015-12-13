@@ -1,0 +1,57 @@
+// building count progression
+
+// 10 Bloodhound-spearman
+//
+// 10-20 Bloodhound-Spearman
+// 5-10 Archer-Tracker
+//
+// 20-40 Bloodhound-Spearman
+// 10-20 Archer-Tracker
+// 5-10 Woodsman-Pathfinder
+//
+// 40-80 Bloodhound-Spearman
+// 20-40 Archer-Tracker
+// 10-20 Woodsman-Pathfinder
+// 5-10 Scout-Trapper
+//
+// 80-160 Bloodhound-Spearman
+// 40-80 Archer-Tracker
+// 20-40 Woodsman-Pathfinder
+// 10-20 Scout-Trapper
+// 5-10 Wellspring-River
+
+
+goal = function() {
+  buildingClamp = Math.min(50, Math.ceil(instance.nth))*2
+  building = Math.min(9, Math.floor(diceRoll(0, buildingClamp) / 10) + diceRoll(0, 1))
+  amountClamp = Math.min(5, Math.ceil(nth/10))
+  amountSize = (5 - Math.floor(building/2)) - (5 - amountClamp)
+  amountRandom = diceRoll(2* thing * 5, 2*thing * 10)
+  return [building, amountRandom]
+}
+
+goal = function(nth) {
+  // the possible building types based on progression, varies from 0-1, to 0-9 as nth increases
+  const buildingTypes = Math.min(50, Math.ceil(nth))*2
+  const building = Math.min(8, Math.floor(diceRoll(0, buildingTypes) / 10) + diceRoll(0, 1))
+
+  // the possible amounts based on progression, earlier types double in qutatity every 10 instances
+  const amountClamp = Math.min(5, Math.ceil(nth / 10))
+  const amountSize = (5 - Math.floor(building / 2)) * amountClamp
+  const amount = diceRoll(amountSize * 5, amountSize * 10)
+  return {building, amount}
+}
+
+if (Math.floor(nth / 10) == 0) {
+  bloodhoud -spearman
+}
+if (Math.floor(nth / 10) == 1) {
+  bloodhoud -spearman
+  archer-tracker
+}
+if (Math.floor(nth / 10) == 1) {
+  bloodhoud -spearman
+  archer-tracker
+}
+
+Math.ceil(buildingIndex / 2 )

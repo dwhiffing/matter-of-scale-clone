@@ -1,3 +1,5 @@
+import { diceRoll } from 'utils/helpers'
+
 export default {
   name: 'hamlet village town city castle kingdom empire planet galaxy universe'.split(' '),
   color: 'maroon silver red gray yellow aqua navy green purple black'.split(' '),
@@ -17,6 +19,70 @@ export default {
     'Lepton-Builder Quark-Font Neutrino-Guide Proton-Decayer State-Binder Force-Splicer Gravity-Hole Magrathea Energy-Shaper Reality-Splitter'.split(' '),
     'Singularity Netherman Phaseshifter Selfsplitter Ascendant Transcendant Beyonder Starchild Planewalker Timeshifter'.split(' ')
   ],
+  goals: {
+    income: {
+      amountScale() {
+        const nth = this.instance() ? this.instance().nth : 1
+        return Math.min(20, Math.ceil(nth / 10))
+      },
+      goal() {
+        return this.amount * this.amountScale() * 10
+      },
+      target() {
+        return this.instance().income()
+      },
+      description() {
+        return `get ${this.goal()} income`
+      }
+    },
+    money: {
+      amountScale() {
+        const nth = this.instance() ? this.instance().nth : 1
+        return Math.min(100, Math.ceil(nth / 5))
+      },
+      goal() {
+        return this.amount * this.amountScale() * 10
+      },
+      target() {
+        return this.instance().money
+      },
+      description() {
+        return `get ${this.goal()} money`
+      }
+    },
+    buildingCount: {
+      amountScale() {
+        const nth = this.instance() ? this.instance().nth : 1
+        const amountClamp = (5 - Math.min(5, Math.ceil(nth / 10)))
+        return (5 - Math.floor(this.building / 2)) - amountClamp
+      },
+      goal() {
+        return this.amount
+      },
+      target() {
+        return this.getBuilding().count
+      },
+      description() {
+        return `get ${this.goal()} ${this.getBuilding().name}`
+      }
+    },
+    buildingIncome: {
+      amountScale() {
+        const nth = this.instance() ? this.instance().nth : 1
+        const amountClamp = Math.min(1, Math.ceil(nth / 20))
+        return (5 - Math.floor(this.building / 2)) * amountClamp
+      },
+      goal() {
+        return this.amount * this.getBuilding().baseIncome
+      },
+      target() {
+        return this.getBuilding().income()
+      },
+      description() {
+        return `get ${this.goal()} income with ${this.getBuilding().name}`
+      }
+    }
+  },
   research: {
     discount: {
       rank: 0,
@@ -24,35 +90,35 @@ export default {
       percent: true,
       increment: 0.05,
       max: 0.5,
-      description: opts => `${opts.name} buildings cost ${opts.value} less`
+      description: (opts={}) => `${opts.name} buildings cost ${opts.value} less`
     },
     ignoreCost: {
       rank: 0,
       current: 0,
       increment: 1,
       max: 10,
-      description: opts => `${opts.name} buildings ignore ${opts.value} buildings when computing cost`
+      description: (opts={}) => `${opts.name} buildings ignore ${opts.value} buildings when computing cost`
     },
     startMoney: {
       rank: 0,
       current: 0,
       increment: 200,
       max: 2000,
-      description: opts => `${opts.name}s start with ${opts.value} ${opts.currency}`
+      description: (opts={}) => `${opts.name}s start with ${opts.value} ${opts.currency}`
     },
     activeIncome: {
       rank: 0,
       current: 1,
       increment: 1,
       max: 5,
-      description: opts => `${opts.name}s generate ${opts.value} when clicking`
+      description: (opts={}) => `${opts.name}s generate ${opts.value} when clicking`
     },
     passiveIncome: {
       rank: 0,
       current: 0,
       increment: 5,
       max: 50,
-      description: opts => `${opts.name}s have ${opts.value} passive income`
+      description: (opts={}) => `${opts.name}s have ${opts.value} passive income`
     },
     upgradeRate: {
       rank: 0,
@@ -60,21 +126,21 @@ export default {
       percent: true,
       increment: 0.2,
       max: 2,
-      description: opts => `${opts.name}s generate upgrade points ${opts.value} faster`
+      description: (opts={}) => `${opts.name}s generate upgrade points ${opts.value} faster`
     },
     autoComplete: {
       rank: 0,
       current: 100,
       increment: -10,
       min: 0,
-      description: opts => `Auto Completes ${opts.name}s after ${opts.value} seconds`
+      description: (opts={}) => `Auto Completes ${opts.name}s after ${opts.value} seconds`
     },
     incrementCost: {
       rank: 0,
       current: 4,
       increment: -1,
       min: 1,
-      description: opts => `Finish ${opts.value} ${opts.name}s before getting next`
+      description: (opts={}) => `Finish ${opts.value} ${opts.name}s before getting next`
     },
     autoCost: {
       rank: 0,
@@ -82,16 +148,16 @@ export default {
       percent: true,
       increment: -0.05,
       min: 1,
-      description: opts => `Lower AutoBuy cost multiplier to ${opts.value}`
+      description: (opts={}) => `Lower AutoBuy cost multiplier to ${opts.value}`
     }
   },
-  otherResearch: {
+  specialResearch: {
     extraHamlets: {
       rank: 0,
       current: 1,
       increment: 1,
       max: 5,
-      description: opts => `You can have ${opts.value} ${opts.name}s active at once`
+      description: (opts={}) => `You can have ${opts.value} ${opts.name}s active at once`
     },
     autoBuy: {
       rank: 0,
@@ -99,7 +165,7 @@ export default {
       percent: true,
       increment: 0.05,
       max: 0.5,
-      description: opts => `AutoBuy ${opts.value} of ${opts.building} per tick`
+      description: (opts={}) => `AutoBuy ${opts.value} of ${opts.building} per tick`
     }
   }
 }
