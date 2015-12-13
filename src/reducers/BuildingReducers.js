@@ -1,28 +1,11 @@
 import _ from 'lodash'
 import u from 'updeep'
 import BuildingFactory from 'factories/BuildingFactory'
-import { add, toObj, shallowUpdate, reducerCreator } from 'utils/helpers'
+import { add, pushToObj, shallowUpdate, reducerCreator } from 'utils/helpers'
 
 const initialState = {}
 
 const buildingReducers = {
-
-  createInstance(state, action) {
-    let { type, count } = action.payload
-
-    const newBuildingSet = _.times(count, () => {
-      return BuildingFactory(type)
-    })
-
-    const concatWithState = [
-      Object.values(state),
-      ...newBuildingSet
-    ].reduce((a, b) => a.concat(b))
-
-    const update = concatWithState.reduce(toObj, {})
-
-    return Object.assign({}, update, state)
-  },
 
   updateBuilding(state, action) {
     const {buildingKey, update} = action.payload
@@ -33,17 +16,37 @@ const buildingReducers = {
   buyBuilding(state, action) {
     const {buildingKey} = action.payload
 
-    return shallowUpdate(buildingKey, {count: add(1)}, state)
+    // add 1 to building count when purchase is successful
+    return shallowUpdate(buildingKey, {
+      count: add(1)
+    }, state)
+  },
+
+  // when an instance is created, push it's building set onto the state
+  createInstance(state, action) {
+    let { id, type, count } = action.payload
+
+    const newBuildingSet = _.times(count, () => {
+      return BuildingFactory(id, type)
+    })
+
+    return pushToObj(state, ...newBuildingSet)
+  },
+
+  // TODO: Should remove buildings when instances are completed
+  completeInstance(state, action) {
+    return state
   },
 
   doTick(state, action) {
     return u.map(building => {
 
-      // this needs to handle actually spending money on autobuy
+      // autobuy the amount instance set aside for us last tick
       let update = {
-        autoBuyAmount: add(building.autoBuyIncrement())
+        autoBuyAmount: add(building.autoBuyFromLastTick())
       }
 
+      // if we have enough, buy the next building
       if (building.autoBuyComplete()) {
         update = {
           autoBuyAmount: 0,

@@ -11,24 +11,24 @@ export const toggleMuliplier = () => {
 
 export function startTicking() {
   return (dispatch, getState) => {
-    const { timerId } = getState().ui
+    const { tickTimeout, autobuyTimeout } = getState().ui
 
-    // set an interval at 'tickrate' to dispatch DO_TICK to the store
-    if (timerId === null) {
-      const timerId = setInterval(() => dispatch({type: 'DO_TICK'}), 500)
-      dispatch({type: 'START_TICKING', payload: timerId})
+    if (tickTimeout === null && autobuyTimeout === null) {
+      const autobuyTimeout = setInterval(() => dispatch({type: 'DO_AUTOBUY'}), 500)
+      const tickTimeout = setInterval(() => dispatch({type: 'DO_TICK'}), 500)
+      dispatch({type: 'START_TICKING', payload: {tickTimeout, autobuyTimeout}})
     }
   }
 }
 
 export function stopTicking() {
   return (dispatch, getState) => {
-    const { timerId } = getState().ui
+    const { tickTimeout, autobuyTimeout } = getState().ui
 
-    // clear the interval
-    if (timerId !== null) {
-      clearInterval(timerId)
-      dispatch({type: 'STOP_TICKING', payload: timerId})
+    if (tickTimeout !== null && autobuyTimeout !== null) {
+      clearInterval(tickTimeout)
+      clearInterval(autobuyTimeout)
+      dispatch({type: 'STOP_TICKING', payload: {tickTimeout, autobuyTimeout}})
     }
   }
 }

@@ -19,10 +19,11 @@ const ApplicationView = React.createClass({
   },
 
   componentDidUpdate() {
-    // This should go in the reducer, but it needs to trigger a dispatch somehow so the new instances get created?
+    // TODO: This should be done in the InstanceReducer when incrementing the autoComplete time
+    // However, it will require several other parts of the instance logic to be rewritten
     let instances = Object.values(this.props.instances)
-    let autoCompletedInstances = instances.filter(i => i.autoComplete >= i.autoCompleteDuration())
-    autoCompletedInstances.forEach(i => this.props.dispatch(markInstanceComplete(i.id)))
+    let autoCompletedInstances = instances.filter(i => i.progress >= 100 && !i.complete && i.autoComplete >= i.autoCompleteDuration())
+    autoCompletedInstances.forEach(i => this.props.markInstanceComplete(i.id))
   },
 
   render() {
@@ -38,9 +39,11 @@ const ApplicationView = React.createClass({
             Clear Save
           </button>
 
-          <a className="col h6 m0 p1 col-8" onClick={() => this.props.history.push("/property")}>
-            View Properties
-          </a>
+          {this.props.properties[1].unlocked || true &&
+            <a className="col h6 m0 p1 col-8" onClick={() => this.props.history.push("/property")}>
+              View Properties
+            </a>
+          }
 
           <button className="col h6 m0 p1 col-1" onClick={this.props.toggleMuliplier}>
             x{this.props.ui.multi}

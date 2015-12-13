@@ -13,12 +13,14 @@ export default React.createClass({
       <div className="properties-wrap">
         {Object.values(properties).map((property, i) => {
 
+          // TODO: this is clumsy, clean it up!
           const lastClone = Object.assign({}, last)
           if (!lastClone || !property.unlocked) return false
-
           last = property
-          const instances = property.instances().filter(i => !i.complete)
-          const completed = property.instances().filter(i => i.complete)
+          // end cleanup
+
+          const instances = property.getInstances()
+          const completed = property.completedInstances()
           const next = lastClone.toCompleteUntilNextInstance
 
           return (
@@ -45,7 +47,7 @@ export default React.createClass({
                   </Section>
 
                   <Section color={property.color} title={`${property.researchName}:`}>
-                    {property.research}
+                    {property.researchMoney}
                   </Section>
 
                   <div className="px1 h5 col col-6">

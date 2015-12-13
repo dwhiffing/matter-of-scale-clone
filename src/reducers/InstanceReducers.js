@@ -1,29 +1,23 @@
 import Constants from 'utils/Constants'
 import store from 'utils/reduxStore'
 import InstanceFactory from 'factories/InstanceFactory'
-import { add, sub, toObj, shallowUpdate, reducerCreator } from 'utils/helpers'
+import { add, sub, pushToObj, shallowUpdate, reducerCreator, clamp } from 'utils/helpers'
 import u from 'updeep'
 
 const initialState = {}
 
 const InstanceReducers = {
 
+  // generate some new instances and push them onto the state
   createInstance(state, action) {
-    const {type, count} = action.payload
-    const property = store.getState().properties[action.payload.type]
+    const {id, type, count} = action.payload
+    const property = store.getState().properties[type]
 
     const newInstances = _.times(count, () => {
-      return InstanceFactory(property, state)
+      return InstanceFactory(id, property, state)
     })
 
-    const concatWithState = [
-      Object.values(state),
-      ...newInstances
-    ].reduce((a, b) => a.concat(b))
-
-    const update = concatWithState.reduce(toObj, {})
-
-    return Object.assign({}, update, state)
+    return pushToObj(state, newInstances)
   },
 
   updateInstance(state, action) {
@@ -35,6 +29,8 @@ const InstanceReducers = {
   completeInstance(state, action) {
     const instanceKey = action.payload.id
 
+    // mark an instance as complete and remove it from money/income computation
+    // TODO: should remove completed instances so things dont get slow later on
     return shallowUpdate(instanceKey, {
       complete: true,
       autoComplete: -1,
@@ -45,33 +41,47 @@ const InstanceReducers = {
   buyBuilding(state, action) {
     const {instanceKey, cost} = action.payload
 
+    // deduct cost of building when purchased
     return shallowUpdate(instanceKey, {
       money: sub(cost)
     }, state)
   },
 
-  doTick(state, action) {
-    // autobuy needs to subtract from income
+  // this is done before DO_TICK so that autoBuy amounts are computed
+  doAutobuy(state, action) {
     return u.map((instance) => {
       if (instance.complete) return instance
-      const income = instance.income()
 
-      const progress = income / instance.goal * 100
+      let money = instance.money + instance.income()
 
-      // compute money from instance and update progress to goal
-      let update = {
+      const autoBuy = instance.autoBuy.map((a, i) => {
+        const maxPerTick = instance.buildings()[i].autoBuyIncrement()
+        const autoBuyAmount = clamp(maxPerTick, money)
+        money -= autoBuyAmount
+        return autoBuyAmount
+      })
+
+      return u({
+        money: money,
+        autoBuy: autoBuy
+      }, instance)
+
+    }, state)
+  },
+
+  doTick(state, action) {
+    return u.map((instance) => {
+      if (instance.complete) return instance
+
+      // get next income and compute progress toward income goal
+      const progress = instance.income() / instance.goal * 100
+      const incomplete = progress < 100
+
+      return u({
         progress: progress,
-        money: add(income)
-      }
+        autoComplete: c => incomplete ? c : c + 0.5
+      }, instance)
 
-      // if instance is complete, also add to autocompletion
-      if (progress >= 100) {
-        update = Object.assign({
-          autoComplete: add(.5)
-        }, update)
-      }
-
-      return u(update, instance)
     }, state)
   }
 

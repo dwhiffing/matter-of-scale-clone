@@ -4,21 +4,32 @@ import _ from 'lodash'
 import numeral from 'numeral'
 import updeep from 'updeep'
 
+// incrementers for use with updeep
 export const add = (i=1) => n => n + i
 export const sub = (i=1) => n => n - i
 
-// used by reduce to convert an array to an object with numeric keys
+// convert an array to an object with numeric keys
 export const toObj = (object, value, i) => {
   object[i] = value
   return object
 }
 
+export const pushToObj = (obj, arr) => {
+  // convert obj to an array and push arr
+  const objArr = Object.values(obj)
+
+  // flatten and convert back to object
+  return [objArr, arr].reduce((a, b) => a.concat(b)).reduce(toObj, {})
+}
+
+// short hand for state update on dynamic key
 export const shallowUpdate = (key, update, state) => {
   return updeep({
     [key]: update
   }, state)
 }
 
+// turn string to CONSTANT_CASE
 export const constantize = (string) => {
   return string
           .replace(/\W+/g, '_')
@@ -26,13 +37,22 @@ export const constantize = (string) => {
           .toUpperCase()
 }
 
+// shorthand to numeral's format
 export const format = (string, format) => {
   return numeral(string).format(format)
 }
 
-export const percentify = (n) => {
-  if (n % 1 === 0) return n
-  return numeral(n*100).format('0') + '%'
+export const clamp = (max, value) => {
+  let difference = value - max
+  if (difference < 0) {
+    difference = value
+  }
+  return Math.min(max, difference)
+}
+
+export const titleify = (str) => {
+  if (!str) return
+  return str.replace(/\w\S*/g, t => t.charAt(0).toUpperCase() + t.substr(1).toLowerCase())
 }
 
 /**

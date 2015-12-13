@@ -1,13 +1,18 @@
 import { updateProperty } from 'actions/PropertyActions'
 import { add, sub } from 'utils/helpers'
 
-export const createInstance = (id, count=1) => ({
-  type: 'CREATE_INSTANCE',
-  payload: {
-    type: id,
-    count: count
+export const createInstance = (type, count=1) => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: 'CREATE_INSTANCE',
+      payload: {
+        id: Object.keys(getState().instances).length,
+        type: type,
+        count: count
+      }
+    })
   }
-})
+}
 
 export const updateInstance = (id, update) => ({
   type: 'UPDATE_INSTANCE',
@@ -25,6 +30,9 @@ export const completeInstance = (id, type) => ({
   }
 })
 
+// TODO: the completion/creation logic should be handled within the reducer when
+// create/complete Instance is dispatched this is complicated by the fact that
+// the extra hamlet research needs hamlets to be created after its purchased
 export function markInstanceComplete(instanceKey) {
   return (dispatch, getState) => {
     const type = getState().instances[instanceKey].type
@@ -41,10 +49,12 @@ export function markInstanceComplete(instanceKey) {
 export function createMissingInstances(key) {
   return (dispatch, getState) => {
     const prop = getState().properties[key]
-    const count = prop.instances().length
+    const count = prop.getInstances().length
     const missing = key == 0 ? prop.research("extra") - count : prop.toBuild
 
-    dispatch(createInstance(key, missing))
+    if (missing > 0) {
+      dispatch(createInstance(key, missing))
+    }
   }
 }
 
@@ -57,7 +67,6 @@ export function triggerInstance(instanceKey) {
     }))
   }
 }
-
 
 export const InstanceThunks = {
   createInstance,

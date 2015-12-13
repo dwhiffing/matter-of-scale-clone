@@ -15,12 +15,13 @@ export default (props) => {
   const clickBuy = () => props.doBuildingPurchase(buildingId, id, building.cost())
   const clickUpgrade = () => props.doUpgradePurchase(type, index, building.upgrades())
 
-  const percent = 100 - (building.autoBuyAmount / (building.research('autoCost') * building.cost())) * 100
+  const percent = Math.max(-100, 100 - (building.autoBuyAmount / (building.research('autoCost') * building.cost())) * 100)
   const progressBarStyle = {
     background: 'rgba(1,1,0,0.2)',
     position: 'absolute',
     top: 0,
     right: `${percent}%`,
+    transition: "right 100ms",
     bottom: 0,
     left: 0,
   }
@@ -55,9 +56,7 @@ export default (props) => {
       })}
       onClick={clickBuy}>
         {building.unlocked() ? building.name : "????"}
-        {building.autoBuyAmount > 0 &&
-          <div style={progressBarStyle} />
-        }
+        <div style={progressBarStyle} />
       </button>
 
       <h4 className="m0 p1 regular center col col-1">
