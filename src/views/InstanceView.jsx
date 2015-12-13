@@ -40,7 +40,7 @@ export default React.createClass({
         </button>
 
         <h3 className="regular px2 m1">
-          {f(instance.progress, "0,0")}%: {goal.description()}
+          {f(instance.progress, "0,0")}%: {goal.description}
         </h3>
 
         <h4 className="center col m0 py1 regular col-4">

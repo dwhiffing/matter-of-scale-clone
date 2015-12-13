@@ -1,32 +1,9 @@
 import store from 'utils/reduxStore'
 import Constants from 'utils/Constants'
+import GoalFactory from 'factories/GoalFactory'
 import { sampleArray, diceRoll, getRandom } from 'utils/helpers'
 
 export default (id, property, nth) => {
-  const goal = Object.assign({
-    setInstance(instance) {
-      this.instanceId = instance.id
-
-      // the possible building types based on progression, varies from 0-1, to 0-9 as nth increases
-      const buildingTypes = Math.min(50, Math.ceil(instance.nth))*2
-      this.building = Math.min(8, Math.floor(diceRoll(0, buildingTypes) / 10) + diceRoll(0, 1))
-
-      // the possible amounts based on progression, earlier types double in qutatity every 10 instances
-      this.amount = diceRoll(this.amountScale() * 10, this.amountScale() * 20)
-    },
-    getBuilding() {
-      return this.instance().buildings()[this.building]
-    },
-    instance() {
-      return store.getState().instances[this.instanceId]
-    },
-    complete() {
-      return this.target() >= this.goal()
-    },
-    progress() {
-      return this.target() / this.goal() * 100
-    }
-  }, sampleArray(Object.values(Constants.goals), 1))
 
   return {
     id: id,
@@ -56,7 +33,7 @@ export default (id, property, nth) => {
     progress: 0,
 
     // the goal for this instance (just income goals for now, this should have more variety)
-    goal: goal,
+    goal: GoalFactory(property.id, nth),
 
     // the number of this instance type
     nth: nth,
@@ -87,6 +64,26 @@ export const helpers = {
   // how many seconds it takes to auto complete this instance
   autoCompleteDuration() {
     return this.property().research("autoComplete")
+  },
+
+  goalTarget() {
+    if (this.goal.type == 0) {
+      return this.income()
+    } else if (this.goal.type == 1) {
+      return this.money
+    } else if (this.goal.type == 2) {
+      return this.buildings()[this.goal.building].count
+    } else {
+      return this.buildings()[this.goal.building].income()
+    }
+  },
+
+  goalComplete() {
+    return this.goalTarget() >= this.goal.amount
+  },
+
+  goalProgress() {
+    return this.goalTarget() / this.goal.amount * 100
   },
 
   // shorthand to the property
