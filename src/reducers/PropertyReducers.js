@@ -41,7 +41,8 @@ const PropertyReducers = {
     let update = {
       [type]: {
         toCompleteUntilNextInstance: sub(1),
-        researchMoney: add(1)
+        researchMoney: add(1),
+        completed: add(1)
       }
     }
 
@@ -50,7 +51,8 @@ const PropertyReducers = {
       update = {
         [type]:  {
           toCompleteUntilNextInstance: property.research('incrementCost'),
-          researchMoney: add(1)
+          researchMoney: add(1),
+          completed: add(1)
         },
         [type + 1]:  {
           unlocked: true,
