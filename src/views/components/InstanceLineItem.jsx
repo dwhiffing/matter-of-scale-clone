@@ -9,8 +9,11 @@ export default ({instance, clickInstance, clickComplete}) => {
       <a onClick={() => clickInstance(instance.id)}>
         {format(instance.money, "0,0")} => {instance.income()}/s
       </a>
+      <span className="h5 px1">
+        {Math.floor(instance.progress)}%
+      </span>
 
-      {instance.progress >= 100 &&
+      {instance.progress >= 100 || true&&
         <span className="px1">
           <span className="h5 px1">
             {instance.autoComplete}/{instance.autoCompleteDuration()}

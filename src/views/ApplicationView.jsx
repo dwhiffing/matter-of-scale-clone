@@ -14,13 +14,14 @@ const actionsToMap = Object.assign({}, InterfaceThunks, PropertyThunks, Instance
 const ApplicationView = React.createClass({
 
   componentDidMount() {
-    this.props.startTicking()
-    this.props.createInstance(0)
   },
 
   componentDidUpdate() {
     // TODO: This should be done in the InstanceReducer when incrementing the autoComplete time
     // However, it will require several other parts of the instance logic to be rewritten
+    if (this.props.ui.tickTimeout && Object.keys(this.props.instances).length === 0) {
+      this.props.createInstance(0)
+    }
     let instances = Object.values(this.props.instances)
     let autoCompletedInstances = instances.filter(i => i.progress >= 100 && !i.complete && i.autoComplete >= i.autoCompleteDuration())
     autoCompletedInstances.forEach(i => this.props.markInstanceComplete(i.id))
@@ -35,7 +36,7 @@ const ApplicationView = React.createClass({
 
         <div className="fixed bottom-0 left-0 right-0 bg-white clearfix">
 
-          <button className="col h6 m0 p1 col-3" onClick={this.props.clearSave}>
+          <button className="col h6 m0 p1 col-1" onClick={this.props.clearSave}>
             Clear Save
           </button>
 

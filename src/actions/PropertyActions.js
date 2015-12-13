@@ -46,7 +46,7 @@ export function buyResearch(propertyKey, researchKey, cost) {
 
     if (researchKey == 'incrementCost') {
       dispatch(updateProperty(propertyKey,{
-        toCompleteUntilNextInstance: property.research('incrementCost')
+        toCompleteUntilNextInstance: property.researchTypes['incrementCost'].current
       }))
     }
   }

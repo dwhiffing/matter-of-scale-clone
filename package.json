@@ -33,6 +33,7 @@
     "react-router": "^1.0.0-beta3",
     "redux": "^3.0.2",
     "redux-actions": "^0.8.0",
+    "redux-persist": "^1.4.8",
     "updeep": "^0.10.1"
   },
   "devDependencies": {

@@ -17,7 +17,6 @@ export default React.createClass({
     const { id, type, name, money, income, currencyName, goal } = instance
     const availableUpgrades = this.props.properties[type].upgrades
     const multi = this.props.ui.multi
-
     return (
       <div className="properties-wrap center">
 
@@ -41,7 +40,7 @@ export default React.createClass({
         </button>
 
         <h3 className="regular px2 m1">
-          {f(instance.progress, "0,0")}%: get {goal} income
+          {f(instance.progress, "0,0")}%: {goal.description()}
         </h3>
 
         <h4 className="center col m0 py1 regular col-4">

@@ -1,12 +1,19 @@
 import Constants from 'utils/Constants'
 import store from 'utils/reduxStore'
-import PropertyFactory from 'factories/PropertyFactory'
+import PropertyFactory, {helpers} from 'factories/PropertyFactory'
 import { add, sub, toObj, shallowUpdate, reducerCreator } from 'utils/helpers'
 import u from 'updeep'
 
-const initialState = PropertyFactory().reduce(toObj, {})
+const initialState = u.map((prop) => u(prop, helpers), PropertyFactory().reduce(toObj, {}))
 
 const PropertyReducers = {
+
+  rehydrate(state, action) {
+    if (action.key === 'properties') {
+      return u.map((property) => u(property, helpers), action.payload)
+    }
+    return state
+  },
 
   updateProperty(state, action) {
     const {propertyKey, update} = action.payload
@@ -17,7 +24,6 @@ const PropertyReducers = {
   createInstance(state, action) {
     const { id, type } = action.payload
     const property = state[type]
-
     // deduct build queue if instance was created by completing an instance
     if (property.toBuild > 0 && property.id !== 0) {
       return shallowUpdate(property.id, {
