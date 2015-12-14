@@ -11,6 +11,7 @@ export default ({ properties, history, markInstanceComplete }) => {
 
         // TODO: this is clumsy, clean it up!
         const lastClone = Object.assign({}, last)
+        const lastName = titleify(lastClone.name)
         if (!lastClone || !property.unlocked) return false
         last = property
         // end cleanup
@@ -25,31 +26,44 @@ export default ({ properties, history, markInstanceComplete }) => {
         const income = f(property.income(), "0,0")
         const id = property.id
 
+        const researchLink = (
+          <a href={`#/research/${id}`}>{name} Improvements</a>
+        )
+
         return (
           <div key={i}>
 
             <h3>{name}s</h3>
 
             {next > 0 &&
-              <p>{titleify(lastClone.name)}s til next {property.name}: {next}</p>
+              <p>
+                {lastName}s til next {property.name}: {next}
+              </p>
             }
 
             {instances.length > 0 &&
               <div>
-                <p>{money} {cur} stored and producing {income} per tick</p>
-
                 <p>
-                  {research} {researchName} is available for use on <a href={`#/research/${id}`}>{name} Improvements</a>.
+                  {money} {cur} stored and producing {income} per tick
                 </p>
 
-                <p>{property.completed} {name}s have been completed total.</p>
+                <p>
+                  {research} {researchName} is available for use on {researchLink}.
+                </p>
 
-                <h4>Active {name}s <span className="badge">{instances.length}</span></h4>
+                <p>
+                  {property.completed} {name}s have been completed total.
+                </p>
+
+                <h4>
+                  Active {name}s <span className="badge">{instances.length}</span>
+                </h4>
 
                 <ul className="list-group">
                   {instances.map((instance, i) => {
                     return (
-                      <InstanceLineItem key={i}
+                      <InstanceLineItem
+                        key={i}
                         instance={instance}
                         clickInstance={id => history.push(`/instance/${id}`)}
                         clickComplete={id => markInstanceComplete(id)}>

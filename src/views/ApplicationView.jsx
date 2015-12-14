@@ -1,7 +1,7 @@
 import React from "react"
 import _ from "lodash"
 import { connect } from 'react-redux'
-import { mapStateKeysToProps, format } from 'utils/helpers'
+import { mapStateKeysToProps, format, titleify } from 'utils/helpers'
 
 import { InterfaceThunks } from "actions/InterfaceActions"
 import { InstanceThunks } from "actions/InstanceActions"
@@ -29,12 +29,21 @@ const ApplicationView = React.createClass({
   },
 
   render() {
+    let instance
+    const { instances, params } = this.props
+    if (params.instance) {
+      instance = instances[params.instance]
+    }
     return (
       <div className="container">
 
         <ol className="breadcrumb">
           <li><a href="#/property">Properties</a></li>
-          <li className="active">Data</li>
+          {instance &&
+            <li className="active"><a href={`#/instance/${params.instance}`}>
+              {titleify(instance.name)} {params.instance}
+            </a></li>
+          }
         </ol>
 
         {this.props.children &&
@@ -43,7 +52,7 @@ const ApplicationView = React.createClass({
 
         <nav className="navbar navbar-default navbar-fixed-bottom">
           <div className="container">
-          <div className="row text-center" style={{margin: "15px -10px"}}>
+          <div className="row text-center" style={{margin: "0 -10px"}}>
               <a className="col-xs-2" onClick={this.props.clearSave}>
                 Clear Save
               </a>

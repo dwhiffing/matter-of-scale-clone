@@ -4,7 +4,6 @@ import { sampleArray, diceRoll, getRandom } from 'utils/helpers'
 import u from 'updeep'
 
 export default (id, property, nth) => {
-
   // these properties are persisted to localStorage
   return {
 
@@ -80,6 +79,10 @@ const helpers = {
   // how many seconds it takes to auto complete this instance
   autoCompleteDuration() {
     return this.property().research("autoComplete")
+  },
+
+  autoCompleteProgress() {
+    return Math.floor(Math.min(100, (this.autoComplete / this.autoCompleteDuration()) * 100))
   },
 
   goalTarget() {

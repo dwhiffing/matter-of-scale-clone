@@ -1,11 +1,11 @@
 import { sampleArray, diceRoll, getRandom } from 'utils/helpers'
-import { baseIncome, buildingNames} from 'factories/BuildingFactory'
+import { baseIncome, baseCost, buildingNames} from 'factories/BuildingFactory'
 
 const goals = [
   {
     type: 0,
     amountScale(nth) {
-      return Math.min(20, Math.ceil(nth / 10))
+      return Math.min(10, Math.ceil(nth / 10)) * Math.min(10, Math.ceil(nth / 5))
     },
     getDescription(amount, building) {
       return `get ${amount} income`
@@ -13,7 +13,7 @@ const goals = [
   }, {
     type: 1,
     amountScale(nth) {
-      return Math.min(100, Math.ceil(nth / 5)) * 10
+      return Math.min(10, Math.ceil(nth / 10)) * Math.min(100, Math.ceil(nth / 2)) * 10
     },
     getDescription(amount, building) {
       return `get ${amount} money`
@@ -21,8 +21,7 @@ const goals = [
   }, {
     type: 2,
     amountScale(nth, building) {
-      const amountClamp = (5 - Math.min(5, Math.ceil(nth / 10)))
-      return Math.max(5, (5 - Math.floor(building / 2)) - amountClamp)
+      return Math.ceil((building+1) / 2) * Math.min(5, Math.ceil(nth / 10))
     },
     getDescription(amount, building) {
       return `get ${amount} ${building}`
@@ -30,8 +29,7 @@ const goals = [
   }, {
     type: 3,
     amountScale(nth, building) {
-      const amountClamp = Math.min(1, Math.ceil(nth / 20))
-      return (5 - Math.floor(building / 2)) * amountClamp * baseIncome[building]
+      return (Math.ceil((building+1) / 2)) * baseIncome[building]
     },
     getDescription(amount, building) {
       return `get ${amount} income with ${building}`
