@@ -1,7 +1,7 @@
 import React from "react"
 import _ from "lodash"
-import { format as f } from "utils/helpers"
-
+import { format as f, titleify } from "utils/helpers"
+import { ProgressBar } from 'react-bootstrap'
 import BuildingLineItem from 'views/components/BuildingLineItem'
 
 export default React.createClass({
@@ -14,86 +14,76 @@ export default React.createClass({
     }
 
     const { doBuildingPurchase, doUpgradePurchase, unlockBuilding} = this.props
-    const { id, type, name, money, income, currencyName, goal } = instance
+    const { id, type, money, income, currencyName, goal } = instance
     const {upgrades, multi} = this.props.ui
 
+    const name = titleify(instance.name)
+    const progress = Math.floor(Math.min(100, instance.progress))
+    const autoComplete = 100 - Math.floor(Math.min(100, (instance.autoComplete / instance.autoCompleteDuration()) * 100))
+
     return (
-      <div className="properties-wrap center">
+      <div>
+        <div className="text-center">
+          <h2>
+            {name}
+          </h2>
 
-        <h1 className="center m1">
-          {name.toUpperCase()}
-        </h1>
-
-        {instance.progress >= 100 && // if instance is complete
-          <div>
-            <button onClick={() => {this.props.markInstanceComplete(id)}}>
-              Complete Level
-            </button>
+          {instance.progress >= 100 && // if instance is complete
             <div>
-              {instance.autoComplete}/{instance.autoCompleteDuration()}
+            <ProgressBar
+              onClick={() => {this.props.markInstanceComplete(id)}}
+              now={autoComplete}
+              label="%(percent)s%" />
+              <h6>Click bar to complete level or wait for auto-complete</h6>
             </div>
-          </div>
-        }
+          }
 
-        <h3 className="regular px2 m1">
-          {f(instance.progress, "0,0")}%: {goal.description}
-        </h3>
+          {instance.progress < 100 && // if instance is complete
+            <ProgressBar now={progress} label="%(percent)s%" />
+          }
 
-        <h4 className="center col m0 py1 regular col-3">
-          {f(money, "0,0")} {currencyName}
-        </h4>
-
-        <h4 className="center col m0 py1 regular col-3">
-          {instance.income()} {currencyName}/sec
-        </h4>
-
-        <h4 className="center col m0 py1 regular col-3">
-          {instance.property().researchMoney} {instance.property().researchName}
-        </h4>
-
-        <h4 className="center col m0 py1 regular col-3">
-          <a className="m1 h4 blue" onClick={() => this.props.history.push(`/research/${instance.type}`)}>
-            research
-          </a>
-        </h4>
-
-        <h5 className="center col m0 py1 col-4">
-          Building
-        </h5>
-
-        <h5 className="center col m0 py1 col-2">
-          #
-        </h5>
-
-        <h5 className="center col m0 py1 col-2">
-          Cost ({currencyName})
-        </h5>
-
-        <h5 className="center col m0 py1 col-2">
-          Income / Building
-        </h5>
-
-        <h5 className="center col m0 py1 col-2">
-          Income / Tick
-        </h5>
-
-        <div>
-          {instance.buildings().map((building, index) => {
-            return (
-              <BuildingLineItem key={index}
-                building={building}
-                instance={instance}
-                index={index}
-                type={type}
-                multi={multi}
-                upgrades={upgrades}
-                doUpgradePurchase={doUpgradePurchase}
-                doBuildingPurchase={doBuildingPurchase}
-                unlockBuilding={unlockBuilding}>
-              </BuildingLineItem>
-            )
-          })}
+          <h5 style={{textAlign:'center'}}>
+            Goal: {goal.description}
+          </h5>
         </div>
+
+        <p>
+          Contains {f(money, "0,0")} {currencyName} producing {instance.income()} {currencyName}/sec
+        </p>
+
+        <p>
+          {instance.property().researchMoney} {instance.property().researchName} available for <a href={`#/research/${instance.type}`}>{name} Improvements</a>.
+        </p>
+
+        <table className="table">
+
+          <thead><tr>
+            <th>Building</th>
+            <th>#</th>
+            <th>Cost</th>
+            <th>Income</th>
+            <th>/ Tick</th>
+          </tr></thead>
+
+          <tbody>
+            {instance.buildings().map((building, index) => {
+              return (
+                <BuildingLineItem key={index}
+                  building={building}
+                  instance={instance}
+                  index={index}
+                  type={type}
+                  multi={multi}
+                  upgrades={upgrades}
+                  doUpgradePurchase={doUpgradePurchase}
+                  doBuildingPurchase={doBuildingPurchase}
+                  unlockBuilding={unlockBuilding}>
+                </BuildingLineItem>
+              )
+            })}
+          </tbody>
+
+        </table>
       </div>
     )
   }

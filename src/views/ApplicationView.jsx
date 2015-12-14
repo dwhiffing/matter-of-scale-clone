@@ -30,30 +30,38 @@ const ApplicationView = React.createClass({
 
   render() {
     return (
-      <div className="container" style={{marginBottom: 50}}>
+      <div className="container">
+
+        <ol className="breadcrumb">
+          <li><a href="#/property">Properties</a></li>
+          <li className="active">Data</li>
+        </ol>
+
         {this.props.children &&
           React.cloneElement(this.props.children, {...this.props})
         }
 
-        <div className="fixed bottom-0 left-0 right-0 bg-white clearfix">
+        <nav className="navbar navbar-default navbar-fixed-bottom">
+          <div className="container">
+          <div className="row text-center" style={{margin: "15px -10px"}}>
+              <a className="col-xs-2" onClick={this.props.clearSave}>
+                Clear Save
+              </a>
 
-          <button className="col h6 m0 py2 col-3" onClick={this.props.clearSave}>
-            Clear Save
-          </button>
+              <a className="col-xs-4" onClick={() => this.props.history.push("/property")}>
+                View Properties
+              </a>
 
-          <button className="col h6 m0 py2 col-3" onClick={() => this.props.history.push("/property")}>
-            View Properties
-          </button>
+              <a className="col-xs-4" onClick={() => {this.props.changeUpgradePoints(0.05)}}>
+                Get Upgrades ({format(this.props.ui.upgrades,'0.00')}U)
+              </a>
 
-          <button className="col h6 m0 py2 col-4" onClick={() => {this.props.changeUpgradePoints(0.05)}}>
-            Get U ({format(this.props.ui.upgrades,'0.00')}U)
-          </button>
-
-          <button className="col h6 m0 py2 col-2" onClick={this.props.toggleMuliplier}>
-            x{this.props.ui.multi}
-          </button>
-
-        </div>
+              <a className="col-xs-2" onClick={this.props.toggleMuliplier}>
+                x{this.props.ui.multi} click
+              </a>
+            </div>
+          </div>
+        </nav>
       </div>
     )
   }

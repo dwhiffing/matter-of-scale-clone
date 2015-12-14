@@ -28,6 +28,7 @@
     "lodash": "^3.10.1",
     "numeral": "^1.5.3",
     "react": "^0.14.0-rc1",
+    "react-bootstrap": "^0.28.1",
     "react-dom": "^0.14.0-rc1",
     "react-redux": "^3.0.0",
     "react-router": "^1.0.0-beta3",
