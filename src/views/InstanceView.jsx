@@ -9,17 +9,20 @@ export default React.createClass({
     const instance = this.props.instances[this.props.params.instance]
 
     if (!instance) {
-      _.defer(() => this.props.history.push('/property'))
       return false
     }
 
     const { doBuildingPurchase, doUpgradePurchase, unlockBuilding} = this.props
-    const { id, type, money, income, currencyName, goal } = instance
+    const { id, type, money, currencyName, goal } = instance
     const {upgrades, multi} = this.props.ui
 
     const name = titleify(instance.name)
     const progress = Math.floor(Math.min(100, instance.progress))
-    const autoComplete = 100 - Math.floor(Math.min(100, (instance.autoComplete / instance.autoCompleteDuration()) * 100))
+    const { researchMoney, researchName } = instance.property()
+    const income = instance.income()
+    const link = (
+      <a href={`#/research/${instance.type}`}>{name} Improvements</a>
+    )
 
     return (
       <div>
@@ -28,17 +31,18 @@ export default React.createClass({
             {name}
           </h2>
 
-          {instance.progress >= 100 && // if instance is complete
-            <div>
-            <ProgressBar
-              onClick={() => {this.props.markInstanceComplete(id)}}
-              now={autoComplete}
-              label="%(percent)s%" />
+          {instance.progress >= 100 &&
+            <div onClick={() => {this.props.markInstanceComplete(id)}}>
+              <ProgressBar
+                className="pointer"
+                now={100 - instance.autoCompleteProgress()}
+                label="%(percent)s%">
+              </ProgressBar>
               <h6>Click bar to complete level or wait for auto-complete</h6>
             </div>
           }
 
-          {instance.progress < 100 && // if instance is complete
+          {instance.progress < 100 &&
             <ProgressBar now={progress} label="%(percent)s%" />
           }
 
@@ -48,11 +52,11 @@ export default React.createClass({
         </div>
 
         <p>
-          Contains {f(money, "0,0")} {currencyName} producing {instance.income()} {currencyName}/sec
+          Contains {f(money, "0,0")} {currencyName} producing {income} {currencyName}/sec
         </p>
 
         <p>
-          {instance.property().researchMoney} {instance.property().researchName} available for <a href={`#/research/${instance.type}`}>{name} Improvements</a>.
+          {researchMoney} {researchName} available for {link}.
         </p>
 
         <table className="table">

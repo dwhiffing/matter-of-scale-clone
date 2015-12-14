@@ -96,13 +96,13 @@ const helpers = {
     }
 
     if (/extra/.test(key)) {
-      return costFn(rank+1, 4, 5, rank)
+      return costFn(rank+1, 2, 2, rank)
     }
     else if (/autoBuy/.test(key)) {
-      return costFn(rank+1, 2, 1.5, rank)
+      return costFn(rank+1, 1, 1.5, rank-1)
     }
     else {
-      return costFn(1, 1, 2, rank-1)
+      return costFn(1, 1, 1.5, rank-1)
     }
   },
 

@@ -15,7 +15,7 @@ export default (props) => {
   const clickBuy = () => props.doBuildingPurchase(buildingId, id, building.cost())
   const clickUpgrade = () => props.doUpgradePurchase(building.instanceId, index, building.upgradeCost())
 
-  const percent = Math.max(-100, 100 - (building.autoBuyAmount / (building.research('autoCost') * building.cost())) * 100)
+  const percent = Math.max(-100, 100 - building.autoBuyPercent())
   const progressBarStyle = {
     background: 'rgba(1,1,0,0.1)',
     position: 'absolute',
@@ -65,7 +65,7 @@ export default (props) => {
       </td>
 
       <td>
-          {building.incomeForSingle()} {building.upgrades() > 1 && <small>({building.baseIncome}x{building.upgrades()})</small>}
+        {building.incomeForSingle()} {building.upgrades() > 1 && <small>({building.baseIncome}x{building.upgrades()})</small>}
       </td>
 
       <td>

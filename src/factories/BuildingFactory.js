@@ -94,6 +94,11 @@ const helpers = {
     return this.autoBuyAmount + this.autoBuyFromLastTick() >= this.autoBuyCost()
   },
 
+  // Progress through the current autobuy cycle
+  autoBuyPercent() {
+    return (this.autoBuyAmount / (this.research('autoCost') * this.cost())) * 100
+  },
+
   // amount you must accumulate from auto buy to get a new building
   autoBuyCost() {
     return this.cost() * this.research('autoCost')

@@ -43,6 +43,8 @@ export default React.createClass({
               }
             }
 
+            const style = canAfford ? {} : {backgroundColor: ''}
+
             return (
               <button type="button" key={i} className={cx("list-group-item", {
                   disabled: isComplete
@@ -52,8 +54,8 @@ export default React.createClass({
                 {property.researchDescription(name)}
 
                 {!isComplete &&
-                  <span className={cx('badge',{
-
+                  <span className={cx("badge", {
+                    danger: !canAfford
                   })}>
                     {cost}
                   </span>

@@ -8,8 +8,7 @@ export default ({instance, clickInstance, clickComplete}) => {
   const cur = titleify(instance.currencyName)
   const income = format(instance.income(), "0,0")
   const percent = format(instance.progress, "0")
-  const autoComplete = 100 - Math.floor(Math.min(100, (instance.autoComplete / instance.autoCompleteDuration()) * 100))
-  const thing = percent >= 100 ? autoComplete : percent
+  const thing = percent >= 100 ? 100 - instance.autoCompleteProgress() : percent
   const progressBarStyle = {
     background: 'rgba(1,1,0,0.1)',
     position: 'absolute',
