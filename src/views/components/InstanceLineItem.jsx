@@ -1,29 +1,48 @@
 import React from "react"
-import { format } from "utils/helpers"
+import { ProgressBar } from 'react-bootstrap'
+import { format, titleify } from "utils/helpers"
 
 export default ({instance, clickInstance, clickComplete}) => {
-
+  const name = titleify(instance.name)
+  const money = format(instance.money, "0,0")
+  const cur = titleify(instance.currencyName)
+  const income = format(instance.income(), "0,0")
+  const percent = format(instance.progress, "0")
+  const autoComplete = 100 - Math.floor(Math.min(100, (instance.autoComplete / instance.autoCompleteDuration()) * 100))
+  const thing = percent >= 100 ? autoComplete : percent
+  const progressBarStyle = {
+    background: 'rgba(1,1,0,0.1)',
+    position: 'absolute',
+    top: 0,
+    right: `${100-thing}%`,
+    transition: "right 100ms",
+    bottom: 0,
+    left: 0,
+    zIndex: 1
+  }
   return (
-    <li className="bar-wrap col col-12 left-align">
+    <li className="h5 row list-group-item" style={{margin: 0, position: 'relative'}}>
 
-      <a onClick={() => clickInstance(instance.id)}>
-        {format(instance.money, "0,0")} => {instance.income()}/s
-      </a>
-      <span className="h5 px1">
-        {Math.floor(instance.progress)}%
-      </span>
+      <div style={progressBarStyle} />
+      <div style={{zIndex: 1, position: 'relative'}}>
 
-      {instance.progress >= 100 &&
-        <span className="px1">
-          <span className="h5 px1">
-            {instance.autoComplete}/{instance.autoCompleteDuration()}
-          </span>
-          <button onClick={() => clickComplete(instance.id)}>
-            Complete Level
-          </button>
+        <span>
+          <a onClick={() => clickInstance(instance.id)}>{name} {instance.id}</a>
         </span>
-      }
 
+        <span className="pull-right">
+          {money} {cur} <small>{income} / s</small>
+        </span>
+
+        {instance.progress >= 100 &&
+          <span className="px1">
+            <button onClick={() => clickComplete(instance.id)}>
+              click to complete manually
+            </button>
+          </span>
+        }
+
+      </div>
     </li>
   )
 }

@@ -1,74 +1,67 @@
 import React from "react"
 import InstanceLineItem from 'views/components/InstanceLineItem'
-import Section from 'views/components/Section'
-import { format as f } from "utils/helpers"
+import { format as f, titleify } from "utils/helpers"
 
 
-export default React.createClass({
-  render() {
-    const { properties, history, markInstanceComplete } = this.props
-    let last
+export default ({ properties, history, markInstanceComplete }) => {
+  let last
+  return (
+    <div>
+      {Object.values(properties).map((property, i) => {
 
-    return (
-      <div className="properties-wrap">
-        {Object.values(properties).map((property, i) => {
+        // TODO: this is clumsy, clean it up!
+        const lastClone = Object.assign({}, last)
+        if (!lastClone || !property.unlocked) return false
+        last = property
+        // end cleanup
 
-          // TODO: this is clumsy, clean it up!
-          const lastClone = Object.assign({}, last)
-          if (!lastClone || !property.unlocked) return false
-          last = property
-          // end cleanup
+        const instances = property.getInstances()
+        const next = lastClone.toCompleteUntilNextInstance
+        const cur = titleify(property.currencyName)
+        const name = titleify(property.name)
+        const money = f(property.money(), "0,0")
+        const research = f(property.researchMoney, "0")
+        const researchName = titleify(property.researchName)
+        const income = f(property.income(), "0,0")
+        const id = property.id
 
-          const instances = property.getInstances()
-          const next = lastClone.toCompleteUntilNextInstance
+        return (
+          <div key={i}>
 
-          return (
-            <div className="px1 mb1 h2 black" key={i}>
+            <h3>{name}s</h3>
 
-              <span className="caps">
-                {property.name}s
-              </span>
+            {next > 0 &&
+              <p>{titleify(lastClone.name)}s til next {property.name}: {next}</p>
+            }
 
-              {i !== 0 &&
-                <span className="h6 gray">
-                  {next > 0 ? `(${lastClone.name}s til next ${property.name}: ${next})` : ""}
-                </span>
-              }
+            {instances.length > 0 &&
+              <div>
+                <p>{money} {cur} stored and producing {income} per tick</p>
 
-              {instances.length > 0 &&
-                <div>
-                  <Section color={property.color} title={`${property.currencyName}:`}>
-                    {f(property.money(), "0,0")} => {property.income()}/s
-                  </Section>
+                <p>
+                  {research} {researchName} is available for use on <a href={`#/research/${id}`}>{name} Improvements</a>.
+                </p>
 
-                  <Section color={property.color} title={`${property.researchName}:`}>
-                    {property.researchMoney}
-                    <a className="m1 h4 blue" onClick={() => history.push(`/research/${property.id}`)}>
-                      (research)
-                    </a>
-                  </Section>
+                <p>{property.completed} {name}s have been completed total.</p>
 
-                  <div className='px2 h3'>
-                    Instances: (completed: {property.completed})
-                  </div>
+                <h4>Active {name}s <span className="badge">{instances.length}</span></h4>
 
-                  <ul className="px3 clearfix">
-                    {instances.map((instance, i) => {
-                      return (
-                        <InstanceLineItem key={i}
-                          instance={instance}
-                          clickInstance={id => history.push(`/instance/${id}`)}
-                          clickComplete={id => markInstanceComplete(id)}>
-                        </InstanceLineItem>
-                      )
-                    })}
-                  </ul>
-                </div>
-              }
-            </div>
-          )
-        })}
-      </div>
-    )
-  }
-})
+                <ul className="list-group">
+                  {instances.map((instance, i) => {
+                    return (
+                      <InstanceLineItem key={i}
+                        instance={instance}
+                        clickInstance={id => history.push(`/instance/${id}`)}
+                        clickComplete={id => markInstanceComplete(id)}>
+                      </InstanceLineItem>
+                    )
+                  })}
+                </ul>
+              </div>
+            }
+          </div>
+        )
+      })}
+    </div>
+  )
+}
