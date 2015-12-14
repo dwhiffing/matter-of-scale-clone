@@ -19,7 +19,7 @@ export default () => {
       id: id,
 
       // accumulated research currency from instance completion
-      researchMoney: 1000,
+      researchMoney: 0,
 
       // current research levels and rates
       researchTypes: ResearchFactory(id),

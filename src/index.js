@@ -9,7 +9,7 @@ import PropertyView from "views/PropertyView"
 import InstanceView from "views/InstanceView"
 import ResearchView from "views/ResearchView"
 
-import { Router, Route } from 'react-router'
+import { Router, Route, IndexRoute } from 'react-router'
 import { Provider } from 'react-redux'
 
 import "index.css"
@@ -21,6 +21,7 @@ ReactDOM.render(
         <Route path="/property" component={PropertyView} />
         <Route path="/research/:property" component={ResearchView} />
         <Route path="/instance/:instance" component={InstanceView} />
+        <IndexRoute component={PropertyView} />
       </Route>
     </Router>
   </Provider>,
