@@ -41,14 +41,12 @@ const buildingReducers = {
   },
 
   completeInstance(state, action) {
-    const id = action.payload.id*10
 
     // TODO: helper for array from range
-    const arr = [id, id+1, id+2, id+3, id+4, id+5, id+6, id+7, id+8, id+9]
-
     // omit the buildings from the store
+    const id = action.payload.id*10
     const omittedState = Object.values(
-      u.omit(arr, state)
+      u.omit(_.range(id, id+10), state)
     ).reduce(toObj, {})
 
     // update the id to reflect the index so that buildings remain mapped properly

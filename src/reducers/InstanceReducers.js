@@ -64,11 +64,10 @@ const InstanceReducers = {
 
       let money = instance.money + instance.income()
 
-      const autoBuy = instance.autoBuy.map((a, i) => {
-        const maxPerTick = instance.buildings()[i].autoBuyIncrement()
-        const autoBuyAmount = clamp(maxPerTick, money)
-        money -= autoBuyAmount
-        return autoBuyAmount
+      const autoBuy = instance.buildings().map((building, i) => {
+        const amount = clamp(building.autoBuyIncrement(), money)
+        money -= amount
+        return amount
       })
 
       return u({

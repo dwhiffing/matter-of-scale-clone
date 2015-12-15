@@ -38,11 +38,12 @@ export default (id, property, nth) => {
   }
 }
 
+// helpers are assigned to each obj as it is created / loaded
 export const rehydrate = (instance) => {
 
-  let rehydratedInstance = u(instance, helpers)
-
+  const rehydratedInstance = u(instance, helpers)
   const property = rehydratedInstance.property()
+
   return Object.assign({}, {
 
     // the display name of this instance

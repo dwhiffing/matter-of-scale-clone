@@ -67,6 +67,13 @@ export const sampleArray = (arr, num) => {
   return arr[diceRoll(0, arr.length-1)]
 }
 
+export const replaceString = (obj, string) => {
+  Object.keys(obj).forEach(name => {
+    string = string.replace(`{${name}}`, obj[name])
+  })
+  return string
+}
+
 /**
 *
 * This allows for extra default transforms on all reducers

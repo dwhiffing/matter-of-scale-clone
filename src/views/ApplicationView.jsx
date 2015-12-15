@@ -29,11 +29,13 @@ const ApplicationView = React.createClass({
   },
 
   render() {
-    let instance
     const { instances, params } = this.props
+
+    let instance
     if (params.instance) {
       instance = instances[params.instance]
     }
+
     return (
       <div className="container">
 
@@ -52,7 +54,8 @@ const ApplicationView = React.createClass({
 
         <nav className="navbar navbar-default navbar-fixed-bottom">
           <div className="container">
-          <div className="row text-center" style={{margin: "0 -10px"}}>
+            <div className="row text-center" style={{margin: "0 -10px"}}>
+
               <a className="col-xs-2" onClick={this.props.clearSave}>
                 Clear Save
               </a>
@@ -61,13 +64,14 @@ const ApplicationView = React.createClass({
                 View Properties
               </a>
 
-              <a className="col-xs-4" onClick={() => {this.props.changeUpgradePoints(0.05)}}>
+              <a className="col-xs-4" onClick={() => this.props.changeUpgradePoints(0.05)}>
                 Get Upgrades ({format(this.props.ui.upgrades,'0.00')}U)
               </a>
 
               <a className="col-xs-2" onClick={this.props.toggleMuliplier}>
                 x{this.props.ui.multi} click
               </a>
+
             </div>
           </div>
         </nav>

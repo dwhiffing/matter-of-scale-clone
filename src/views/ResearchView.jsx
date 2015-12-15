@@ -5,32 +5,31 @@ import { format as f, titleify } from "utils/helpers"
 
 export default React.createClass({
   render() {
-    const {params,properties} = this.props
+    const { params, properties, buyResearch } = this.props
     const property = properties[params.property]
     const name = titleify(property.name)
+    const { researchMoney, researchName } = property
 
     return (
       <div>
 
-        <h3 style={{textAlign:'center'}}>
-          {name} Improvements
-        </h3>
+        <div className="text-center">
 
-        <h5 style={{textAlign:'center'}}>
-          {property.researchMoney} {property.researchName}
-        </h5>
+          <h3>{name} Improvements</h3>
+
+          <h5>{researchMoney} {researchName}</h5>
+
+        </div>
 
         <div className="list-group">
           {Object.keys(property.researchTypes).map((name, i) => {
 
-            const research = property.researchTypes[name]
             const isComplete = property.researchComplete(name)
             const cost = property.researchCost(name)
             const canAfford = cost <= property.researchMoney
 
             if (/autoBuy/.test(name)) {
               const building = parseInt(name.split('-')[1])
-
               if (property.unlockedBuildings.indexOf(building) === -1) {
                 return false
               }
@@ -43,13 +42,12 @@ export default React.createClass({
               }
             }
 
-            const style = canAfford ? {} : {backgroundColor: ''}
-
             return (
-              <button type="button" key={i} className={cx("list-group-item", {
+              <button key={i}
+                onClick={() => buyResearch(property.id, name, cost)}
+                className={cx("list-group-item", {
                   disabled: isComplete
-                })}
-                onClick={() => this.props.buyResearch(property.id, name, cost)}>
+                })}>
 
                 {property.researchDescription(name)}
 
@@ -57,10 +55,11 @@ export default React.createClass({
                   <span className={cx("badge", {
                     danger: !canAfford
                   })}>
+
                     {cost}
+
                   </span>
                 }
-
               </button>
             )
           })}
