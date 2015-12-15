@@ -12,10 +12,32 @@ a {
   cursor: pointer;
 }
 
+.m0 {
+  margin: 0;
+}
+
+#react > .container {
+  margin-bottom: 100px;
+}
+
 .pointer {
   cursor: pointer;
 }
 
 .danger {
   background-color: #D9534F;
+}
+
+.relative {
+  position: relative;
+}
+
+.bg-progress-bar {
+  background: rgba(1,1,0,0.1);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  transition: right 100ms;
+  z-index: 1
 }

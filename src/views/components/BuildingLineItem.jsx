@@ -4,73 +4,69 @@ import cx from "classnames"
 export default (props) => {
   if (!props.building) return false
 
-  const { index, type, building, instance } = props
+  const { index, type, building, instance, upgrades, multi } = props
 
-  const canAffordUpgrade = building.upgradeCost() <= props.upgrades || building.count == 0
-  const canAffordBuy = building.cost() * props.multi <= instance.money
-
-  const id = instance.id
-  const buildingId = id*10 + index
-
-  const clickBuy = () => props.doBuildingPurchase(buildingId, id, building.cost())
-  const clickUpgrade = () => props.doUpgradePurchase(building.instanceId, index, building.upgradeCost())
-
+  const cost = building.cost()
+  const income = building.income()
+  const upgradeLevel = building.upgrades()
+  const upgradeCost = building.upgradeCost()
+  const singleIncome = building.incomeForSingle()
   const percent = Math.max(-100, 100 - building.autoBuyPercent())
-  const progressBarStyle = {
-    background: 'rgba(1,1,0,0.1)',
-    position: 'absolute',
-    top: 0,
-    right: `${percent}%`,
-    transition: "right 100ms",
-    bottom: 0,
-    left: 0,
-  }
+
+  const buildingId = instance.id*10 + index
+  const clickBuy = () => props.doBuildingPurchase(buildingId, instance.id, cost)
+  const clickUpgrade = () => props.doUpgradePurchase(instance.id, index, upgradeCost)
+
+  const upgradeMuliplier = (
+    <small>({building.baseIncome}x{upgradeLevel})</small>
+  )
+
+  const canAffordUpgrade = upgradeCost <= upgrades || building.count == 0
+  const canAffordBuy = cost * multi <= instance.money
 
   if (!building.unlocked() && canAffordBuy) {
     setTimeout(() => props.unlockBuilding(type, index), 0)
   }
-  // should be muted if not unlocked
+
   return (
     <tr>
-
       <td>
         <div className="btn-group">
-        {building.count > 0 &&
-          <button type=""
-          className={cx('btn btn-default btn-sm',{
-            "btn-danger": !canAffordUpgrade
-          })}
-          onClick={clickUpgrade}>
-            {building.upgradeCost()}U
+
+          {building.count > 0 &&
+            <button
+              onClick={clickUpgrade}
+              className={cx('btn btn-default btn-sm',{
+                "btn-danger": !canAffordUpgrade
+              })}>
+
+              {upgradeCost}U
+
+            </button>
+          }
+
+          <button
+            onClick={clickBuy}
+            className={cx('relative btn btn-default btn-sm',{
+              "btn-danger": !canAffordBuy
+            })}>
+
+            {building.unlocked() ? building.name : "????"}
+
+            <div className="bg-progress-bar" style={{right: `${percent}%`}} />
+
           </button>
-        }
-        <button
-        style={{position: 'relative'}}
-        className={cx('btn btn-default btn-sm',{
-          "btn-danger": !canAffordBuy
-        })}
-        onClick={clickBuy}>
-          {building.unlocked() ? building.name : "????"}
-          <div style={progressBarStyle} />
-        </button>
+
         </div>
       </td>
 
-      <td>
-        {building.count}
-      </td>
+      <td>{building.count}</td>
 
-      <td>
-        {building.cost() * props.multi}
-      </td>
+      <td>{cost * multi}</td>
 
-      <td>
-        {building.incomeForSingle()} {building.upgrades() > 1 && <small>({building.baseIncome}x{building.upgrades()})</small>}
-      </td>
+      <td>{singleIncome} {upgradeLevel > 1 && upgradeMuliplier}</td>
 
-      <td>
-        {building.income()}
-      </td>
+      <td>{income}</td>
     </tr>
   )
 }

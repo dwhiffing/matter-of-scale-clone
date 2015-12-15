@@ -1,4 +1,4 @@
-import {arrayFromRange} from 'utils/helpers'
+import _ from 'lodash'
 
 const research = {
   discount: {
@@ -89,7 +89,7 @@ export default (id) => {
       extra: specialResearch.extraHamlets
     }, researchTypes)
   }
-  [0,1,2,3,4,5,6,7,8,9].forEach((b, i) => {
+  _.range(0, 10).forEach((b, i) => {
     researchTypes['autoBuy-'+i] = specialResearch.autoBuy
   })
   return researchTypes

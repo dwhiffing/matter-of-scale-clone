@@ -1,14 +1,19 @@
 import store from 'utils/reduxStore'
 import u from 'updeep'
 
+// base for all cost compution
 export const baseCost = [10, 50, 200, 1000, 10000, 20000, 50000, 100000, 200000, 1000000]
+
+// base for all income compution
 export const baseIncome = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000]
+
+// display name of buildings
 export const buildingNames = [
   ['Bloodhound','Spearman','Archer','Tracker','Woodsman','Pathfinder','Scout','Trapper','Wellspring','River'],
   ['Shepherd','Sheepdog','Fence-Maker','Wolf-hunter','Farmhand','Shearer','Carver','Smoker','Roaster','Breeder'],
   ['Digger','River-Guide','Bridge-Builder','Baker','Heater','Shaper','Trailblazer','Mixer','Sculptor','Mason'],
   ['Coal-Miner','Cart-Mover','Tracklayer','Foreman','Prospector','Blacksmith','Ironmonger','Smithy','Smelter','Ironworks'],
-  ['Recruiter','Weaponsmith','Armorsmith','Fletcher','Sergeant','Propagandist','Major','Logician','Major-Major-Major','General'],
+  ['Recruiter','Weaponsmith','Armorsmith','Fletcher','Sergeant','Propagandist','Major','Logician','Major-Major','General'],
   ['Panner','Tool-Salesman','Money-Changer','Trader','Goldforge','Goldsmith','Designer','Gem-Cutter','Jeweler','Banker'],
   ['Engineer','Coal-Plant','Oil-Plant','Wire-Extruder','Powerline','Utility-Worker','Solar-Fields','Solar-Tower','Nuclear-Plant','Fusion-Plant'],
   ['Astronaut','Astrophysicist','Launch-Center','Rockets','Space-Elevator','Space-Station','Mass-Driver','Bot-Swarm','Asteroids','Space-Shipyard'],
@@ -25,8 +30,10 @@ export default (id, type) => {
     // index of this building within its instance
     index: index,
 
+    // the property type this building belonds to
     propertyId: type,
 
+    // instance id this building belongs to
     instanceId: id,
 
     // amount of this building purchased
@@ -39,17 +46,23 @@ export default (id, type) => {
 }
 
 export const rehydrate = (building) => {
-  let rehydratedBuilding = u(building, helpers)
-  const thing = Object.assign({}, {
-    name: buildingNames[building.propertyId][building.index],
-    baseCost: baseCost[building.index],
-    baseIncome: baseIncome[building.index],
-  }, rehydratedBuilding)
-  return thing
+  const { index, propertyId } = building
+  const rehydratedBuilding = u(building, helpers)
 
+  return Object.assign({}, {
+
+    name: buildingNames[propertyId][index],
+
+    baseCost: baseCost[index],
+
+    baseIncome: baseIncome[index],
+
+  }, rehydratedBuilding)
 }
 
+// helpers are assigned to each obj as it is created / loaded
 const helpers = {
+
   // has the player ever been able to afford this building?
   unlocked() {
     return this.getProperty().unlockedBuildings.indexOf(this.index) > -1

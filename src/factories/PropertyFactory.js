@@ -1,7 +1,7 @@
 import store from 'utils/reduxStore'
 import numeral from "numeral"
 import u from 'updeep'
-import { titleify } from 'utils/helpers'
+import { titleify, replaceString } from 'utils/helpers'
 import { buildingNames } from 'factories/BuildingFactory'
 import ResearchFactory from 'factories/ResearchFactory'
 
@@ -120,13 +120,6 @@ const helpers = {
 
     const current = percentify(research.current)
     const next = percentify(research.current + research.increment)
-
-    const replaceString = (obj, string) => {
-      Object.keys(obj).forEach(name => {
-        string = string.replace(`{${name}}`, obj[name])
-      })
-      return string
-    }
 
     return replaceString({
       name: titleify(this.name),
