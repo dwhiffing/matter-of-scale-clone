@@ -5,10 +5,10 @@ import { titleify, replaceString } from 'utils/helpers'
 import { buildingNames } from 'factories/BuildingFactory'
 import ResearchFactory from 'factories/ResearchFactory'
 
-const name = ['hamlet', 'village', 'town', 'city', 'castle', 'kingdom', 'empire', 'planet', 'galaxy', 'universe']
-const color = ['maroon', 'silver', 'red', 'gray', 'yellow', 'aqua', 'navy', 'green', 'purple', 'black']
-const currency = ['deer', 'lamb', 'brick', 'iron', 'soldier', 'gold', 'machine', 'starship', 'matter', 'existence']
-const researchNames = ['venison', 'wool', 'marble', 'steel', 'captain', 'platinum', 'circuit', 'anti-matter', 'AI', 'transcendence']
+export const name = ['hamlet', 'village', 'town', 'city', 'castle', 'kingdom', 'empire', 'planet', 'galaxy', 'universe']
+export const color = ['#D48A5B', '#F8ECC9', '#C85705', '#9A93A1', '#CBA65C', '#F8CA00', '#07557D', '#24D268', '#E566C2', '#333333']
+export const currencyNames = ['deer', 'lamb', 'brick', 'iron', 'soldier', 'gold', 'machine', 'starship', 'matter', 'existence']
+export const researchNames = ['venison', 'wool', 'marble', 'steel', 'captain', 'platinum', 'circuit', 'anti-matter', 'AI', 'transcendence']
 
 export default () => {
 
@@ -54,7 +54,7 @@ export const rehydrate = (property) => {
     color: color[property.id],
 
     // building currency display name
-    currencyName: currency[property.id],
+    currencyName: currencyNames[property.id],
 
     // research currency display name
     researchName: researchNames[property.id],

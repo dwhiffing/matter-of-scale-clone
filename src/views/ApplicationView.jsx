@@ -29,21 +29,30 @@ const ApplicationView = React.createClass({
   },
 
   render() {
-    const { instances, params } = this.props
+    const { instances, properties, params } = this.props
 
-    let instance
+    let instance, property
     if (params.instance) {
       instance = instances[params.instance]
+    }
+    if (params.property) {
+      property = properties[params.property]
     }
 
     return (
       <div className="container">
 
         <ol className="breadcrumb">
+          <li><strong>Idle Game</strong></li>
           <li><a href="#/property">Properties</a></li>
           {instance &&
             <li className="active"><a href={`#/instance/${params.instance}`}>
               {titleify(instance.name)} {params.instance}
+            </a></li>
+          }
+          {property &&
+            <li className="active"><a href={`#/research/${params.property}`}>
+              {titleify(property.name)} Improvements
             </a></li>
           }
         </ol>

@@ -1,5 +1,6 @@
-import { sampleArray, diceRoll, getRandom } from 'utils/helpers'
-import { baseIncome, baseCost, buildingNames} from 'factories/BuildingFactory'
+import { sampleArray, diceRoll, getRandom, titleify } from 'utils/helpers'
+import { baseIncome, baseCost, buildingNames } from 'factories/BuildingFactory'
+import { currencyNames } from 'factories/PropertyFactory'
 
 const goals = [
   {
@@ -7,16 +8,16 @@ const goals = [
     amountScale(nth) {
       return Math.min(10, Math.ceil(nth / 10)) * Math.min(10, Math.ceil(nth / 5))
     },
-    getDescription(amount, building) {
-      return `get ${amount} income`
+    getDescription(amount, building, currency) {
+      return `get ${amount} ${currency}/sec`
     }
   }, {
     type: 1,
     amountScale(nth) {
       return Math.min(10, Math.ceil(nth / 10)) * Math.min(100, Math.ceil(nth / 2)) * 10
     },
-    getDescription(amount, building) {
-      return `get ${amount} money`
+    getDescription(amount, building, currency) {
+      return `get ${amount} ${currency}`
     }
   }, {
     type: 2,
@@ -31,8 +32,8 @@ const goals = [
     amountScale(nth, building) {
       return (Math.ceil((building+1) / 2)) * baseIncome[building]
     },
-    getDescription(amount, building) {
-      return `get ${amount} income with ${building}`
+    getDescription(amount, building, currency) {
+      return `get ${amount} ${currency}/sec with ${building}`
     }
   }
 ]
@@ -50,11 +51,12 @@ export default (type, nth) => {
   const name = buildingNames[type][building]
   const scale = goal.amountScale(nth, building)
   const amount = diceRoll(scale * 10, scale * 20)
+  const currency = titleify(currencyNames[type])
 
   return {
     type: goal.type,
     building: building,
     amount: amount,
-    description: goal.getDescription(amount, name)
+    description: goal.getDescription(amount, name, currency)
   }
 }

@@ -1,7 +1,7 @@
 import React from "react"
 import { buyResearch } from "actions/PropertyActions"
 import cx from "classnames"
-import { format as f, titleify } from "utils/helpers"
+import { format as f, titleify, colorStyle, Color } from "utils/helpers"
 
 export default React.createClass({
   render() {
@@ -11,13 +11,13 @@ export default React.createClass({
     const { researchMoney, researchName } = property
 
     return (
-      <div>
+      <div className={property.name}>
 
         <div className="text-center">
 
           <h3>{name} Improvements</h3>
 
-          <h5>{researchMoney} {researchName}</h5>
+          <h5>{researchMoney} <Color>{titleify(researchName)}</Color></h5>
 
         </div>
 

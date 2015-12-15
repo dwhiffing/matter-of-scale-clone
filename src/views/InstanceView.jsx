@@ -1,6 +1,6 @@
 import React from "react"
 import _ from "lodash"
-import { format as f, titleify } from "utils/helpers"
+import { format as f, titleify, Color } from "utils/helpers"
 import { ProgressBar } from 'react-bootstrap'
 import BuildingLineItem from 'views/components/BuildingLineItem'
 
@@ -12,7 +12,7 @@ export default React.createClass({
 
     const { doBuildingPurchase, doUpgradePurchase, unlockBuilding} = this.props
     const { id, type, money, currencyName, goal } = instance
-    const { researchMoney, researchName } = instance.property()
+    const { researchMoney, researchName, color } = instance.property()
     const { upgrades, multi } = this.props.ui
 
     const name = titleify(instance.name)
@@ -25,13 +25,16 @@ export default React.createClass({
       <a href={`#/research/${instance.type}`}>{name} Improvements</a>
     )
 
+    const currencyDiv = <Color>{titleify(currencyName)}</Color>
+    const researchDiv = <Color>{titleify(researchName)}</Color>
+
     return (
-      <div>
+      <div className={instance.property().name}>
         <div className="text-center">
 
           <h2>{name}</h2>
 
-          {complete  &&
+          {complete &&
             <div onClick={() => {this.props.markInstanceComplete(id)}}>
 
               <ProgressBar
@@ -53,9 +56,9 @@ export default React.createClass({
 
         </div>
 
-        <p>Contains {f(money, "0,0")} {currencyName} producing {income} {currencyName}/sec</p>
+        <p>Contains {f(money, "0,0")} {currencyDiv} producing {income}  {currencyDiv} / sec</p>
 
-        <p>{researchMoney} {researchName} available for {researchLink}.</p>
+        <p>{researchMoney} {researchDiv} available for {researchLink}.</p>
 
         <table className="table">
 
