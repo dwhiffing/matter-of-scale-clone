@@ -1,6 +1,6 @@
 import React from "react"
 import InstanceLineItem from 'views/components/InstanceLineItem'
-import { format as f, titleify } from "utils/helpers"
+import { format as f, titleify, Color } from "utils/helpers"
 
 export default ({ properties, history, markInstanceComplete }) => {
   return (
@@ -9,15 +9,13 @@ export default ({ properties, history, markInstanceComplete }) => {
       if (!property.unlocked) return false
 
       const instances = property.getInstances()
-
       const name = titleify(property.name)
-      const currencyName = titleify(property.currencyName)
-      const researchName = titleify(property.researchName)
-
+      const income = f(property.income(), "0,0")
       const money = f(property.money(), "0,0")
       const research = f(property.researchMoney, "0")
-      const income = f(property.income(), "0,0")
 
+      const currencyName = <Color>{titleify(property.currencyName)}</Color>
+      const researchName = <Color>{titleify(property.researchName)}</Color>
       const researchLink = (
         <a href={`#/research/${property.id}`}>{name} Improvements</a>
       )
@@ -29,7 +27,7 @@ export default ({ properties, history, markInstanceComplete }) => {
       }
 
       return (
-        <div key={i}>
+        <div className={property.name} key={i}>
 
           <h3>{name}s</h3>
 
@@ -39,7 +37,7 @@ export default ({ properties, history, markInstanceComplete }) => {
             </p>
           }
 
-          {instances.length > 0 &&
+          {instances &&
             <div>
               <p>
                 {money} {currencyName} stored and producing {income} per tick

@@ -8,6 +8,10 @@ nav a {
   user-select: none;
 }
 
+* {
+  font-family: Roboto !importants;
+}
+
 a {
   cursor: pointer;
 }
@@ -33,11 +37,96 @@ a {
 }
 
 .bg-progress-bar {
-  background: rgba(1,1,0,0.1);
+  opacity: .4;
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   transition: right 100ms;
-  z-index: 1
+  z-index: 0
+}
+
+span.property-color {
+  font-weight: 900;
+  font-size: 1.2em;
+}
+
+.hamlet [class*="progress-bar"] {
+  background-color: #D48A5B;
+}
+
+.village [class*="progress-bar"] {
+  background-color: #D6B038;
+}
+
+.town [class*="progress-bar"] {
+  background-color: #C03100;
+}
+
+.city [class*="progress-bar"] {
+  background-color: #6D6EF7;
+}
+
+.castle [class*="progress-bar"] {
+  background-color: #7E7E7E;
+}
+
+.kingdom [class*="progress-bar"] {
+  background-color: #F8CA00;
+}
+
+.empire [class*="progress-bar"] {
+  background-color: #07557D;
+}
+
+.planet [class*="progress-bar"] {
+  background-color: #24D268;
+}
+
+.galaxy [class*="progress-bar"] {
+  background-color: #E566C2;
+}
+
+.universe [class*="progress-bar"] {
+  background-color: #333333;
+}
+
+.hamlet .property-color {
+  color: #D48A5B;
+}
+
+.village .property-color {
+  color: #D6B038;
+}
+
+.town .property-color {
+  color: #C03100;
+}
+
+.city .property-color {
+  color: #6D6EF7;
+}
+
+.castle .property-color {
+  color: #7E7E7E;
+}
+
+.kingdom .property-color {
+  color: #F8CA00;
+}
+
+.empire .property-color {
+  color: #07557D;
+}
+
+.planet .property-color {
+  color: #24D268;
+}
+
+.galaxy .property-color {
+  color: #E566C2;
+}
+
+.universe .property-color {
+  color: #333333;
 }

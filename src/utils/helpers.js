@@ -1,5 +1,6 @@
 import { createAction, handleActions } from 'redux-actions'
 import store from 'utils/reduxStore'
+import React from 'react'
 import _ from 'lodash'
 import numeral from 'numeral'
 import updeep from 'updeep'
@@ -73,6 +74,20 @@ export const replaceString = (obj, string) => {
   })
   return string
 }
+
+export const Color = (props) => {
+  return (
+    <span className="property-color">
+      {props.children}
+    </span>
+  )
+}
+
+export const colorStyle = (color) => ({
+  fontWeight: 900,
+  fontSize: '1.2em',
+  color: color,
+})
 
 /**
 *

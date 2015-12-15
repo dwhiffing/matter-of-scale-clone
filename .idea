@@ -18,7 +18,7 @@ at the beginning:
 
   the goal of the game is to reach the end as efficiently as possible
 
-  stats persist as the player continues playing, 
+  stats persist as the player continues playing,
 
   game could have high score board, since the game rewards being more efficient in a different way
 
@@ -63,7 +63,7 @@ universes - unique gameplay: paragon/prestiege
 
 
 
-Time Scale 
+Time Scale
 
 As world scale is increasing, time scale increases as well, at first only microseconds are passing and there is no control
 
@@ -76,3 +76,7 @@ react-motion
 
 
 
+Need to limit the amount of instances that can be created
+should also limit the amount of work that lower level properties do later on
+can simplify stats and just have them produce research that can be coverted to other things
+should be able to catch up between sessions by computing missing ticks
