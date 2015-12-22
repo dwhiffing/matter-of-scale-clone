@@ -35,7 +35,7 @@ persistStore(PersistedStore, {
     in: (state) => {
       // interface omitted keys
       if (state.multi) {
-        return _.omit(state, ['tickTimeout', 'autobuyTimeout'] )
+        return _.omit(state, ['doTickTimeout', 'preTickTimeout'] )
       }
       // instance omitted keys
       if (state[0].autoBuy) {

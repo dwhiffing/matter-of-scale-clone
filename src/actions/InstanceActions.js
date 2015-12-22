@@ -58,7 +58,16 @@ export function createMissingInstances(key) {
   }
 }
 
+export function toggleAutoBuy(key) {
+  return (dispatch, getState) => {
+    dispatch(updateInstance(key, {
+      disableAutoBuy: autoBuy => !autoBuy
+    }))
+  }
+}
+
 export const InstanceThunks = {
   createInstance,
-  markInstanceComplete
+  markInstanceComplete,
+  toggleAutoBuy
 }

@@ -47,7 +47,7 @@ export default ({getState}) => next => action => {
   const message = `${action.type}:${JSON.stringify(action.payload)}`;
 
   const payload = action.payload ? action.payload : action.meta
-  const shouldLog = action.type && !/DO_TICK|DO_AUTOBUY|REHYDRATE/.test(action.type)
+  const shouldLog = action.type && !/TICK|REHYDRATE/.test(action.type)
 
   if (!shouldLog) return returnValue
 

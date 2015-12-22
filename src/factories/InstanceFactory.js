@@ -15,9 +15,6 @@ export default (id, property, nth) => {
     // amount accumulated toward auto completion when progress is 100
     autoComplete: 0,
 
-    // whether this instance has completed its goal and been marked as "complete"
-    complete: false,
-
     // the computed progress towards the current goal for display purposes
     progress: 0,
 
@@ -32,6 +29,9 @@ export default (id, property, nth) => {
 
     // how much money the instance has accumulated
     money: property.research("startMoney"),
+
+    // has the user disabled autobuy for this instance?
+    disableAutoBuy: false,
 
     // how much autoBuy each building should accumulate next tick
     autoBuy: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

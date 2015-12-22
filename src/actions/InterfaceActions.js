@@ -18,24 +18,30 @@ export const changeUpgradePoints = (upgrades) => {
 
 export function startTicking() {
   return (dispatch, getState) => {
-    const { tickTimeout, autobuyTimeout } = getState().ui
+    const { doTickTimeout, preTickTimeout } = getState().ui
 
-    if (tickTimeout === null && autobuyTimeout === null) {
-      const autobuyTimeout = setInterval(() => dispatch({type: 'DO_AUTOBUY'}), 500)
-      const tickTimeout = setInterval(() => dispatch({type: 'DO_TICK'}), 500)
-      dispatch({type: 'START_TICKING', payload: {tickTimeout, autobuyTimeout}})
+    if (doTickTimeout === null && preTickTimeout === null) {
+      const preTickTimeout = setInterval(() => dispatch({type: 'PRE_TICK'}), 500)
+      const doTickTimeout = setInterval(() => dispatch({type: 'DO_TICK'}), 500)
+      dispatch({type: 'START_TICKING', payload: {
+        doTickTimeout: doTickTimeout,
+        preTickTimeout: preTickTimeout
+      }})
     }
   }
 }
 
 export function stopTicking() {
   return (dispatch, getState) => {
-    const { tickTimeout, autobuyTimeout } = getState().ui
+    const { doTickTimeout, preTickTimeout } = getState().ui
 
-    if (tickTimeout !== null && autobuyTimeout !== null) {
-      clearInterval(tickTimeout)
-      clearInterval(autobuyTimeout)
-      dispatch({type: 'STOP_TICKING', payload: {tickTimeout, autobuyTimeout}})
+    if (doTickTimeout !== null && preTickTimeout !== null) {
+      clearInterval(doTickTimeout)
+      clearInterval(preTickTimeout)
+      dispatch({type: 'STOP_TICKING', payload: {
+        doTickTimeout: doTickTimeout,
+        preTickTimeout: preTickTimeout
+      }})
     }
   }
 }

@@ -24,6 +24,7 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.jsx?$/, exclude: /node_modules/, loaders: ["react-hot", "babel-loader"]},
+      { test: /\.woff|\.eot$|\.ttf$|\.svg$/, loader: "url-loader?limit=10000000&mimetype=application/font-woff&name=/font/junticon.woff" },
       { test: /\.css?$/, loaders: [ 'style', 'css' ] }
     ]
   }

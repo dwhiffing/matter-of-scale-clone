@@ -57,15 +57,14 @@ const InstanceReducers = {
     }, state)
   },
 
-  // this is done before DO_TICK so that autoBuy amounts are computed
-  doAutobuy(state, action) {
+  preTick(state, action) {
     return u.map((instance) => {
-      if (instance.complete) return instance
 
       let money = instance.money + instance.income()
-
+      
       const autoBuy = instance.buildings().map((building, i) => {
-        const amount = clamp(building.autoBuyIncrement(), money)
+        const maxAutoBuy = clamp(building.autoBuyIncrement(), money)
+        const amount = instance.disableAutoBuy ? 0 : maxAutoBuy
         money -= amount
         return amount
       })
@@ -80,9 +79,8 @@ const InstanceReducers = {
 
   doTick(state, action) {
     return u.map((instance) => {
-      if (instance.complete) return instance
 
-      // get next income and compute progress toward income goal
+      // compute progress towards goal/autoComplete
       const progress = instance.goalProgress()
       return u({
         progress: progress,

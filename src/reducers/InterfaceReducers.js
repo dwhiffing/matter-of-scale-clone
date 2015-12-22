@@ -4,8 +4,8 @@ const initialState = {
   multi: 1,
   saveSlot: 1,
   upgrades: 0,
-  tickTimeout: null,
-  autobuyTimeout: null
+  doTickTimeout: null,
+  preTickTimeout: null
 }
 
 const InterfaceReducer = {
@@ -19,17 +19,24 @@ const InterfaceReducer = {
   },
 
   toggleMultiplier(state, action) {
-    return Object.assign({}, state, {multi: state.multi < 100 ? state.multi * 10 : 1})
+    return Object.assign({}, state, {
+      multi: state.multi < 100 ? state.multi * 10 : 1
+    })
   },
 
   startTicking(state, action) {
-    const {tickTimeout, autobuyTimeout} = action.payload
-    return Object.assign({}, state, {tickTimeout, autobuyTimeout})
+    const {doTickTimeout, preTickTimeout} = action.payload
+    return Object.assign({}, state, {
+      doTickTimeout: doTickTimeout,
+      preTickTimeout: preTickTimeout
+    })
   },
 
   changeUpgradePoints(state, action) {
     const num = state.upgrades + action.payload
-    return Object.assign({}, state, {upgrades: Math.round(num*100) / 100})
+    return Object.assign({}, state, {
+      upgrades: Math.round(num*100) / 100
+    })
   },
 
   clearSave(state, action) {
