@@ -10,7 +10,9 @@ export default React.createClass({
 
     if (!instance) return false
 
-    const { doBuildingPurchase, doUpgradePurchase, unlockBuilding} = this.props
+    let progressBar
+
+    const { doBuildingPurchase, doUpgradePurchase, unlockBuilding, ui} = this.props
     const { id, type, money, currencyName, goal } = instance
     const { researchMoney, researchName, color } = instance.property()
     const { upgrades, multi } = this.props.ui
@@ -28,37 +30,55 @@ export default React.createClass({
     const currencyDiv = <Color>{titleify(currencyName)}</Color>
     const researchDiv = <Color>{titleify(researchName)}</Color>
 
+    if (complete) {
+      progressBar = (
+        <div onClick={() => this.props.markInstanceComplete(id)}>
+
+          <ProgressBar
+            className="pointer"
+            now={autoCompleteProgress}
+            label="%(percent)s%">
+          </ProgressBar>
+
+          <h6>
+            Click bar to complete level or wait for auto-complete
+          </h6>
+
+        </div>
+      )
+    } else {
+      progressBar = (
+        <ProgressBar now={progress} label="%(percent)s%" />
+      )
+    }
+
     return (
       <div className={instance.property().name}>
         <div className="text-center">
 
-          <h2>{name}</h2>
+          <h2>
+            {name}
+          </h2>
 
-          {complete &&
-            <div onClick={() => {this.props.markInstanceComplete(id)}}>
+          {progressBar}
 
-              <ProgressBar
-                className="pointer"
-                now={autoCompleteProgress}
-                label="%(percent)s%">
-              </ProgressBar>
-
-              <h6>Click bar to complete level or wait for auto-complete</h6>
-
-            </div>
-          }
-
-          {!complete &&
-            <ProgressBar now={progress} label="%(percent)s%" />
-          }
-
-          <h5>Goal: {goal.description}</h5>
+          <h5>
+            Goal: {goal.description}
+          </h5>
 
         </div>
 
-        <p>Contains {f(money, "0,0")} {currencyDiv} producing {income}  {currencyDiv} / sec</p>
+        <p>
+          Contains {f(money, "0,0")} {currencyDiv} producing {income}  {currencyDiv} / sec
+        </p>
 
-        <p>{researchMoney} {researchDiv} available for {researchLink}.</p>
+        <p>
+          {researchMoney} {researchDiv} available for {researchLink}.
+        </p>
+
+        <a onClick={() => this.props.toggleAutoBuy(id)}>
+          Toggle Autobuy: {instance.disableAutoBuy ? 'off' : 'on'}
+        </a>
 
         <table className="table">
 
@@ -73,13 +93,12 @@ export default React.createClass({
           <tbody>
             {instance.buildings().map((building, index) => {
               return (
-                <BuildingLineItem key={index}
+                <BuildingLineItem
+                  key={`building-${index}`}
+                  index={index}
+                  ui={ui}
                   building={building}
                   instance={instance}
-                  index={index}
-                  type={type}
-                  multi={multi}
-                  upgrades={upgrades}
                   doUpgradePurchase={doUpgradePurchase}
                   doBuildingPurchase={doBuildingPurchase}
                   unlockBuilding={unlockBuilding}>

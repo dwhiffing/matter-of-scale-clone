@@ -4,28 +4,17 @@ import cx from "classnames"
 export default (props) => {
   if (!props.building) return false
 
-  const { index, type, building, instance, upgrades, multi } = props
+  const { index, building, instance, ui } = props
 
-  const cost = building.cost()
-  const income = building.income()
-  const upgradeLevel = building.upgrades()
-  const upgradeCost = building.upgradeCost()
-  const singleIncome = building.incomeForSingle()
+  const buildingCost = building.cost()
   const percent = Math.max(-100, 100 - building.autoBuyPercent())
 
   const buildingId = instance.id*10 + index
-  const clickBuy = () => props.doBuildingPurchase(buildingId, instance.id, cost)
-  const clickUpgrade = () => props.doUpgradePurchase(instance.id, index, upgradeCost)
-
-  const upgradeMuliplier = (
-    <small>({building.baseIncome}x{upgradeLevel})</small>
-  )
-
-  const canAffordUpgrade = upgradeCost <= upgrades || building.count == 0
-  const canAffordBuy = cost * multi <= instance.money
+  const canAffordUpgrade = building.upgradeCost() <= ui.upgrades || building.count == 0
+  const canAffordBuy = buildingCost * ui.multi <= instance.money
 
   if (!building.unlocked() && canAffordBuy) {
-    setTimeout(() => props.unlockBuilding(type, index), 0)
+    setTimeout(() => props.unlockBuilding(instance.type, index), 0)
   }
 
   return (
@@ -35,18 +24,18 @@ export default (props) => {
 
           {building.count > 0 &&
             <button
-              onClick={clickUpgrade}
+              onClick={() => props.doUpgradePurchase(instance.id, index, building.upgradeCost())}
               className={cx('btn btn-default btn-sm',{
                 "btn-danger": !canAffordUpgrade
               })}>
 
-              {upgradeCost}U
+              {building.upgradeCost()}U
 
             </button>
           }
 
           <button
-            onClick={clickBuy}
+            onClick={() => props.doBuildingPurchase(buildingId, instance.id, buildingCost)}
             className={cx('relative btn btn-default btn-sm',{
               "btn-danger": !canAffordBuy
             })}>
@@ -60,13 +49,28 @@ export default (props) => {
         </div>
       </td>
 
-      <td>{building.count}</td>
+      <td>
+        {building.count}
+      </td>
 
-      <td>{cost * multi}</td>
+      <td>
+        {buildingCost * ui.multi}
+      </td>
 
-      <td>{singleIncome} {upgradeLevel > 1 && upgradeMuliplier}</td>
+      <td>
+        <span>
+          {building.incomeForSingle()}
+        </span>
+        {building.upgrades() > 1 &&
+          <span><small>
+            ({building.baseIncome}x{building.upgrades()})
+          </small></span>
+        }
+      </td>
 
-      <td>{income}</td>
+      <td>
+        {building.income()}
+      </td>
     </tr>
   )
 }

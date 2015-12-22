@@ -15,9 +15,13 @@ export default React.createClass({
 
         <div className="text-center">
 
-          <h3>{name} Improvements</h3>
+          <h3>
+            {name} Improvements
+          </h3>
 
-          <h5>{researchMoney} <Color>{titleify(researchName)}</Color></h5>
+          <h5>
+            {researchMoney} <Color>{titleify(researchName)}</Color>
+          </h5>
 
         </div>
 

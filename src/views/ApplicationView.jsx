@@ -23,7 +23,7 @@ const ApplicationView = React.createClass({
     // However, it will require several other parts of the instance logic to be rewritten
     const instances = Object.values(this.props.instances)
     const autoCompletedInstances = instances.filter(i => {
-      return i.progress >= 100 && !i.complete && i.autoComplete >= i.autoCompleteDuration()
+      return i.progress >= 100 && i.autoComplete >= i.autoCompleteDuration()
     })
     autoCompletedInstances.forEach(i => this.props.markInstanceComplete(i.id))
   },
@@ -46,9 +46,11 @@ const ApplicationView = React.createClass({
           <li><strong>Idle Game</strong></li>
           <li><a href="#/property">Properties</a></li>
           {instance &&
-            <li className="active"><a href={`#/instance/${params.instance}`}>
-              {titleify(instance.name)} {params.instance}
-            </a></li>
+            <li className="active">
+              <a href={`#/instance/${params.instance}`}>
+                {titleify(instance.name)} {params.instance}
+              </a>
+            </li>
           }
           {property &&
             <li className="active"><a href={`#/research/${params.property}`}>
