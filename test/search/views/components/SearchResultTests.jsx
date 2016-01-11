@@ -1,0 +1,3 @@
+describe('SearchResult.jsx', () => {
+
+})

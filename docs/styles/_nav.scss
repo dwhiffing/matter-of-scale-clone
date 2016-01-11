@@ -1,0 +1,106 @@
+header {
+  text-align: right;
+  margin-bottom: 1.8em;
+}
+
+header a {
+  text-decoration: none;
+  font-size: 1em;
+  line-height: 1.8em;
+  color: $color-secondary;
+}
+
+header a:hover {
+  color: $color-accent;
+}
+
+header a:after {
+  content: '⁄';
+  margin: 0 1em;
+  color: $color-tertiary;
+  pointer-events: none;
+}
+
+header a:last-of-type:after {
+  display: none;
+}
+
+nav {
+  position: fixed;
+  width: 16em;
+  height: 100%;
+  top: 0;
+  padding: 1.5em 1em 0;
+  background-color: $color-menu;
+  border-right: 1px $color-offside solid;
+  overflow: auto;
+}
+
+nav ul.docs {
+  margin: 0;
+  list-style-type: none;
+
+  li {
+    position: relative;
+  }
+
+  li:before, li:last-of-type:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: ' ';
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: $color-offside;
+  }
+
+  li:last-of-type:after {
+    top: 100%;
+  }
+
+  a {
+    text-decoration: none;
+    color: $color-literal;
+    display: block;
+    padding: 1em 0;
+  }
+
+  a span {
+    float: right;
+    color: $color-tertiary;
+  }
+
+  a:hover {
+    color: $color-accent;
+  }
+}
+
+nav h4 {
+  position: relative;
+  font-size: 1em;
+  line-height: 1.8em;
+  padding-top: 1.8em;
+  margin-top: 1.8em;
+  margin-bottom: 0.75em;
+
+  &:first-of-type {
+    padding-top: 0;
+    margin-top: 1.8em;
+  }
+
+  &:first-of-type:before {
+    display: none;
+  }
+
+  &:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: ' ';
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: $color-offside;
+  }
+}

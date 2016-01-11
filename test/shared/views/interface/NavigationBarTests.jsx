@@ -1,0 +1,3 @@
+describe('NavigationBar.jsx', () => {
+
+})

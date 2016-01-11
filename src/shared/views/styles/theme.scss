@@ -1,0 +1,136 @@
+// for some reason, these classes fail in production mode
+$colors: (
+  white: #FFFFFF,
+  black: #000000,
+  yellow: #FFCC00,
+  clear: transparent
+);
+
+$grays: (
+  10: (#1A1A1A),
+  20: (#383838),
+  30: (#505050),
+  40: (#626262),
+  50: (#888888),
+  60: (#9C9C9C),
+  70: (#B8B8B8),
+  80: (#CFCFCF),
+  85: (#E0E0E0),
+  90: (#E9E9E9),
+  95: (#F8F8F8)
+);
+
+.color-white {color: #FFFFFF}
+.color-black {color: #000000}
+.color-yellow {color: #FFCC00}
+.color-clear {color: transparent}
+.color-white:before {color: #FFFFFF}
+.color-black:before {color: #000000}
+.color-yellow:before {color: #FFCC00}
+.color-clear:before {color: transparent}
+
+.bg-white {background-color: #FFFFFF}
+.bg-black {background-color: #000000}
+.bg-yellow {background-color: #FFCC00}
+.bg-clear {background-color: transparent}
+
+.b-white {border-color: #FFFFFF}
+.b-black {border-color: #000000}
+.b-yellow {border-color: #FFCC00}
+.b-clear {border-color: transparent}
+
+// define color classes (.color-white, .bg-yellow.etc)
+@each $name, $color in $colors {
+  .color-#{$name} {
+    color: $color;
+  }
+  .bg-#{$name} {
+    background-color: $color;
+  }
+  .b-#{$name} {
+    border-color: $color;
+  }
+}
+
+$siteColors: (
+  cougarlife: (primary: #EE3b57, secondary: #00B2CF),
+  milfbook: (primary: #3f729b, secondary: #3D3D3D),
+  establishedmen: (primary: #0083c9, secondary: #00ac00),
+  arrangementfinders: (primary: #CD4197, secondary: #0CA7D6),
+  erosdating: (primary: #fed100, secondary: #999999),
+  mancrunch: (primary: #90298C, secondary: #45A5D5),
+  downlow: (primary: #67104a, secondary: #360131)
+);
+
+// define a theme for each site
+@each $site, $colors in $siteColors {
+  main.#{$site} {
+
+    // define primary color classes, bg-primary, color-primary, etc
+    @each $type, $color in $colors {
+      .bg-#{$type} {
+        background-color: $color;
+      }
+      .color-#{$type}, .color-#{$type}:before {
+        color: $color;
+      }
+      .b-#{$type} {
+        border-color: $color;
+      }
+    }
+
+    // define button color classes
+    button, .button {
+      color: #FFFFFF;
+      background-color: map-get($colors, secondary);
+      &.primary {
+        background-color: map-get($colors, primary);
+      }
+      &.white {
+        background-color: #FFFFFF;
+        color: map-get($colors, secondary);
+      }
+      @each $num, $gray in $grays {
+        &.gray-#{$num} {
+          color: $gray;
+        }
+      }
+    }
+  }
+}
+
+body {
+  background-color: #FAFAFA;
+}
+
+.bg-none {
+  background-color: transparent;
+}
+
+.bg-fade-down {
+  color: #fff;
+  background: linear-gradient(to bottom, rgba(0,0,0,1) 0%,rgba(0,0,0,0) 100%);
+}
+
+.bg-fade-up {
+  color: #fff;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,1) 100%);
+}
+
+.bg-fade-up-light {
+  color: #fff;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.45) 100%);
+}
+
+// define gray classes (.gray-10, .bg-gray-90.etc)
+@each $num, $gray in $grays {
+  .gray-#{$num}, .gray-#{$num}:before {
+    color: $gray;
+  }
+  .bg-gray-#{$num}, main button.bg-gray-#{$num} {
+    background-color: $gray;
+  }
+  .b-gray-#{$num} {
+    border-color: $gray;
+  }
+}

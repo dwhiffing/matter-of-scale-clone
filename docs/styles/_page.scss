@@ -1,0 +1,145 @@
+html, body {
+  height: 100%;
+}
+
+body {
+  background-color: $color-background;
+  color: $color-primary;
+  font-size: 16px;
+  font-family: $body-font;
+  line-height: 1.8em;
+  padding-right: 1.8em;
+  padding-left: 1.8em;
+}
+
+p, pre, table, ul, ol {
+  margin: 0 0 1.8em;
+}
+
+a {
+  color: inherit;
+  transition: color $fade-speed ease;
+}
+
+a:hover {
+  color: $color-accent;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  font-size: 1.25em;
+  line-height: 1.5em;
+  margin-top: 1em;
+  padding-top: 1em;
+  margin-bottom: 1em;
+  text-align: left;
+}
+
+h1 {
+  color: $color-attribute;
+  text-transform: uppercase;
+}
+
+ul, ol {
+  margin-left: 1.8em;
+}
+
+main {
+  margin: auto;
+  max-width: 72em;
+  hyphens: auto;
+  position: relative;
+  min-height: 100%;
+}
+
+main:before {
+  position: absolute;
+  z-index: -1;
+  content: ' ';
+  display: block;
+  top: 0;
+  right: 100%;
+  width: 200%;
+  height: 100%;
+  background-color: $color-menu;
+}
+
+section {
+  padding: 2.3em 1.8em 1em 5em;
+  margin-left: 16em;
+  overflow: hidden;
+}
+
+pre, code {
+  font-family: $mono-font;
+}
+
+pre {
+  box-shadow: 0 1px 0 $color-offside inset;
+  background-color: $color-menu;
+  padding: 0.5em 1em;
+  border-radius: $border-radius;
+  overflow: auto;
+}
+
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  position: relative;
+  box-shadow: 0 1px 0 $color-offside inset;
+  width: 100%;
+}
+
+table td, table th {
+  padding: 0.5em 1em;
+}
+
+table th {
+  hyphens: none;
+  white-space: nowrap;
+  background-color: $color-menu;
+}
+
+tbody code {
+  background: none;
+  padding: 0;
+}
+
+tbody tr:nth-of-type(2n) {
+  background-color: $color-menu;
+}
+
+hr {
+  display: block;
+  height: 0;
+  width: 100%;
+  position: relative;
+}
+
+hr:before {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  content: ' ';
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: $color-offside;
+}
+
+.anchor {
+  text-decoration: none;
+  color: $color-tertiary;
+  margin-left: 0.5em;
+}
+
+#theme-select {
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: 1px solid #BBB;
+  padding: 2px 6px;
+  color: #676767;
+  font-size: 13px;
+  border-radius: 4px;
+  margin-left: 2px;
+}

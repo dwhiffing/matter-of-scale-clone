@@ -1,0 +1,10 @@
+@import './shared/views/styles/theme.scss';
+@import './shared/views/styles/base.scss';
+@import './shared/views/styles/flex.scss';
+@import './shared/views/styles/transitions.scss';
+@import './shared/views/styles/utils.scss';
+@import './shared/views/styles/fontello.scss';
+
+// TODO: move this somewhere more appropriate
+@import './profiles/views/styles/profiles.scss';
+@import './inbox/views/styles/inbox.scss';

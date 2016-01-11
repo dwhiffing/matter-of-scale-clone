@@ -1,0 +1,54 @@
+<div class="api">
+  {{#.}}
+
+    {{#StoreActionPair}}
+    <h4>{{StoreActionPair}}</h4>
+    {{/StoreActionPair}}
+
+    {{#StoreActionThings}}
+    <p>{{StoreActionThings}}</p>
+    {{/StoreActionThings}}
+
+    <h6>{{module}}</h6>
+
+    {{#docs}}
+      <h2 id="{{context.anchor}}">
+
+      {{#context.isClass}}
+      <span class="class">class</span>
+      {{/context.isClass}}
+
+      {{#context.static}}
+      <span class="class">static</span>
+      {{/context.static}}
+
+      {{#context.isConstructor}}
+      <span class="class">{{context.target}}</span>
+      {{/context.isConstructor}}
+
+      {{#context.isProperty}}
+      <span class="class">{{context.name}}</span>
+      {{/context.isProperty}}
+
+      {{{context.targetType}}}
+      {{^context.isConstructor}}
+      {{{context.path}}}
+      {{/context.isConstructor}}
+
+      {{#context.isFunction}}
+      <span class="light">(</span>{{{comment.params}}}<span class="light">)</span>
+      {{/context.isFunction}}
+
+      {{#comment.returnType}}
+      <span class="arrow">⇒</span>
+      <span class="return">{{comment.returnType}}</span>
+      {{/comment.returnType}}
+
+      <a href="#{{context.anchor}}" class="anchor">#</a></h2>
+
+      {{{comment.description}}}
+
+    {{/docs}}
+    <hr>
+  {{/.}}
+</div>

@@ -1,30 +1,15 @@
-var path = require('path');
-var webpack = require('webpack');
+var path = require("path");
+var webpack = require("webpack");
+var _ = require('lodash')
 
-module.exports = {
-  devtool: 'inline-source-map',
-  entry: [
-    'webpack-dev-server/client?http://localhost:3001',
-    'webpack/hot/only-dev-server',
-    './src/index'
-  ],
-  output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/static/'
-  },
+var webpackBaseConfig = require("./webpack.base.js");
+
+module.exports = _.assign(webpackBaseConfig, {
+  devtool: "eval",
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
-  ],
-  resolve: {
-    root: path.resolve(__dirname, './src'),
-    extensions: ['', '.js', '.jsx']
-  },
-  module: {
-    loaders: [
-      { test: /\.jsx?$/, exclude: /node_modules/, loaders: ["react-hot", "babel-loader"]},
-      { test: /\.css?$/, loaders: [ 'style', 'css' ] }
-    ]
-  }
-};
+    // set env vars
+    new webpack.DefinePlugin({
+      __PRODUCTION__: false
+    })
+  ]
+})

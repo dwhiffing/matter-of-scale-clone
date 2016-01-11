@@ -1,0 +1,90 @@
+.profile-details {
+  .tagline {
+    position: relative;
+    padding: 1.4rem 1rem 1rem 2.7rem;
+    i {
+      position: absolute;
+      color: map-get($grays, 70);
+      left: 20px;
+      top: 20px;
+    }
+    p {
+      margin: 0;
+      font: 200 italic 1.2rem/1.3 $fontFamily;
+    }
+  }
+  .basics {
+    color: #7A7A7A;
+    margin: 0.8em 1em;
+    line-height: 2em;
+    font-size: 1.05rem;
+    // dashes between attributes
+    .center-align {
+      color: map-get($grays, 80);
+    }
+    i {
+      color: map-get($grays, 70);
+      padding-right: 10px;
+    }
+  }
+}
+
+.profile-details.edit {
+  .basics {
+    margin: 0;
+    i {
+      margin: 19px 0.5em;
+      line-height: 1;
+      color: map-get($grays, 70);
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+
+  input, select {
+    padding: 1em 0 1em 2em;
+    height: 53px;
+    border-bottom: 1px solid map-get($grays, 80);
+    line-height: 1.3em;
+    border-right: 1px solid map-get($grays, 80);
+  }
+
+  textarea {
+    height: 120px;
+    &:focus {
+      height: 180px;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .profile-details {
+    .basics {
+      line-height: 2em;
+      font-size: .9rem;
+    }
+  }
+}
+
+.photo-manager {
+  input {
+    border-color: #111;
+    opacity: 0.85;
+    padding: 27px 27px 27px 46px;
+  }
+
+  button.col-12 {
+    border-radius: 0;
+    padding: 17px 0px;
+    i {
+      color: #212121;
+      padding: 0px 15px;
+    }
+    &.active {
+      i {
+        color: white;
+      }
+    }
+  }
+}

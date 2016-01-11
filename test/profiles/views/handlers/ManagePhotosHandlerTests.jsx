@@ -1,0 +1,3 @@
+describe('ManagePhotosHandler', () => {
+  it("");
+})

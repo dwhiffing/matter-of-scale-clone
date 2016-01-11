@@ -1,0 +1,20 @@
+.hljs-keyword,
+.hljs-built_in,
+.hljs-label,
+.hljs-attribute {
+  color: $color-attribute;
+}
+
+.hljs-literal,
+.hljs-number,
+.hljs-subst {
+  color: $color-value;
+}
+
+.hljs-string {
+  color: $color-literal;
+}
+
+.hljs-comment {
+  color: $color-secondary;
+}

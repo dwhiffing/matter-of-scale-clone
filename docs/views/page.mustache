@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!--
+This page is automatically generated. See:
+foster/docs/README.md for details.
+-->
+<html lang="en">
+  <head>
+    <title>{{title}}</title>
+    {{#description}}<meta name="description" content="{{description}}">{{/description}}
+    {{#keywords}}<meta name="keywords" content="{{keywords}}">{{/keywords}}
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta charset="utf-8">
+    <link rel="icon" href="{{{root}}}assets/favicon.png">
+    <link rel="stylesheet" href="{{{root}}}assets/style.css">
+  </head>
+
+  <body class="cl">
+    <main>
+      <nav>
+
+        {{> logo}}
+
+        <ul class="docs">
+          <li><a href="{{{root}}}getting-started">Getting Started<span>⏣</span></a></li>
+          <li><a href="{{{root}}}api">API Reference<span>⏣</span></a></li>
+          <li><a href="{{{root}}}testing">Testing<span>⏣</span></a></li>
+        </ul>
+        <h4>API:</h4>
+        {{#api}}
+          <h4>{{module}}</h4>
+          <ul class="api color-secondary">
+            {{#docs}} {{#context}}
+              <li {{#isProperty}} class=" property"{{/isProperty}}>
+                <a class="color-primary" href="{{{root}}}api/#{{anchor}}">{{name}}</a>
+              </li>
+            {{/context}} {{/docs}}
+          </ul>
+        {{/api}}
+
+      </nav>
+
+      <section>
+
+        <header>
+          <a href="https://stash.avidlifemedia.com/projects/JUNTO/repos/foster/browse">Stash</a>
+           <select id='theme-select'>
+            {{#sites}}
+              <option>{{nick}}</option>
+            {{/sites}}
+          </select>
+        </header>
+
+        <article>
+          {{{content}}}
+        </article>
+
+      </section>
+
+    <script>
+      (function() {
+        document.getElementById('theme-select').addEventListener('change', function(e) {
+          document.body.classList.remove(document.body.getAttribute('class'))
+          document.body.classList.add(e.target.value)
+        })
+      })()
+    </script>
+
+    </main>
+  </body>
+</html>

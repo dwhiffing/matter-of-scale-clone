@@ -1,0 +1,3 @@
+describe('Slider.jsx', () => {
+
+})
