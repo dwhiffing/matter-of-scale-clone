@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
-import { persistStore, autoRehydrate } from 'redux-persist'
-import { startTicking} from 'actions/InterfaceActions'
+import { persistStore, autoRehydrate, createTransform } from 'redux-persist'
+import { startTicking } from 'actions/InterfaceActions'
 import logger from 'utils/loggerMiddleware'
 import { toObj } from 'utils/helpers'
 import _ from 'lodash'
@@ -9,7 +9,7 @@ const thunk = function thunkMiddleware({ dispatch, getState }) {
   return next => action =>
     typeof action === 'function' ?
       action(dispatch, getState) :
-      next(action);
+      next(action)
 }
 
 // combine all reducers into a single object
@@ -28,43 +28,42 @@ const omitNested = (obj, omit) => {
   return Object.values(obj).map(t => _.omit(t, omit)).reduce(toObj, {})
 }
 
+const propertyTransform = createTransform(
+  (inState) => omitNested(inState, ['name','color','currencyName','researchName','buildingNames']),
+  outState => outState,
+  { whitelist: ['properties'] }
+)
+
+const instanceTransform = createTransform(
+  (inState) => omitNested(inState, ['name','color','currencyName','researchName']),
+  outState => outState,
+  { whitelist: ['instances'] }
+)
+
+const buildingTransform = createTransform(
+  (inState) => omitNested(inState, ['name','baseCost','baseIncome']),
+  outState => outState,
+  { whitelist: ['buildings'] }
+)
+
+const uiTransform = createTransform(
+  (inState) => _.omit(inState, ['doTickTimeout', 'preTickTimeout']),
+  outState => outState,
+  { whitelist: ['ui'] }
+)
+
 // TODO: For some reason, debounces longer than this fail
 persistStore(PersistedStore, {
   debounce: 90,
-  transforms: [{
-    in: (state) => {
-      // interface omitted keys
-      if (state.multi) {
-        return _.omit(state, ['doTickTimeout', 'preTickTimeout'] )
-      }
-      // instance omitted keys
-      if (state[0].autoBuy) {
-        return omitNested(state, ['name','color','currencyName','researchName'])
-      }
-      // property omitted keys
-      else if (state[0].unlockedBuildings) {
-        return omitNested(state, ['name','color','currencyName','researchName','buildingNames'])
-      }
-      // building omitted keys
-      else {
-        return omitNested(state, ['name','baseCost','baseIncome'])
-      }
-    },
-    out: (raw) => {
-      return raw
-    },
-  }],
-  rehydrateAction: (key, data) => {
-    return {
-      type: 'REHYDRATE',
-      key: key,
-      payload: data
-    }
-  },
+  transforms: [
+    propertyTransform,
+    instanceTransform,
+    buildingTransform,
+    uiTransform,
+  ],
 }, () => {
-    // start the game once data has loaded
-    PersistedStore.dispatch(startTicking())
-  }
-)
+  // start the game once data has loaded
+  PersistedStore.dispatch(startTicking())
+})
 
 export default PersistedStore

@@ -1,53 +1,49 @@
-import { reducerCreator } from 'utils/helpers'
+import u from 'updeep'
 
 const initialState = {
   multi: 1,
   saveSlot: 1,
   upgrades: 0,
   doTickTimeout: null,
-  preTickTimeout: null
+  preTickTimeout: null,
 }
 
-const InterfaceReducer = {
+export default (state = initialState, action) => {
+  const { type, payload } = action
 
-  rehydrate(state, action) {
-    if (action.key === 'ui') {
-      const {multi, saveSlot, upgrades} = action.payload
-      return Object.assign({}, state, {multi, saveSlot, upgrades})
+  switch (type) {
+
+    case 'persist/REHYDRATE': {
+      return payload.ui ? u(payload.ui, state) : state
     }
-    return state
-  },
 
-  toggleMultiplier(state, action) {
-    return Object.assign({}, state, {
-      multi: state.multi < 100 ? state.multi * 10 : 1
-    })
-  },
+    case 'TOGGLE_MULTIPLIER':
+      return u({
+        multi: state.multi < 100 ? state.multi * 10 : 1,
+      }, state)
 
-  startTicking(state, action) {
-    const {doTickTimeout, preTickTimeout} = action.payload
-    return Object.assign({}, state, {
-      doTickTimeout: doTickTimeout,
-      preTickTimeout: preTickTimeout
-    })
-  },
+    case 'START_TICKING':
+      return u({
+        doTickTimeout: payload.doTickTimeout,
+        preTickTimeout: payload.preTickTimeout,
+      }, state)
 
-  changeUpgradePoints(state, action) {
-    const num = state.upgrades + action.payload
-    return Object.assign({}, state, {
-      upgrades: Math.round(num*100) / 100
-    })
-  },
+    case 'CHANGE_UPGRADE_POINTS': {
+      return u({
+        upgrades: Math.round((state.upgrades + payload) * 100) / 100,
+      }, state)
+    }
 
-  clearSave(state, action) {
-    localStorage.removeItem('reduxPersist:buildings')
-    localStorage.removeItem('reduxPersist:instances')
-    localStorage.removeItem('reduxPersist:properties')
-    localStorage.removeItem('reduxPersist:ui')
-    window.location.reload()
-    return state
+    case 'CLEAR_SAVE': {
+      localStorage.removeItem('reduxPersist:buildings')
+      localStorage.removeItem('reduxPersist:instances')
+      localStorage.removeItem('reduxPersist:properties')
+      localStorage.removeItem('reduxPersist:ui')
+      window.location.reload()
+      return state
+    }
+
+    default:
+      return state
   }
-
 }
-
-export default reducerCreator(InterfaceReducer, initialState)

@@ -1,95 +1,83 @@
 import store from 'utils/reduxStore'
 import InstanceFactory, { rehydrate } from 'factories/InstanceFactory'
-import { add, sub, pushToObj, shallowUpdate, reducerCreator, clamp, toObj } from 'utils/helpers'
+import { sub, pushToObj, shallowUpdate, clamp, toObj } from 'utils/helpers'
 import u from 'updeep'
+import _ from 'lodash'
 
 const initialState = {}
 
-const InstanceReducers = {
+export default (state = initialState, action) => {
+  const { type, payload } = action
 
-  rehydrate(state, action) {
-    if (action.key === 'instances') {
-      return u.map((instance) => rehydrate(instance), action.payload)
-    }
-    return state
-  },
+  switch (type) {
 
-  // generate some new instances and push them onto the state
-  createInstance(state, action) {
-    const {id, type, count} = action.payload
-    const property = store.getState().properties[type]
+    case 'persist/REHYDRATE':
+      return payload.instances ?
+        u.map(i => rehydrate(i), payload.instances) :
+        state
 
-    const newInstances = _.times(count, () => {
-      const nth = Object.values(state).filter(obj => obj.type == property.id).length + 1
-      const instance = rehydrate(InstanceFactory(id, property, nth))
-      return instance
-    })
+    case 'UPDATE_INSTANCE':
+      return shallowUpdate(payload.instanceKey, payload.update, state)
 
-    return pushToObj(state, newInstances)
-  },
+    case 'BUY_BUILDING':
+      return shallowUpdate(payload.instanceKey, {
+        money: sub(payload.cost * payload.count),
+      }, state)
 
-  updateInstance(state, action) {
-    const {instanceKey, update} = action.payload
+    case 'CREATE_INSTANCE': {
+      const { id, type, count } = action.payload
+      const property = store.getState().properties[type]
 
-    return shallowUpdate(instanceKey, update, state)
-  },
-
-  completeInstance(state, action) {
-    const instanceKey = action.payload.id
-
-    // omit the instace from the store
-    const omittedState = Object.values(
-      u.omit(instanceKey, state)
-    ).reduce(toObj, {})
-
-    // update the id to reflect the index so that buildings remain mapped properly
-    return u.map((instance, index) => {
-      return u({id: index}, instance)
-    }, omittedState)
-  },
-
-  buyBuilding(state, action) {
-    const {instanceKey, cost, count} = action.payload
-
-    // deduct cost of building when purchased
-    return shallowUpdate(instanceKey, {
-      money: sub(cost * count)
-    }, state)
-  },
-
-  preTick(state, action) {
-    return u.map((instance) => {
-
-      let money = instance.money + instance.income()
-      
-      const autoBuy = instance.buildings().map((building, i) => {
-        const maxAutoBuy = clamp(building.autoBuyIncrement(), money)
-        const amount = instance.disableAutoBuy ? 0 : maxAutoBuy
-        money -= amount
-        return amount
+      const newInstances = _.times(count, () => {
+        const nth = Object.values(state).filter(obj => obj.type == property.id).length + 1
+        const instance = rehydrate(InstanceFactory(id, property, nth))
+        return instance
       })
 
-      return u({
-        money: money,
-        autoBuy: autoBuy
-      }, instance)
+      return pushToObj(state, newInstances)
+    }
 
-    }, state)
-  },
+    case 'COMPLETE_INSTANCE': {
+      const instanceKey = action.payload.id
+      // omit the instace from the store
+      const omittedState = Object.values(
+        u.omit(instanceKey, state)
+      ).reduce(toObj, {})
 
-  doTick(state, action) {
-    return u.map((instance) => {
+      // update the id to reflect the index so that buildings remain mapped properly
+      return u.map((instance, index) => {
+        return u({ id: index }, instance)
+      }, omittedState)
+    }
 
-      // compute progress towards goal/autoComplete
-      const progress = instance.goalProgress()
-      return u({
-        progress: progress,
-        autoComplete: c => progress < 100 ? c : c + 0.5
-      }, instance)
+    case 'PRE_TICK':
+      return u.map((instance) => {
 
-    }, state)
+        let money = instance.money + instance.income()
+
+        const autoBuy = instance.buildings().map(building => {
+          const maxAutoBuy = clamp(building.autoBuyIncrement(), money)
+          const amount = instance.disableAutoBuy ? 0 : maxAutoBuy
+          money -= amount
+          return amount
+        })
+
+        return u({
+          money: money,
+          autoBuy: autoBuy,
+        }, instance)
+
+      }, state)
+
+    case 'DO_TICK':
+      return u.map((instance) => {
+        return u({
+          progress: instance.goalProgress(),
+          autoComplete: c => instance.goalProgress() < 100 ? c : c + 0.5,
+        }, instance)
+      }, state)
+
+    default:
+      return state
   }
-
 }
-
-export default reducerCreator(InstanceReducers, initialState)
