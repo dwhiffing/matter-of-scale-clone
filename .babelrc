@@ -1,0 +1,9 @@
+{
+  "presets": ["react-native"],
+  "plugins": ["transform-decorators-legacy"],
+  "env": {
+    "development": {
+      "presets": ["react-hmre"]
+    }
+  }
+}

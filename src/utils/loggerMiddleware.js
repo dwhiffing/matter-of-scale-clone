@@ -24,11 +24,14 @@ export default ({getState}) => next => action => {
 
   const changesTo = Object.keys(changes)[0]
 
-  const type = () => {
-    if (/_REQUEST/.test(action.type)) return 'REQUEST'
-    if (/_FAILURE/.test(action.type)) return 'FAILURE'
-    return 'SUCCESS'
-  }()
+  let type
+  if (/_REQUEST/.test(action.type)) {
+    type = 'REQUEST'
+  } else if (/_FAILURE/.test(action.type)) {
+    type = 'FAILURE'
+  } else {
+    type = 'SUCCESS'
+  }
 
   let dispatchColor
   switch (type) {

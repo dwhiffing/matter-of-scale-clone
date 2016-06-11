@@ -1,11 +1,10 @@
-var path = require('path');
-var webpack = require('webpack');
+var path = require('path')
+var webpack = require('webpack')
 
 module.exports = {
-  devtool: 'inline-source-map',
+  devtool: 'cheap-module-eval-source-map',
   entry: [
-    'webpack-dev-server/client?http://localhost:3001',
-    'webpack/hot/only-dev-server',
+    'webpack-hot-middleware/client',
     './src/index'
   ],
   output: {
@@ -14,8 +13,8 @@ module.exports = {
     publicPath: '/static/'
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.HotModuleReplacementPlugin()
   ],
   resolve: {
     root: path.resolve(__dirname, './src'),
@@ -23,9 +22,17 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.jsx?$/, exclude: /node_modules/, loaders: ["react-hot", "babel-loader"]},
-      { test: /\.woff|\.eot$|\.ttf$|\.svg$/, loader: "url-loader?limit=10000000&mimetype=application/font-woff&name=/font/junticon.woff" },
-      { test: /\.css?$/, loaders: [ 'style', 'css' ] }
+      {
+        test: /\.jsx?$/,
+        loaders: [ 'jsx', 'babel' ],
+        exclude: /node_modules/,
+        include: __dirname
+      },
+      {
+        test: /\.css?$/,
+        loaders: [ 'style', 'raw' ],
+        include: __dirname
+      }
     ]
   }
-};
+}

@@ -12,7 +12,10 @@ export default ({instance, clickInstance, clickComplete}) => {
 
   const isComplete = percent >= 100
   const autoComplete = isComplete ? 100-instance.autoCompleteProgress() : percent
-  const onClick = isComplete ?  () => clickComplete(instance.id) : () => {}
+  const onClick = isComplete ?  () => clickComplete(instance.id) : () => clickInstance(instance.id)
+
+  const goalPercent = Math.floor(Math.min(100, instance.progress))
+  const goalDescription = `${instance.goal.description} (${goalPercent}%)`
 
   return (
     <li className="h5 row list-group-item relative m0">
@@ -21,15 +24,15 @@ export default ({instance, clickInstance, clickComplete}) => {
 
       <div className="row relative" style={{zIndex: 1}}>
 
-        <div className="col-xs-4" onClick={() => clickInstance(instance.id)}>
+        <div className="col-xs-3" onClick={() => clickInstance(instance.id)}>
           <a>{name} {instance.id}</a>
         </div>
 
-        <div className="text-center col-xs-4" onClick={onClick}>
-          {isComplete && <a>Click to complete</a>}
+        <div className="text-center col-xs-6" onClick={onClick}>
+          <a>{isComplete ? 'Click to complete' : goalDescription}</a>
         </div>
 
-        <div className="text-right col-xs-4">
+        <div className="text-right col-xs-3">
           {money} {cur} <small>{income} / s</small>
         </div>
 

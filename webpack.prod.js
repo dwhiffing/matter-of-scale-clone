@@ -1,22 +1,34 @@
-var path = require('path');
-var webpack = require('webpack');
+var path = require('path')
+var webpack = require('webpack')
 
 module.exports = {
+  devtool: 'cheap-module-eval-source-map',
   entry: [
-    './src/index'
+    'webpack-hot-middleware/client',
+    './index'
   ],
   output: {
-    path: path.join(__dirname, './dist'),
-    filename: 'bundle.js'
+    path: path.join(__dirname, 'dist'),
+    filename: 'bundle.js',
+    publicPath: '/static/'
   },
-  resolve: {
-    root: path.resolve(__dirname, './src'),
-    extensions: ['', '.js', '.jsx']
-  },
+  plugins: [
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.HotModuleReplacementPlugin()
+  ],
   module: {
     loaders: [
-      { test: /\.jsx?$/, exclude: /node_modules/, loaders: ["react-hot", "babel-loader"]},
-      { test: /\.css?$/, loaders: [ 'style', 'css' ] }
+      {
+        test: /\.js$/,
+        loaders: [ 'babel' ],
+        exclude: /node_modules/,
+        include: __dirname
+      },
+      {
+        test: /\.css?$/,
+        loaders: [ 'style', 'raw' ],
+        include: __dirname
+      }
     ]
   }
-};
+}

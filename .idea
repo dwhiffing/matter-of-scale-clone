@@ -51,17 +51,17 @@ each world has a different gameplay mechanic to master to get through it quickly
 
 if you understand the strategy, the phase should be much, much shorter
 
-particles - unique gameplay: none
-bacteria - unique gameplay: ???
-insects - unique gameplay: breeding
-small animals - unique gameplay: ???
-humans - unique gameplay: war
-countries - unique gameplay: trading (make profit by buying high and selling low)
-aliens - unique gameplay: time travel
-galaxies - unique gameplay: galactic conquest
-universes - unique gameplay: paragon/prestiege
-
-
+particles - unique gameplay: none (all are gained manually)
+bacteria - unique gameplay: resource producing units
+fish - unique gameplay: breeding (make profit by producing producing units [swarm simulator, shark game]) this replaces autobuy
+apes - unique gameplay: crafting
+humans - unique gameplay: war (make profit by producing military units to take land)
+villages - unique gameplay: religion (make profit by buying high and selling low)
+towns - unique gameplay: trading (make profit by buying high and selling low)
+cities - unique gameplay: industry (automated crafting)
+planets - unique gameplay: space travel (travel to different planets for bonuses based on number of planets)
+galaxies - unique gameplay: time control (speed up time based on number of galaxies)
+universes - unique gameplay: paragon/prestiege (start over with bonuses based on number of universes)
 
 Time Scale
 
@@ -69,14 +69,14 @@ As world scale is increasing, time scale increases as well, at first only micros
 
 time starts at a fixed speed, but can then be adjusted to any desired speed in a threshold that increases as the world scale increases
 
-
-
 react-bootstrap
 react-motion
 
-
-
 Need to limit the amount of instances that can be created
 should also limit the amount of work that lower level properties do later on
-can simplify stats and just have them produce research that can be coverted to other things
+can simplify stats and just have them produce research that can be converted to other things
 should be able to catch up between sessions by computing missing ticks
+
+Can use ideas from kittens game
+Have trading as a mid-late game element
+Have long craft trees for later game elements
