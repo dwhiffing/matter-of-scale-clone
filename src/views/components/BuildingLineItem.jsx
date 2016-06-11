@@ -1,5 +1,5 @@
-import React from "react"
-import cx from "classnames"
+import React from 'react'
+import cx from 'classnames'
 
 export default (props) => {
   if (!props.building) return false
@@ -25,8 +25,8 @@ export default (props) => {
           {building.count > 0 &&
             <button
               onClick={() => props.doUpgradePurchase(instance.id, index, building.upgradeCost())}
-              className={cx('btn btn-default btn-sm',{
-                "btn-danger": !canAffordUpgrade
+              className={cx('btn btn-default btn-sm', {
+                'btn-danger': !canAffordUpgrade,
               })}>
 
               {building.upgradeCost()}U
@@ -37,12 +37,12 @@ export default (props) => {
           <button
             onClick={() => props.doBuildingPurchase(buildingId, instance.id, buildingCost)}
             className={cx('relative btn btn-default btn-sm',{
-              "btn-danger": !canAffordBuy
+              'btn-danger': !canAffordBuy,
             })}>
 
-            {building.unlocked() ? building.name : "????"}
+            {building.unlocked() ? building.name : '????'}
 
-            <div className="bg-progress-bar" style={{right: `${percent}%`}} />
+            <div className="bg-progress-bar" style={{ right: `${percent}%` }} />
 
           </button>
 

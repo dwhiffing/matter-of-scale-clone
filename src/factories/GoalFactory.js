@@ -1,5 +1,5 @@
-import { sampleArray, diceRoll, getRandom, titleify } from 'utils/helpers'
-import { baseIncome, baseCost, buildingNames } from 'factories/BuildingFactory'
+import { sampleArray, diceRoll, titleify } from 'utils/helpers'
+import { baseIncome, buildingNames } from 'factories/BuildingFactory'
 import { currencyNames } from 'factories/PropertyFactory'
 
 const goals = [
@@ -10,7 +10,7 @@ const goals = [
     },
     getDescription(amount, building, currency) {
       return `get ${amount} ${currency}/sec`
-    }
+    },
   }, {
     type: 1,
     amountScale(nth) {
@@ -18,7 +18,7 @@ const goals = [
     },
     getDescription(amount, building, currency) {
       return `get ${amount} ${currency}`
-    }
+    },
   }, {
     type: 2,
     amountScale(nth, building) {
@@ -26,7 +26,7 @@ const goals = [
     },
     getDescription(amount, building) {
       return `get ${amount} ${building}`
-    }
+    },
   }, {
     type: 3,
     amountScale(nth, building) {
@@ -34,8 +34,8 @@ const goals = [
     },
     getDescription(amount, building, currency) {
       return `get ${amount} ${currency}/sec with ${building}`
-    }
-  }
+    },
+  },
 ]
 
 export default (type, nth) => {
@@ -57,6 +57,6 @@ export default (type, nth) => {
     type: goal.type,
     building: building,
     amount: amount,
-    description: goal.getDescription(amount, name, currency)
+    description: goal.getDescription(amount, name, currency),
   }
 }

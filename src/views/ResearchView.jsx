@@ -1,7 +1,6 @@
-import React from "react"
-import { buyResearch } from "actions/PropertyActions"
-import cx from "classnames"
-import { format as f, titleify, colorStyle, Color } from "utils/helpers"
+import React from 'react'
+import cx from 'classnames'
+import { titleify, Color } from 'utils/helpers'
 
 export default React.createClass({
   render() {
@@ -49,15 +48,15 @@ export default React.createClass({
             return (
               <button key={i}
                 onClick={() => buyResearch(property.id, name, cost)}
-                className={cx("list-group-item", {
-                  disabled: isComplete
+                className={cx('list-group-item', {
+                  disabled: isComplete,
                 })}>
 
                 {property.researchDescription(name)}
 
                 {!isComplete &&
-                  <span className={cx("badge", {
-                    danger: !canAfford
+                  <span className={cx('badge', {
+                    danger: !canAfford,
                   })}>
 
                     {cost}
@@ -70,5 +69,5 @@ export default React.createClass({
         </div>
       </div>
     )
-  }
+  },
 })

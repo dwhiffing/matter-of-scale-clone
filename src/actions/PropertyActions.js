@@ -6,14 +6,14 @@ export const updateProperty = (id, update) => ({
   type: 'UPDATE_PROPERTY',
   payload: {
     propertyKey: id,
-    update: update
-  }
+    update: update,
+  },
 })
 
 export const unlockBuilding = (id, index) => {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch(updateProperty(id, {
-      unlockedBuildings: u => u.concat([index])
+      unlockedBuildings: u => u.concat([index]),
     }))
   }
 }
@@ -27,7 +27,7 @@ export function buyResearch(propertyKey, researchKey, cost) {
     const maxed = research.current >= research.max || research.current <= research.min
 
     if (maxed) {
-      return dispatch(flashMessage(`PURCHASE_ERROR: research type maxed`))
+      return dispatch(flashMessage('PURCHASE_ERROR: research type maxed'))
     } else if (cost > money) {
       return dispatch(flashMessage(`PURCHASE_ERROR: ${cost - money} research short`))
     }
@@ -36,8 +36,8 @@ export function buyResearch(propertyKey, researchKey, cost) {
       researchMoney: sub(cost),
       researchTypes: { [researchKey]: {
         current: +(research.current+research.increment).toPrecision(3),
-        rank: add(1)
-      }}
+        rank: add(1),
+      } },
     }))
 
     if (researchKey == 'extra') {
@@ -46,7 +46,7 @@ export function buyResearch(propertyKey, researchKey, cost) {
 
     if (researchKey == 'incrementCost') {
       dispatch(updateProperty(propertyKey,{
-        toCompleteUntilNextInstance: property.researchTypes['incrementCost'].current
+        toCompleteUntilNextInstance: property.researchTypes['incrementCost'].current,
       }))
     }
   }
@@ -55,5 +55,5 @@ export function buyResearch(propertyKey, researchKey, cost) {
 
 export const PropertyThunks = {
   unlockBuilding,
-  buyResearch
+  buyResearch,
 }

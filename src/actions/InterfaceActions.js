@@ -1,18 +1,18 @@
 export const clearSave = () => {
   return (dispatch) => {
-    dispatch({type: "CLEAR_SAVE"})
+    dispatch({ type: 'CLEAR_SAVE' })
   }
 }
 
 export const toggleMuliplier = () => {
   return (dispatch) => {
-    dispatch({type: "TOGGLE_MULTIPLIER"})
+    dispatch({ type: 'TOGGLE_MULTIPLIER' })
   }
 }
 
 export const changeUpgradePoints = (upgrades) => {
   return (dispatch) => {
-    dispatch({type: "CHANGE_UPGRADE_POINTS", payload: upgrades})
+    dispatch({ type: 'CHANGE_UPGRADE_POINTS', payload: upgrades })
   }
 }
 
@@ -21,12 +21,12 @@ export function startTicking() {
     const { doTickTimeout, preTickTimeout } = getState().ui
 
     if (doTickTimeout === null && preTickTimeout === null) {
-      const preTickTimeout = setInterval(() => dispatch({type: 'PRE_TICK'}), 500)
-      const doTickTimeout = setInterval(() => dispatch({type: 'DO_TICK'}), 500)
-      dispatch({type: 'START_TICKING', payload: {
+      const preTickTimeout = setInterval(() => dispatch({ type: 'PRE_TICK' }), 500)
+      const doTickTimeout = setInterval(() => dispatch({ type: 'DO_TICK' }), 500)
+      dispatch({ type: 'START_TICKING', payload: {
         doTickTimeout: doTickTimeout,
-        preTickTimeout: preTickTimeout
-      }})
+        preTickTimeout: preTickTimeout,
+      } })
     }
   }
 }
@@ -38,19 +38,19 @@ export function stopTicking() {
     if (doTickTimeout !== null && preTickTimeout !== null) {
       clearInterval(doTickTimeout)
       clearInterval(preTickTimeout)
-      dispatch({type: 'STOP_TICKING', payload: {
+      dispatch({ type: 'STOP_TICKING', payload: {
         doTickTimeout: doTickTimeout,
-        preTickTimeout: preTickTimeout
-      }})
+        preTickTimeout: preTickTimeout,
+      } })
     }
   }
 }
 
 export function flashMessage(message) {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch({
       type: 'FLASH_MESSAGE',
-      payload: message
+      payload: message,
     })
   }
 }
@@ -60,5 +60,5 @@ export const InterfaceThunks = {
   startTicking,
   toggleMuliplier,
   clearSave,
-  changeUpgradePoints
+  changeUpgradePoints,
 }

@@ -1,6 +1,5 @@
-import React from "react"
-import _ from "lodash"
-import { format as f, titleify, Color } from "utils/helpers"
+import React from 'react'
+import { format as f, titleify, Color } from 'utils/helpers'
 import { ProgressBar } from 'react-bootstrap'
 import BuildingLineItem from 'views/components/BuildingLineItem'
 
@@ -12,10 +11,9 @@ export default React.createClass({
 
     let progressBar
 
-    const { doBuildingPurchase, doUpgradePurchase, unlockBuilding, ui} = this.props
-    const { id, type, money, currencyName, goal } = instance
-    const { researchMoney, researchName, color } = instance.property()
-    const { upgrades, multi } = this.props.ui
+    const { doBuildingPurchase, doUpgradePurchase, unlockBuilding, ui } = this.props
+    const { id, money, currencyName, goal } = instance
+    const { researchMoney, researchName } = instance.property()
 
     const name = titleify(instance.name)
     const progress = Math.floor(Math.min(100, instance.progress))
@@ -69,7 +67,7 @@ export default React.createClass({
         </div>
 
         <p>
-          Contains {f(money, "0,0")} {currencyDiv} producing {income}  {currencyDiv} / sec
+          Contains {f(money, '0,0')} {currencyDiv} producing {income}  {currencyDiv} / sec
         </p>
 
         <p>
@@ -110,5 +108,5 @@ export default React.createClass({
         </table>
       </div>
     )
-  }
+  },
 })

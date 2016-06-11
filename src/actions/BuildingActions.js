@@ -1,14 +1,13 @@
-import { updateProperty } from 'actions/PropertyActions'
 import { updateInstance } from 'actions/InstanceActions'
 import { flashMessage, changeUpgradePoints } from 'actions/InterfaceActions'
-import { add, sub } from 'utils/helpers'
+import { add } from 'utils/helpers'
 
 export const updateBuilding = (id, update) => ({
   type: 'UPDATE_BUILDING',
   payload: {
     buildingKey: id,
-    update: update
-  }
+    update: update,
+  },
 })
 
 export const buyBuilding = (buildingKey, instanceKey, cost, count) => ({
@@ -17,8 +16,8 @@ export const buyBuilding = (buildingKey, instanceKey, cost, count) => ({
     buildingKey,
     instanceKey,
     cost: cost,
-    count: count
-  }
+    count: count,
+  },
 })
 
 export function doBuildingPurchase(buildingKey, instanceKey, cost) {
@@ -40,7 +39,7 @@ export function doUpgradePurchase(instanceKey, buildingKey, cost) {
     const { count, index } = getState().instances[instanceKey].buildings()[buildingKey]
     if (upgrades >= cost && count > 0) {
       dispatch(updateInstance(instanceKey, {
-        upgradedBuildings: {[index]: add(1)}
+        upgradedBuildings: { [index]: add(1) },
       }))
       dispatch(changeUpgradePoints(0 - cost))
     } else {
@@ -51,5 +50,5 @@ export function doUpgradePurchase(instanceKey, buildingKey, cost) {
 
 export const BuildingThunks = {
   doBuildingPurchase,
-  doUpgradePurchase
+  doUpgradePurchase,
 }

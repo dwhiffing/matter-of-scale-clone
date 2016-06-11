@@ -18,7 +18,7 @@ export const buildingNames = [
   ['Engineer','Coal-Plant','Oil-Plant','Wire-Extruder','Powerline','Utility-Worker','Solar-Fields','Solar-Tower','Nuclear-Plant','Fusion-Plant'],
   ['Astronaut','Astrophysicist','Launch-Center','Rockets','Space-Elevator','Space-Station','Mass-Driver','Bot-Swarm','Asteroids','Space-Shipyard'],
   ['Lepton-Builder','Quark-Font','Neutrino-Guide','Proton-Decayer','State-Binder','Force-Splicer','Gravity-Hole','Magrathea','Energy-Shaper','Reality-Splitter'],
-  ['Singularity','Netherman','Phaseshifter','Selfsplitter','Ascendant','Transcendant','Beyonder','Starchild','Planewalker','Timeshifter']
+  ['Singularity','Netherman','Phaseshifter','Selfsplitter','Ascendant','Transcendant','Beyonder','Starchild','Planewalker','Timeshifter'],
 ]
 
 export default (id, type) => {
@@ -135,5 +135,5 @@ const helpers = {
   // short-hand to property research
   research(key) {
     return this.getProperty().research(key)
-  }
+  },
 }

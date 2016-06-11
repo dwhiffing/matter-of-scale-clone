@@ -1,6 +1,6 @@
-import React from "react"
+import React from 'react'
 import InstanceLineItem from 'views/components/InstanceLineItem'
-import { format as f, titleify, Color } from "utils/helpers"
+import { format as f, titleify, Color } from 'utils/helpers'
 
 export default ({ properties, history, markInstanceComplete }) => {
   return (
@@ -10,9 +10,9 @@ export default ({ properties, history, markInstanceComplete }) => {
 
       const instances = property.getInstances()
       const name = titleify(property.name)
-      const income = f(property.income(), "0,0")
-      const money = f(property.money(), "0,0")
-      const research = f(property.researchMoney, "0")
+      const income = f(property.income(), '0,0')
+      const money = f(property.money(), '0,0')
+      const research = f(property.researchMoney, '0')
 
       const currencyName = <Color>{titleify(property.currencyName)}</Color>
       const researchName = <Color>{titleify(property.researchName)}</Color>
@@ -20,10 +20,11 @@ export default ({ properties, history, markInstanceComplete }) => {
         <a href={`#/research/${property.id}`}>{name} Improvements</a>
       )
 
+      let last, lastName, next
       if (i > 0) {
-        var last = properties[i - 1]
-        var lastName = titleify(last.name)
-        var next = last.toCompleteUntilNextInstance
+        last = properties[i - 1]
+        lastName = titleify(last.name)
+        next = last.toCompleteUntilNextInstance
       }
 
       return (

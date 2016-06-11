@@ -1,7 +1,6 @@
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
 import { persistStore, autoRehydrate, createTransform } from 'redux-persist'
 import { startTicking } from 'actions/InterfaceActions'
-import logger from 'utils/loggerMiddleware'
 import { toObj } from 'utils/helpers'
 import _ from 'lodash'
 
@@ -18,7 +17,7 @@ export const combinedReducers = combineReducers(reducers)
 
 // guide to redux middleware: http://gaearon.github.io/redux/docs/advanced/Middleware.html
 const composedStore = compose(
-  applyMiddleware(logger, thunk)
+  applyMiddleware(thunk)
 )(createStore)
 
 // persist to local storage with redux-persist

@@ -1,6 +1,5 @@
 import store from 'utils/reduxStore'
 import GoalFactory from 'factories/GoalFactory'
-import { sampleArray, diceRoll, getRandom } from 'utils/helpers'
 import u from 'updeep'
 
 export default (id, property, nth) => {
@@ -28,7 +27,7 @@ export default (id, property, nth) => {
     nth: nth,
 
     // how much money the instance has accumulated
-    money: property.research("startMoney"),
+    money: property.research('startMoney'),
 
     // has the user disabled autobuy for this instance?
     disableAutoBuy: false,
@@ -73,13 +72,13 @@ const helpers = {
   // compute income from all buildings as well as passive income from research
   income() {
     const buildingIncome = this.buildings().reduce((a, b) => a + b.income(), 0)
-    const passiveIncome = this.property().research("passiveIncome")
+    const passiveIncome = this.property().research('passiveIncome')
     return buildingIncome + passiveIncome
   },
 
   // how many seconds it takes to auto complete this instance
   autoCompleteDuration() {
-    return this.property().research("autoComplete")
+    return this.property().research('autoComplete')
   },
 
   autoCompleteProgress() {
@@ -109,5 +108,5 @@ const helpers = {
   // shorthand to the property
   property() {
     return store.getState().properties[this.type]
-  }
+  },
 }

@@ -1,6 +1,3 @@
-import { updateProperty } from 'actions/PropertyActions'
-import { add, sub } from 'utils/helpers'
-
 export const createInstance = (type, count=1) => {
   return (dispatch, getState) => {
     dispatch({
@@ -8,8 +5,8 @@ export const createInstance = (type, count=1) => {
       payload: {
         id: Object.keys(getState().instances).length,
         type: type,
-        count: count
-      }
+        count: count,
+      },
     })
   }
 }
@@ -18,16 +15,16 @@ export const updateInstance = (id, update) => ({
   type: 'UPDATE_INSTANCE',
   payload: {
     instanceKey: id,
-    update: update
-  }
+    update: update,
+  },
 })
 
 export const completeInstance = (id, type) => ({
   type: 'COMPLETE_INSTANCE',
   payload: {
     id: id,
-    type: type
-  }
+    type: type,
+  },
 })
 
 // TODO: the completion/creation logic should be handled within the reducer when
@@ -50,7 +47,7 @@ export function createMissingInstances(key) {
   return (dispatch, getState) => {
     const prop = getState().properties[key]
     const count = prop.getInstances().length
-    const missing = key == 0 ? prop.research("extra") - count : prop.toBuild
+    const missing = key == 0 ? prop.research('extra') - count : prop.toBuild
 
     if (missing > 0) {
       dispatch(createInstance(key, missing))
@@ -59,9 +56,9 @@ export function createMissingInstances(key) {
 }
 
 export function toggleAutoBuy(key) {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch(updateInstance(key, {
-      disableAutoBuy: autoBuy => !autoBuy
+      disableAutoBuy: autoBuy => !autoBuy,
     }))
   }
 }
@@ -69,5 +66,5 @@ export function toggleAutoBuy(key) {
 export const InstanceThunks = {
   createInstance,
   markInstanceComplete,
-  toggleAutoBuy
+  toggleAutoBuy,
 }

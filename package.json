@@ -1,13 +1,14 @@
 {
   "name": "idle-game",
   "author": "Daniel Whiffing",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "An idle game based on Matter of Scale.",
-  "main": "src/main.jsx",
+  "main": "src/index.js",
   "license": "ISC",
   "homepage": "https://github.com/dwhiffing/idle-game#readme",
   "keywords": [
     "react",
+    "redux",
     "idle",
     "incremental"
   ],
@@ -19,9 +20,8 @@
     "url": "https://github.com/dwhiffing/idle-game/issues"
   },
   "scripts": {
-    "build": "webpack -p --config webpack.prod.js",
     "start": "node server.js",
-    "test": "env NODE_PATH=$NODE_PATH:$PWD/src mocha --require ./test/index.js --compilers js:babel/register  ./test/**/*Test.js"
+    "lint": "eslint ./src"
   },
   "dependencies": {
     "babel-polyfill": "^6.9.1",

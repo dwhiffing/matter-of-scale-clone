@@ -1,12 +1,11 @@
-import React from "react"
-import _ from "lodash"
+import React from 'react'
 import { connect } from 'react-redux'
 import { mapStateKeysToProps, format, titleify } from 'utils/helpers'
 
-import { InterfaceThunks } from "actions/InterfaceActions"
-import { InstanceThunks } from "actions/InstanceActions"
-import { BuildingThunks } from "actions/BuildingActions"
-import { PropertyThunks } from "actions/PropertyActions"
+import { InterfaceThunks } from 'actions/InterfaceActions'
+import { InstanceThunks } from 'actions/InstanceActions'
+import { BuildingThunks } from 'actions/BuildingActions'
+import { PropertyThunks } from 'actions/PropertyActions'
 
 const stateToMap = mapStateKeysToProps(['ui', 'properties', 'instances', 'buildings'])
 const actionsToMap = Object.assign({}, InterfaceThunks, PropertyThunks, InstanceThunks, BuildingThunks)
@@ -60,18 +59,18 @@ const ApplicationView = React.createClass({
         </ol>
 
         {this.props.children &&
-          React.cloneElement(this.props.children, {...this.props})
+          React.cloneElement(this.props.children, { ...this.props })
         }
 
         <nav className="navbar navbar-default navbar-fixed-bottom">
           <div className="container">
-            <div className="row text-center" style={{margin: "0 -10px"}}>
+            <div className="row text-center" style={{ margin: '0 -10px' }}>
 
               <a className="col-xs-2" onClick={this.props.clearSave}>
                 Clear Save
               </a>
 
-              <a className="col-xs-4" onClick={() => this.props.history.push("/property")}>
+              <a className="col-xs-4" onClick={() => this.props.history.push('/property')}>
                 View Properties
               </a>
 
@@ -88,7 +87,7 @@ const ApplicationView = React.createClass({
         </nav>
       </div>
     )
-  }
+  },
 })
 
 export default connect(stateToMap, actionsToMap)(ApplicationView)

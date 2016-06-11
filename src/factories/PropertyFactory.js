@@ -1,5 +1,5 @@
 import store from 'utils/reduxStore'
-import numeral from "numeral"
+import numeral from 'numeral'
 import u from 'updeep'
 import { titleify, replaceString } from 'utils/helpers'
 import { buildingNames } from 'factories/BuildingFactory'
@@ -125,7 +125,7 @@ const helpers = {
       name: titleify(this.name),
       currency: titleify(this.currencyName),
       building: titleify(buildingName),
-      value: this.researchComplete(key) ? current : `${next} (${current})`
+      value: this.researchComplete(key) ? current : `${next} (${current})`,
     }, research.description)
   },
 
@@ -138,5 +138,5 @@ const helpers = {
   completedInstances() {
     const instances = Object.values(store.getState().instances)
     return instances.filter(i => i.type == this.id && i.complete)
-  }
+  },
 }

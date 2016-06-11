@@ -7,28 +7,28 @@ const research = {
     percent: true,
     increment: 0.1,
     max: 0.5,
-    description: "{name} buildings cost {value} less"
+    description: '{name} buildings cost {value} less',
   },
   ignoreCost: {
     rank: 0,
     current: 0,
     increment: 2,
     max: 10,
-    description: "{name} buildings ignore {value} buildings when computing cost"
+    description: '{name} buildings ignore {value} buildings when computing cost',
   },
   startMoney: {
     rank: 0,
     current: 0,
     increment: 200,
     max: 1000,
-    description: "{name}s start with {value} {currency}"
+    description: '{name}s start with {value} {currency}',
   },
   passiveIncome: {
     rank: 0,
     current: 0,
     increment: 10,
     max: 50,
-    description: "{name}s have {value} passive income"
+    description: '{name}s have {value} passive income',
   },
   upgradeCost: {
     rank: 0,
@@ -36,21 +36,21 @@ const research = {
     percent: true,
     increment: 0.1,
     max: 0.5,
-    description: "{name}s upgrades cost {value} less"
+    description: '{name}s upgrades cost {value} less',
   },
   autoComplete: {
     rank: 0,
     current: 50,
     increment: -10,
     min: 0,
-    description: "Auto Completes {name}s after {value} seconds"
+    description: 'Auto Completes {name}s after {value} seconds',
   },
   incrementCost: {
     rank: 0,
     current: 5,
     increment: -1,
     min: 1,
-    description: "Finish {value} {name}s before getting next"
+    description: 'Finish {value} {name}s before getting next',
   },
   autoCost: {
     rank: 0,
@@ -58,8 +58,8 @@ const research = {
     percent: true,
     increment: -0.1,
     min: 1,
-    description: "Lower AutoBuy cost multiplier to {value}"
-  }
+    description: 'Lower AutoBuy cost multiplier to {value}',
+  },
 }
 
 const specialResearch = {
@@ -68,7 +68,7 @@ const specialResearch = {
     current: 1,
     increment: 1,
     max: 5,
-    description: "You can have {value} {name}s active at once"
+    description: 'You can have {value} {name}s active at once',
   },
   autoBuy: {
     rank: 0,
@@ -76,8 +76,8 @@ const specialResearch = {
     percent: true,
     increment: 0.1,
     max: 0.5,
-    description: "AutoBuy {value} of {building} per tick"
-  }
+    description: 'AutoBuy {value} of {building} per tick',
+  },
 }
 
 
@@ -86,7 +86,7 @@ export default (id) => {
   let researchTypes = research
   if (id === 0) {
     researchTypes = Object.assign({
-      extra: specialResearch.extraHamlets
+      extra: specialResearch.extraHamlets,
     }, researchTypes)
   }
   _.range(0, 10).forEach((b, i) => {

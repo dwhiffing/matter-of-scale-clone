@@ -1,5 +1,3 @@
-import { createAction, handleActions } from 'redux-actions'
-import store from 'utils/reduxStore'
 import React from 'react'
 import _ from 'lodash'
 import numeral from 'numeral'
@@ -26,7 +24,7 @@ export const pushToObj = (obj, arr) => {
 // short hand for state update on dynamic key
 export const shallowUpdate = (key, update, state) => {
   return updeep({
-    [key]: update
+    [key]: update,
   }, state)
 }
 
@@ -64,7 +62,7 @@ export const diceRoll = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-export const sampleArray = (arr, num) => {
+export const sampleArray = (arr) => {
   return arr[diceRoll(0, arr.length-1)]
 }
 
@@ -88,30 +86,6 @@ export const colorStyle = (color) => ({
   fontSize: '1.2em',
   color: color,
 })
-
-/**
-*
-* This allows for extra default transforms on all reducers
-* currently, it just transforms the action key to be CONSTANT_CASE
-* and passes it to handleActions, which will return a single reducer from the reducer collection
-*
-* you can specify a single reducer for non-async actions:
-* argument: {fooReducer: () => {...}, barReducer: () => {...}}
-* becomes: {FOO_REDUCER: () => {...}, BAR_REDUCER: () => {...}}
-*
-* or next/throw for async actions
-* argument: {fetchFoo: {next: () => {...sauccess}, throw: () => {...error}}}
-* becomes: {FETCH_FOO: {next: () => {...success}, throw: () => {...error}}}
-*
-*/
-export const reducerCreator = (actions, initialState) => {
-  actions = _.reduce(actions, function(result, value, key) {
-    result[constantize(key)] = value
-    return result
-  }, {})
-
-  return handleActions(actions, initialState)
-}
 
 /**
 * takes an array of keys of desired state to inject
