@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router'
 import { mapStateKeysToProps, format, titleify } from 'utils/helpers'
 
 import { InterfaceThunks } from 'actions/InterfaceActions'
@@ -70,9 +71,9 @@ const ApplicationView = React.createClass({
                 Clear Save
               </a>
 
-              <a className="col-xs-4" onClick={() => this.props.history.push('/property')}>
+              <Link className="col-xs-4" to="#/property">
                 View Properties
-              </a>
+              </Link>
 
               <a className="col-xs-4" onClick={() => this.props.changeUpgradePoints(0.05)}>
                 Get Upgrades ({format(this.props.ui.upgrades,'0.00')}U)

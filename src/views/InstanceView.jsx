@@ -35,7 +35,7 @@ export default React.createClass({
           <ProgressBar
             className="pointer"
             now={autoCompleteProgress}
-            label="%(percent)s%">
+            label={`${progress}%`}>
           </ProgressBar>
 
           <h6>
@@ -46,7 +46,7 @@ export default React.createClass({
       )
     } else {
       progressBar = (
-        <ProgressBar now={progress} label="%(percent)s%" />
+        <ProgressBar now={progress} label={`${progress}%`} />
       )
     }
 
