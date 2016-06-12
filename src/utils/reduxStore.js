@@ -1,6 +1,5 @@
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
 import { persistStore, autoRehydrate, createTransform } from 'redux-persist'
-import { startTicking } from 'actions/InterfaceActions'
 import { toObj } from 'utils/helpers'
 import _ from 'lodash'
 import createLogger from 'redux-logger'
@@ -72,7 +71,7 @@ persistStore(PersistedStore, {
   sagaMiddleware.run(InstanceSagas)
   sagaMiddleware.run(InterfaceSagas)
   sagaMiddleware.run(PropertySagas)
-  PersistedStore.dispatch(startTicking())
+  PersistedStore.dispatch({ type: 'START_TICKING' })
 })
 
 

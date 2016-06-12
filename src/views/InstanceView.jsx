@@ -11,7 +11,7 @@ export default React.createClass({
 
     let progressBar
 
-    const { tryBuildingPurchase, upgradePurchase, unlockBuilding, ui } = this.props
+    const { tryBuildingPurchase, tryUpgradePurchase, _unlockBuilding, ui } = this.props
     const { id, money, currencyName, goal } = instance
     const { researchMoney, researchName } = instance.property()
 
@@ -97,9 +97,9 @@ export default React.createClass({
                   ui={ui}
                   building={building}
                   instance={instance}
-                  upgradePurchase={upgradePurchase}
+                  tryUpgradePurchase={tryUpgradePurchase}
                   tryBuildingPurchase={tryBuildingPurchase}
-                  unlockBuilding={unlockBuilding}>
+                  _unlockBuilding={_unlockBuilding}>
                 </BuildingLineItem>
               )
             })}

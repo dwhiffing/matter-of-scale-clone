@@ -14,7 +14,7 @@ export default (props) => {
   const canAffordBuy = buildingCost * ui.multi <= instance.money
 
   if (!building.unlocked() && canAffordBuy) {
-    setTimeout(() => props.unlockBuilding(instance.type, index), 0)
+    setTimeout(() => props._unlockBuilding(instance.type, index), 0)
   }
 
   return (
@@ -24,7 +24,7 @@ export default (props) => {
 
           {building.count > 0 &&
             <button
-              onClick={() => props.upgradePurchase(instance.id, index, building.upgradeCost())}
+              onClick={() => props.tryUpgradePurchase(instance.id, index, building.upgradeCost())}
               className={cx('btn btn-default btn-sm', {
                 'btn-danger': !canAffordUpgrade,
               })}>

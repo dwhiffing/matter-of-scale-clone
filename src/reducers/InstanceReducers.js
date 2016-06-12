@@ -51,7 +51,6 @@ export default (state = initialState, action) => {
 
     case 'DO_TICK': {
       const newState = u.map((instance) => {
-
         let money = instance.money + instance.income()
 
         const autoBuy = instance.buildings().map(building => {

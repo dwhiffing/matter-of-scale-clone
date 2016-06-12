@@ -10,7 +10,7 @@ function* doTickSaga() {
     take('START_TICKING')
 
     while (true) {
-      yield delay(500)
+      yield delay(100)
       yield put({ type: 'DO_TICK' })
       const instances = yield select(state => Object.values(state.instances))
       const completeInstances = instances.filter(i => {

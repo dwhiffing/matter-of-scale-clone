@@ -1,4 +1,13 @@
-export const updateProperty = (propertyKey, update) => ({
+export const tryBuyResearch = (propertyKey, researchKey, cost) => ({
+  type: 'TRY_BUY_RESEARCH',
+  payload: {
+    propertyKey: propertyKey,
+    researchKey: researchKey,
+    cost: cost,
+  },
+})
+
+export const _updateProperty = (propertyKey, update) => ({
   type: 'UPDATE_PROPERTY',
   payload: {
     propertyKey: propertyKey,
@@ -6,19 +15,10 @@ export const updateProperty = (propertyKey, update) => ({
   },
 })
 
-export const unlockBuilding = (id, index) => ({
+export const _unlockBuilding = (id, index) => ({
   type: 'UNLOCK_BUILDING',
   payload: {
     id: id,
     index: index,
-  },
-})
-
-export const buyResearch = (propertyKey, researchKey, cost) => ({
-  type: 'BUY_RESEARCH',
-  payload: {
-    propertyKey: propertyKey,
-    researchKey: researchKey,
-    cost: cost,
   },
 })

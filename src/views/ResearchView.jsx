@@ -4,7 +4,7 @@ import { titleify, Color } from 'utils/helpers'
 
 export default React.createClass({
   render() {
-    const { params, properties, buyResearch } = this.props
+    const { params, properties, tryBuyResearch } = this.props
     const property = properties[params.property]
     const name = titleify(property.name)
     const { researchMoney, researchName } = property
@@ -47,7 +47,7 @@ export default React.createClass({
 
             return (
               <button key={i}
-                onClick={() => buyResearch(property.id, name, cost)}
+                onClick={() => tryBuyResearch(property.id, name, cost)}
                 className={cx('list-group-item', {
                   disabled: isComplete,
                 })}>

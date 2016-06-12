@@ -3,7 +3,7 @@ import u from 'updeep'
 const initialState = {
   multi: 1,
   saveSlot: 1,
-  upgrades: 0,
+  upgrades: 220,
   doTickTimeout: null,
   preTickTimeout: null,
 }

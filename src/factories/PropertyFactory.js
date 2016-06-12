@@ -34,7 +34,7 @@ export default () => {
       toBuild: 0,
 
       // number of this type to complete until next property up is created
-      toCompleteUntilNextInstance: Math.floor(1 + id / 3),
+      toCompleteUntilNextInstance: 5 + id,
 
       // has player has reached this property type?
       unlocked: id == 0,

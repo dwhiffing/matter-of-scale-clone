@@ -1,12 +1,11 @@
 import { put, take, select, fork, call } from 'redux-saga/effects'
 import {
-  doCreateInstance,
-  updateInstance,
-  createMissingInstances,
-  doCompleteInstance,
+  _doCreateInstance,
+  _updateInstance,
+  _createMissingInstances,
+  _doCompleteInstance,
   tryCreateInstance,
 } from 'actions/InstanceActions'
-
 
 function* _createInstance(type, count) {
   if (count <= 0) {
@@ -20,7 +19,7 @@ function* _createInstance(type, count) {
       nth: instances.filter(obj => obj.type == property.id).length + 1,
     }
   })
-  yield put(doCreateInstance(id, type, nth, count))
+  yield put(_doCreateInstance(id, type, nth, count))
 }
 
 
@@ -31,8 +30,8 @@ function* tryCompleteInstanceSaga() {
     const instanceKey = action.payload
     const propertyKey = yield select(state => state.instances[action.payload].type)
 
-    yield put(doCompleteInstance(instanceKey, propertyKey))
-    yield put(createMissingInstances())
+    yield put(_doCompleteInstance(instanceKey, propertyKey))
+    yield put(_createMissingInstances())
   }
 }
 
@@ -72,7 +71,7 @@ function* toggleAutoBuySaga() {
   while (true) {
     const action = yield take('TOGGLE_AUTO_BUY')
 
-    yield put(updateInstance(action.payload.key, {
+    yield put(_updateInstance(action.payload, {
       disableAutoBuy: autoBuy => !autoBuy,
     }))
   }

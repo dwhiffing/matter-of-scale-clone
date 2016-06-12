@@ -1,6 +1,6 @@
-import { updateInstance } from 'actions/InstanceActions'
-import { doBuildingPurchase } from 'actions/BuildingActions'
-import { flashMessage, changeUpgradePoints } from 'actions/InterfaceActions'
+import { _updateInstance } from 'actions/InstanceActions'
+import { _doBuildingPurchase } from 'actions/BuildingActions'
+import { _flashMessage, changeUpgradePoints } from 'actions/InterfaceActions'
 import { add } from 'utils/helpers'
 import { put, select, fork, take } from 'redux-saga/effects'
 
@@ -15,16 +15,16 @@ function* tryBuildingPurchase() {
     }))
 
     if (cost * count <= money) {
-      yield put(doBuildingPurchase(buildingKey, instanceKey, cost, count))
+      yield put(_doBuildingPurchase(buildingKey, instanceKey, cost, count))
     } else {
-      yield put(flashMessage(`PURCHASE_ERROR: ${cost - money} money short`))
+      yield put(_flashMessage(`PURCHASE_ERROR: ${cost - money} money short`))
     }
   }
 }
 
-function* upgradePurchase() {
+function* tryUpgradePurchase() {
   while (true) {
-    const action = yield take('UPGRADE_PURCHASE')
+    const action = yield take('TRY_UPGRADE_PURCHASE')
 
     const { instanceKey, buildingKey, cost } = action.payload
     const { upgrades, building } = yield select(state => ({
@@ -33,17 +33,17 @@ function* upgradePurchase() {
     }))
 
     if (upgrades >= cost && building.count > 0) {
-      yield put(updateInstance(instanceKey, {
+      yield put(_updateInstance(instanceKey, {
         upgradedBuildings: { [building.index]: add(1) },
       }))
       yield put(changeUpgradePoints(0 - cost))
     } else {
-      yield put(flashMessage(`PURCHASE_ERROR: ${cost - upgrades} upgrade points short`))
+      yield put(_flashMessage(`PURCHASE_ERROR: ${cost - upgrades} upgrade points short`))
     }
   }
 }
 
 export default function* BuildingSagas() {
   yield fork(tryBuildingPurchase)
-  yield fork(upgradePurchase)
+  yield fork(tryUpgradePurchase)
 }

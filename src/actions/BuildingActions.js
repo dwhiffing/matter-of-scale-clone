@@ -7,7 +7,16 @@ export const tryBuildingPurchase = (buildingKey, instanceKey, cost) => ({
   },
 })
 
-export const doBuildingPurchase = (buildingKey, instanceKey, cost, count) => ({
+export const tryUpgradePurchase = (instanceKey, buildingKey, cost) => ({
+  type: 'TRY_UPGRADE_PURCHASE',
+  payload: {
+    instanceKey: instanceKey,
+    buildingKey: buildingKey,
+    cost: cost,
+  },
+})
+
+export const _doBuildingPurchase = (buildingKey, instanceKey, cost, count) => ({
   type: 'DO_BUILDING_PURCHASE',
   payload: {
     buildingKey,
@@ -17,20 +26,10 @@ export const doBuildingPurchase = (buildingKey, instanceKey, cost, count) => ({
   },
 })
 
-
-export const updateBuilding = (id, update) => ({
+export const _updateBuilding = (id, update) => ({
   type: 'UPDATE_BUILDING',
   payload: {
     buildingKey: id,
     update: update,
-  },
-})
-
-export const upgradePurchase = (instanceKey, buildingKey, cost) => ({
-  type: 'UPGRADE_PURCHASE',
-  payload: {
-    instanceKey: instanceKey,
-    buildingKey: buildingKey,
-    cost: cost,
   },
 })

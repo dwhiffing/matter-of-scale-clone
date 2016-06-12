@@ -1,6 +1,6 @@
-import { createMissingInstances } from 'actions/InstanceActions'
-import { flashMessage } from 'actions/InterfaceActions'
-import { updateProperty } from 'actions/PropertyActions'
+import { _createMissingInstances } from 'actions/InstanceActions'
+import { _flashMessage } from 'actions/InterfaceActions'
+import { _updateProperty } from 'actions/PropertyActions'
 import { sub, add } from 'utils/helpers'
 import { put, take, select, fork } from 'redux-saga/effects'
 
@@ -9,7 +9,7 @@ function* unlockBuildingSaga() {
     const action = yield take('UNLOCK_BUILDING')
 
     const { id, index } = action.payload
-    yield put(updateProperty(id, {
+    yield put(_updateProperty(id, {
       unlockedBuildings: u => u.concat([index]),
     }))
   }
@@ -17,22 +17,22 @@ function* unlockBuildingSaga() {
 
 function* buyResearchSaga() {
   while (true) {
-    const action = yield take('BUY_RESEARCH')
+    const action = yield take('TRY_BUY_RESEARCH')
 
     const { propertyKey, researchKey, cost } = action.payload
     const property = yield select(state => state.properties[propertyKey])
     const research = property.researchTypes[researchKey]
 
     if (research.current >= research.max || research.current <= research.min) {
-      yield put(flashMessage(
+      yield put(_flashMessage(
         'PURCHASE_ERROR: research type maxed'
       ))
     } else if (cost > property.researchMoney) {
-      yield put(flashMessage(
+      yield put(_flashMessage(
         `PURCHASE_ERROR: ${cost - property.researchMoney} research short`
       ))
     } else {
-      yield put(updateProperty(propertyKey, {
+      yield put(_updateProperty(propertyKey, {
         researchMoney: sub(cost),
         researchTypes: { [researchKey]: {
           current: +(research.current+research.increment).toPrecision(3),
@@ -41,11 +41,11 @@ function* buyResearchSaga() {
       }))
 
       if (researchKey === 'extra') {
-        yield put(createMissingInstances())
+        yield put(_createMissingInstances())
       }
 
       if (researchKey === 'incrementCost') {
-        yield put(updateProperty(propertyKey,{
+        yield put(_updateProperty(propertyKey,{
           toCompleteUntilNextInstance: property.researchTypes['incrementCost'].current,
         }))
       }
