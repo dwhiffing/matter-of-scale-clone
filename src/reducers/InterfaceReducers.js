@@ -27,7 +27,7 @@ export default (state = initialState, action) => {
         doTickTimeout: payload.doTickTimeout,
       }, state)
 
-    case 'CHANGE_UPGRADE_POINTS': {
+    case 'SET_UPGRADE_POINTS': {
       return u({
         upgrades: Math.round((state.upgrades + payload) * 100) / 100,
       }, state)

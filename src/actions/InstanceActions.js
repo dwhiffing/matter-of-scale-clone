@@ -1,4 +1,4 @@
-export const createInstance = (type, count=1) => ({
+export const tryCreateInstance = (type, count=1) => ({
   type: 'TRY_CREATE_INSTANCE',
   payload: {
     type: type,
@@ -16,32 +16,29 @@ export const doCreateInstance = (id, type, nth, count=1) => ({
   },
 })
 
-export const updateInstance = (id, update) => ({
+export const tryCompleteInstance = (instanceKey) => ({
+  type: 'TRY_COMPLETE_INSTANCE',
+  payload: instanceKey,
+})
+
+export const doCompleteInstance = (instanceKey, propertyKey) => ({
+  type: 'DO_COMPLETE_INSTANCE',
+  payload: {
+    instanceKey: instanceKey,
+    propertyKey: propertyKey,
+  },
+})
+
+export const updateInstance = (instanceKey, update) => ({
   type: 'UPDATE_INSTANCE',
   payload: {
-    instanceKey: id,
+    instanceKey: instanceKey,
     update: update,
   },
 })
 
-export const markInstanceComplete = (instanceKey) => ({
-  type: 'MARK_INSTANCE_COMPLETE',
-  payload: instanceKey,
-})
-
-export const createMissingInstances = (type) => ({
+export const createMissingInstances = () => ({
   type: 'CREATE_MISSING_INSTANCES',
-  payload: {
-    type,
-  },
-})
-
-export const completeInstance = (id, type) => ({
-  type: 'COMPLETE_INSTANCE',
-  payload: {
-    id: id,
-    type: type,
-  },
 })
 
 export const toggleAutoBuy = (key) => ({

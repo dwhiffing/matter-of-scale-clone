@@ -1,21 +1,21 @@
-import { updateInstance } from '../actions/InstanceActions'
-import { buyBuilding } from '../actions/BuildingActions'
-import { flashMessage, changeUpgradePoints } from '../actions/InterfaceActions'
+import { updateInstance } from 'actions/InstanceActions'
+import { doBuildingPurchase } from 'actions/BuildingActions'
+import { flashMessage, changeUpgradePoints } from 'actions/InterfaceActions'
 import { add } from 'utils/helpers'
 import { put, select, fork, take } from 'redux-saga/effects'
 
-function* buildingPurchase() {
+function* tryBuildingPurchase() {
   while (true) {
-    const action = yield take('BUILDING_PURCHASE')
+    const action = yield take('TRY_BUILDING_PURCHASE')
 
     const { buildingKey, instanceKey, cost } = action.payload
-    const state = yield select(state => state)
-    const { instances, ui } = state
+    const { money, count } = yield select(state => ({
+      money: state.instances[instanceKey].money,
+      count: state.ui.multi,
+    }))
 
-    const money = instances[instanceKey].money
-    const count = ui.multi
     if (cost * count <= money) {
-      yield put(buyBuilding(buildingKey, instanceKey, cost, count))
+      yield put(doBuildingPurchase(buildingKey, instanceKey, cost, count))
     } else {
       yield put(flashMessage(`PURCHASE_ERROR: ${cost - money} money short`))
     }
@@ -27,11 +27,14 @@ function* upgradePurchase() {
     const action = yield take('UPGRADE_PURCHASE')
 
     const { instanceKey, buildingKey, cost } = action.payload
-    const upgrades = yield select(state => state.ui.upgrads)
-    const { count, index } = yield select(state => state.instances[instanceKey].buildings()[buildingKey])
-    if (upgrades >= cost && count > 0) {
+    const { upgrades, building } = yield select(state => ({
+      upgrades: state.ui.upgrades,
+      building: state.instances[instanceKey].buildings()[buildingKey],
+    }))
+
+    if (upgrades >= cost && building.count > 0) {
       yield put(updateInstance(instanceKey, {
-        upgradedBuildings: { [index]: add(1) },
+        upgradedBuildings: { [building.index]: add(1) },
       }))
       yield put(changeUpgradePoints(0 - cost))
     } else {
@@ -41,6 +44,6 @@ function* upgradePurchase() {
 }
 
 export default function* BuildingSagas() {
-  yield fork(buildingPurchase)
+  yield fork(tryBuildingPurchase)
   yield fork(upgradePurchase)
 }

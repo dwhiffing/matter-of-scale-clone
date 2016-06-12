@@ -1,7 +1,7 @@
-export const updateProperty = (id, update) => ({
+export const updateProperty = (propertyKey, update) => ({
   type: 'UPDATE_PROPERTY',
   payload: {
-    propertyKey: id,
+    propertyKey: propertyKey,
     update: update,
   },
 })

@@ -18,7 +18,7 @@ export default (state = initialState, action) => {
     case 'UPDATE_BUILDING':
       return shallowUpdate(payload.buildingKey, payload.update, state)
 
-    case 'BUY_BUILDING':
+    case 'DO_BUILDING_PURCHASE':
       return shallowUpdate(payload.buildingKey, {
         count: add(payload.count),
       }, state)
@@ -32,10 +32,9 @@ export default (state = initialState, action) => {
       return pushToObj(state, ...newBuildingSet)
     }
 
-    case 'COMPLETE_INSTANCE': {
-      // TODO: helper for array from range
+    case 'DO_COMPLETE_INSTANCE': {
       // omit the buildings from the store
-      const id = payload.id * 10
+      const id = payload.instanceKey * 10
       const omittedState = Object.values(
         u.omit(_.range(id, id + 10), state)
       ).reduce(toObj, {})

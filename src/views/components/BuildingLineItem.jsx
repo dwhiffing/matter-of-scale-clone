@@ -35,7 +35,7 @@ export default (props) => {
           }
 
           <button
-            onClick={() => props.buildingPurchase(buildingId, instance.id, buildingCost)}
+            onClick={() => props.tryBuildingPurchase(buildingId, instance.id, buildingCost)}
             className={cx('relative btn btn-default btn-sm',{
               'btn-danger': !canAffordBuy,
             })}>

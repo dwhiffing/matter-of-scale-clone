@@ -19,7 +19,7 @@ export default (state = initialState, action) => {
     case 'UPDATE_INSTANCE':
       return shallowUpdate(payload.instanceKey, payload.update, state)
 
-    case 'BUY_BUILDING':
+    case 'DO_BUILDING_PURCHASE':
       return shallowUpdate(payload.instanceKey, {
         money: sub(payload.cost * payload.count),
       }, state)
@@ -36,8 +36,8 @@ export default (state = initialState, action) => {
       return pushToObj(state, newInstances)
     }
 
-    case 'COMPLETE_INSTANCE': {
-      const instanceKey = action.payload.id
+    case 'DO_COMPLETE_INSTANCE': {
+      const instanceKey = payload.instanceKey
       // omit the instace from the store
       const omittedState = Object.values(
         u.omit(instanceKey, state)

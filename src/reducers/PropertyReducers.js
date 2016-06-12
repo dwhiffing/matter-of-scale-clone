@@ -28,12 +28,13 @@ export default (state = initialState, action) => {
       return state
     }
 
-    case 'COMPLETE_INSTANCE': {
-      const property = state[payload.type]
+    case 'DO_COMPLETE_INSTANCE': {
+      const propertyKey = payload.propertyKey
+      const property = state[propertyKey]
 
       // update research currency and next instance tick
       let update = {
-        [payload.type]: {
+        [propertyKey]: {
           toCompleteUntilNextInstance: sub(1),
           researchMoney: add(1),
           completed: add(1),
@@ -43,12 +44,12 @@ export default (state = initialState, action) => {
       // if next is complete, reset it and queue an instance of the next level
       if (property.toCompleteUntilNextInstance <= 1) {
         update = {
-          [payload.type]:  {
+          [propertyKey]:  {
             toCompleteUntilNextInstance: property.research('incrementCost'),
             researchMoney: add(1),
             completed: add(1),
           },
-          [payload.type + 1]:  {
+          [propertyKey + 1]:  {
             unlocked: true,
             toBuild: add(1),
           },

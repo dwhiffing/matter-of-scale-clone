@@ -8,7 +8,7 @@ export default class PropertyView extends React.Component {
   };
 
   render() {
-    const { properties, markInstanceComplete } = this.props
+    const { properties, tryCompleteInstance } = this.props
     return (
       <div>
       {Object.values(properties).map((property, i) => {
@@ -69,7 +69,7 @@ export default class PropertyView extends React.Component {
                         key={i}
                         instance={instance}
                         clickInstance={id => this.context.router.push(`/instance/${id}`)}
-                        clickComplete={id => markInstanceComplete(id)}>
+                        clickComplete={id => tryCompleteInstance(id)}>
                       </InstanceLineItem>
                     )
                   })}

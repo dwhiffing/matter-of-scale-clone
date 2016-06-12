@@ -3,22 +3,24 @@ import { persistStore, autoRehydrate, createTransform } from 'redux-persist'
 import { startTicking } from 'actions/InterfaceActions'
 import { toObj } from 'utils/helpers'
 import _ from 'lodash'
-
+import createLogger from 'redux-logger'
 import createSagaMiddleware from 'redux-saga'
 
-import BuildingSagas from '../sagas/BuildingSagas'
-import InstanceSagas from '../sagas/InstanceSagas'
-import InterfaceSagas from '../sagas/InterfaceSagas'
-import PropertySagas from '../sagas/PropertySagas'
-import createLogger from 'redux-logger'
+import * as reducers from 'reducers'
+import BuildingSagas from 'sagas/BuildingSagas'
+import InstanceSagas from 'sagas/InstanceSagas'
+import InterfaceSagas from 'sagas/InterfaceSagas'
+import PropertySagas from 'sagas/PropertySagas'
 
 const sagaMiddleware = createSagaMiddleware()
 
 // combine all reducers into a single object
-import * as reducers from '../reducers'
 export const combinedReducers = combineReducers(reducers)
 
-const logger = createLogger({ predicate: (getState, action) => action.type !== 'DO_TICK' })
+const logger = createLogger({
+  predicate: (getState, action) => action.type !== 'DO_TICK',
+})
+
 // guide to redux middleware: http://gaearon.github.io/redux/docs/advanced/Middleware.html
 const composedStore = compose(
   applyMiddleware(sagaMiddleware, logger)

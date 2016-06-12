@@ -20,6 +20,6 @@ export const flashMessage = (message) => ({
 })
 
 export const changeUpgradePoints = (upgrades) => ({
-  type: 'CHANGE_UPGRADE_POINTS',
+  type: 'SET_UPGRADE_POINTS',
   payload: upgrades,
 })

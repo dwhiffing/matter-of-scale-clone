@@ -11,7 +11,7 @@ export default React.createClass({
 
     let progressBar
 
-    const { buildingPurchase, upgradePurchase, unlockBuilding, ui } = this.props
+    const { tryBuildingPurchase, upgradePurchase, unlockBuilding, ui } = this.props
     const { id, money, currencyName, goal } = instance
     const { researchMoney, researchName } = instance.property()
 
@@ -30,7 +30,7 @@ export default React.createClass({
 
     if (complete) {
       progressBar = (
-        <div onClick={() => this.props.markInstanceComplete(id)}>
+        <div onClick={() => this.props.tryCompleteInstance(id)}>
 
           <ProgressBar
             className="pointer"
@@ -98,7 +98,7 @@ export default React.createClass({
                   building={building}
                   instance={instance}
                   upgradePurchase={upgradePurchase}
-                  buildingPurchase={buildingPurchase}
+                  tryBuildingPurchase={tryBuildingPurchase}
                   unlockBuilding={unlockBuilding}>
                 </BuildingLineItem>
               )
