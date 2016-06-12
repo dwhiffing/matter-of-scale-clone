@@ -6,7 +6,7 @@ import { add, pushToObj, shallowUpdate, toObj } from 'utils/helpers'
 const initialState = {}
 
 export default (state = initialState, action) => {
-  const {  type, payload } = action
+  const { type, payload } = action
 
   switch (type) {
 
@@ -23,7 +23,7 @@ export default (state = initialState, action) => {
         count: add(payload.count),
       }, state)
 
-    case 'CREATE_INSTANCE': {
+    case 'DO_CREATE_INSTANCE': {
       const { id, type, count } = payload
       const newBuildingSet = _.times(count, () =>
         u.map(b => rehydrate(b), BuildingFactory(id, type))

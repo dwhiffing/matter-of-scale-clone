@@ -24,12 +24,11 @@ export default (state = initialState, action) => {
         money: sub(payload.cost * payload.count),
       }, state)
 
-    case 'CREATE_INSTANCE': {
-      const { id, type, count } = action.payload
+    case 'DO_CREATE_INSTANCE': {
+      const { id, type, nth, count } = action.payload
       const property = store.getState().properties[type]
 
       const newInstances = _.times(count, () => {
-        const nth = Object.values(state).filter(obj => obj.type == property.id).length + 1
         const instance = rehydrate(InstanceFactory(id, property, nth))
         return instance
       })
@@ -50,8 +49,8 @@ export default (state = initialState, action) => {
       }, omittedState)
     }
 
-    case 'PRE_TICK':
-      return u.map((instance) => {
+    case 'DO_TICK': {
+      const newState = u.map((instance) => {
 
         let money = instance.money + instance.income()
 
@@ -69,13 +68,13 @@ export default (state = initialState, action) => {
 
       }, state)
 
-    case 'DO_TICK':
       return u.map((instance) => {
         return u({
           progress: instance.goalProgress(),
           autoComplete: c => instance.goalProgress() < 100 ? c : c + 0.5,
         }, instance)
-      }, state)
+      }, newState)
+    }
 
     default:
       return state

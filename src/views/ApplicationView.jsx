@@ -3,33 +3,29 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { mapStateKeysToProps, format, titleify } from 'utils/helpers'
 
-import { InterfaceThunks } from 'actions/InterfaceActions'
-import { InstanceThunks } from 'actions/InstanceActions'
-import { BuildingThunks } from 'actions/BuildingActions'
-import { PropertyThunks } from 'actions/PropertyActions'
+import * as InterfaceActions from 'actions/InterfaceActions'
+import * as InstanceActions from 'actions/InstanceActions'
+import * as BuildingActions from 'actions/BuildingActions'
+import * as PropertyActions from 'actions/PropertyActions'
 
-const stateToMap = mapStateKeysToProps(['ui', 'properties', 'instances', 'buildings'])
-const actionsToMap = Object.assign({}, InterfaceThunks, PropertyThunks, InstanceThunks, BuildingThunks)
+const stateToMap = mapStateKeysToProps([
+  'ui',
+  'properties',
+  'instances',
+  'buildings',
+])
+
+const actionsToMap = Object.assign({},
+  InterfaceActions,
+  PropertyActions,
+  InstanceActions,
+  BuildingActions
+)
 
 const ApplicationView = React.createClass({
 
-  componentDidUpdate() {
-    // ensure there is always at least one hamlet
-    if (this.props.ui.doTickTimeout && Object.keys(this.props.instances).length === 0) {
-      this.props.createInstance(0)
-    }
-
-    // TODO: This should be done in the InstanceReducer when incrementing the autoComplete time
-    // However, it will require several other parts of the instance logic to be rewritten
-    const instances = Object.values(this.props.instances)
-    const autoCompletedInstances = instances.filter(i => {
-      return i.progress >= 100 && i.autoComplete >= i.autoCompleteDuration()
-    })
-    autoCompletedInstances.forEach(i => this.props.markInstanceComplete(i.id))
-  },
-
   render() {
-    const { instances, properties, params } = this.props
+    const { instances, properties, params, children } = this.props
 
     let instance, property
     if (params.instance) {
@@ -59,9 +55,7 @@ const ApplicationView = React.createClass({
           }
         </ol>
 
-        {this.props.children &&
-          React.cloneElement(this.props.children, { ...this.props })
-        }
+        {children && React.cloneElement(children, { ...this.props })}
 
         <nav className="navbar navbar-default navbar-fixed-bottom">
           <div className="container">

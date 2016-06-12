@@ -22,10 +22,9 @@ export default (state = initialState, action) => {
         multi: state.multi < 100 ? state.multi * 10 : 1,
       }, state)
 
-    case 'START_TICKING':
+    case 'SET_TICK_TIMEOUT':
       return u({
         doTickTimeout: payload.doTickTimeout,
-        preTickTimeout: payload.preTickTimeout,
       }, state)
 
     case 'CHANGE_UPGRADE_POINTS': {

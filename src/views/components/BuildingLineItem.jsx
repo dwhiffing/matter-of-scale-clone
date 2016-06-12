@@ -24,7 +24,7 @@ export default (props) => {
 
           {building.count > 0 &&
             <button
-              onClick={() => props.doUpgradePurchase(instance.id, index, building.upgradeCost())}
+              onClick={() => props.upgradePurchase(instance.id, index, building.upgradeCost())}
               className={cx('btn btn-default btn-sm', {
                 'btn-danger': !canAffordUpgrade,
               })}>
@@ -35,7 +35,7 @@ export default (props) => {
           }
 
           <button
-            onClick={() => props.doBuildingPurchase(buildingId, instance.id, buildingCost)}
+            onClick={() => props.buildingPurchase(buildingId, instance.id, buildingCost)}
             className={cx('relative btn btn-default btn-sm',{
               'btn-danger': !canAffordBuy,
             })}>

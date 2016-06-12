@@ -17,7 +17,7 @@ export default (state = initialState, action) => {
     case 'UPDATE_PROPERTY':
       return shallowUpdate(payload.propertyKey, payload.update, state)
 
-    case 'CREATE_INSTANCE': {
+    case 'DO_CREATE_INSTANCE': {
       const property = state[payload.type]
       // deduct build queue if instance was created by completing an instance
       if (property.toBuild > 0 && property.id !== 0) {

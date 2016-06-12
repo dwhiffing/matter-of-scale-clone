@@ -4,20 +4,24 @@ import { startTicking } from 'actions/InterfaceActions'
 import { toObj } from 'utils/helpers'
 import _ from 'lodash'
 
-const thunk = function thunkMiddleware({ dispatch, getState }) {
-  return next => action =>
-    typeof action === 'function' ?
-      action(dispatch, getState) :
-      next(action)
-}
+import createSagaMiddleware from 'redux-saga'
+
+import BuildingSagas from '../sagas/BuildingSagas'
+import InstanceSagas from '../sagas/InstanceSagas'
+import InterfaceSagas from '../sagas/InterfaceSagas'
+import PropertySagas from '../sagas/PropertySagas'
+import createLogger from 'redux-logger'
+
+const sagaMiddleware = createSagaMiddleware()
 
 // combine all reducers into a single object
 import * as reducers from '../reducers'
 export const combinedReducers = combineReducers(reducers)
 
+const logger = createLogger({ predicate: (getState, action) => action.type !== 'DO_TICK' })
 // guide to redux middleware: http://gaearon.github.io/redux/docs/advanced/Middleware.html
 const composedStore = compose(
-  applyMiddleware(thunk)
+  applyMiddleware(sagaMiddleware, logger)
 )(createStore)
 
 // persist to local storage with redux-persist
@@ -62,7 +66,12 @@ persistStore(PersistedStore, {
   ],
 }, () => {
   // start the game once data has loaded
+  sagaMiddleware.run(BuildingSagas)
+  sagaMiddleware.run(InstanceSagas)
+  sagaMiddleware.run(InterfaceSagas)
+  sagaMiddleware.run(PropertySagas)
   PersistedStore.dispatch(startTicking())
 })
+
 
 export default PersistedStore

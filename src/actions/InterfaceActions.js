@@ -1,64 +1,25 @@
-export const clearSave = () => {
-  return (dispatch) => {
-    dispatch({ type: 'CLEAR_SAVE' })
-  }
-}
+export const clearSave = () => ({
+  type: 'CLEAR_SAVE',
+})
 
-export const toggleMuliplier = () => {
-  return (dispatch) => {
-    dispatch({ type: 'TOGGLE_MULTIPLIER' })
-  }
-}
+export const stopTicking = () => ({
+  type: 'STOP_TICKING',
+})
 
-export const changeUpgradePoints = (upgrades) => {
-  return (dispatch) => {
-    dispatch({ type: 'CHANGE_UPGRADE_POINTS', payload: upgrades })
-  }
-}
+export const startTicking = () => ({
+  type: 'START_TICKING',
+})
 
-export function startTicking() {
-  return (dispatch, getState) => {
-    const { doTickTimeout, preTickTimeout } = getState().ui
+export const toggleMuliplier = () => ({
+  type: 'TOGGLE_MULTIPLIER',
+})
 
-    if (doTickTimeout === null && preTickTimeout === null) {
-      const preTickTimeout = setInterval(() => dispatch({ type: 'PRE_TICK' }), 500)
-      const doTickTimeout = setInterval(() => dispatch({ type: 'DO_TICK' }), 500)
-      dispatch({ type: 'START_TICKING', payload: {
-        doTickTimeout: doTickTimeout,
-        preTickTimeout: preTickTimeout,
-      } })
-    }
-  }
-}
+export const flashMessage = (message) => ({
+  type: 'FLASH_MESSAGE',
+  payload: message,
+})
 
-export function stopTicking() {
-  return (dispatch, getState) => {
-    const { doTickTimeout, preTickTimeout } = getState().ui
-
-    if (doTickTimeout !== null && preTickTimeout !== null) {
-      clearInterval(doTickTimeout)
-      clearInterval(preTickTimeout)
-      dispatch({ type: 'STOP_TICKING', payload: {
-        doTickTimeout: doTickTimeout,
-        preTickTimeout: preTickTimeout,
-      } })
-    }
-  }
-}
-
-export function flashMessage(message) {
-  return (dispatch) => {
-    dispatch({
-      type: 'FLASH_MESSAGE',
-      payload: message,
-    })
-  }
-}
-
-export const InterfaceThunks = {
-  stopTicking,
-  startTicking,
-  toggleMuliplier,
-  clearSave,
-  changeUpgradePoints,
-}
+export const changeUpgradePoints = (upgrades) => ({
+  type: 'CHANGE_UPGRADE_POINTS',
+  payload: upgrades,
+})

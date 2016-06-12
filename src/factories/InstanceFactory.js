@@ -23,7 +23,7 @@ export default (id, property, nth) => {
     // the goal for this instance (just income goals for now, this should have more variety)
     goal: GoalFactory(property.id, nth),
 
-    // the number of this instance type
+    // the number of this instance type for this property
     nth: nth,
 
     // how much money the instance has accumulated
