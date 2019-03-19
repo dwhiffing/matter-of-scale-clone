@@ -1,7 +1,7 @@
 import React from 'react'
 import { ProgressBar } from 'react-bootstrap'
 
-export default (instance, onClick) => {
+const InstanceProgressBar = (instance, onClick) => {
   const progress = Math.floor(Math.min(100, instance.progress))
   if (progress >= 100) {
     return (
@@ -19,3 +19,5 @@ export default (instance, onClick) => {
     return <ProgressBar now={progress} label={`${progress}%`} />
   }
 }
+
+export default InstanceProgressBar

@@ -1,7 +1,13 @@
 import React from 'react'
 import { format as f, titleify, Color } from 'utils/helpers'
+import InstanceLineItem from '../../InstanceView/components/InstanceLineItem'
 
-export default function InstanceList({ instances, tryCompleteInstance }) {
+export default function InstanceList({
+  property,
+  instances,
+  tryCompleteInstance,
+  clickInstance,
+}) {
   const income = f(property.income(), '0,0')
   const money = f(property.money(), '0,0')
   const research = f(property.researchMoney, '0')
@@ -32,7 +38,7 @@ export default function InstanceList({ instances, tryCompleteInstance }) {
             <InstanceLineItem
               key={i}
               instance={instance}
-              clickInstance={id => push(`/instance/${id}`)}
+              clickInstance={clickInstance}
               clickComplete={id => tryCompleteInstance(id)}
             />
           )

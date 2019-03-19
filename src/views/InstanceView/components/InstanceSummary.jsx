@@ -1,11 +1,12 @@
 import React from 'react'
-import { format as f } from 'utils/helpers'
+import { format as f, titleify, Color } from 'utils/helpers'
+import InstanceProgressBar from './InstanceProgressBar'
 
 export default function InstanceSummary({ instance, tryCompleteInstance }) {
   const currencyDiv = <Color>{titleify(instance.currencyName)}</Color>
 
   return (
-    <>
+    <div>
       <div className="text-center">
         <h2>{instance.property().name}</h2>
 
@@ -21,6 +22,6 @@ export default function InstanceSummary({ instance, tryCompleteInstance }) {
         Contains {f(instance.money, '0,0')} {currencyDiv} producing{' '}
         {instance.income()} {currencyDiv} / sec
       </p>
-    </>
+    </div>
   )
 }

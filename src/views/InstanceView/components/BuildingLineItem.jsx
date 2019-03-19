@@ -1,7 +1,7 @@
 import React from 'react'
 import cx from 'classnames'
 
-export default (props) => {
+const BuildingLineItem = props => {
   if (!props.building) return false
 
   const { index, building, instance, ui } = props
@@ -9,8 +9,9 @@ export default (props) => {
   const buildingCost = building.cost()
   const percent = Math.max(-100, 100 - building.autoBuyPercent())
 
-  const buildingId = instance.id*10 + index
-  const canAffordUpgrade = building.upgradeCost() <= ui.upgrades || building.count == 0
+  const buildingId = instance.id * 10 + index
+  const canAffordUpgrade =
+    building.upgradeCost() <= ui.upgrades || building.count == 0
   const canAffordBuy = buildingCost * ui.multi <= instance.money
 
   if (!building.unlocked() && canAffordBuy) {
@@ -21,56 +22,54 @@ export default (props) => {
     <tr>
       <td>
         <div className="btn-group">
-
-          {building.count > 0 &&
+          {building.count > 0 && (
             <button
-              onClick={() => props.tryUpgradePurchase(instance.id, index, building.upgradeCost())}
+              onClick={() =>
+                props.tryUpgradePurchase(
+                  instance.id,
+                  index,
+                  building.upgradeCost()
+                )
+              }
               className={cx('btn btn-default btn-sm', {
                 'btn-danger': !canAffordUpgrade,
               })}>
-
               {building.upgradeCost()}U
-
             </button>
-          }
+          )}
 
           <button
-            onClick={() => props.tryBuildingPurchase(buildingId, instance.id, buildingCost)}
-            className={cx('relative btn btn-default btn-sm',{
+            onClick={() =>
+              props.tryBuildingPurchase(buildingId, instance.id, buildingCost)
+            }
+            className={cx('relative btn btn-default btn-sm', {
               'btn-danger': !canAffordBuy,
             })}>
-
             {building.unlocked() ? building.name : '????'}
 
             <div className="bg-progress-bar" style={{ right: `${percent}%` }} />
-
           </button>
-
         </div>
       </td>
 
-      <td>
-        {building.count}
-      </td>
+      <td>{building.count}</td>
+
+      <td>{buildingCost * ui.multi}</td>
 
       <td>
-        {buildingCost * ui.multi}
+        <span>{building.incomeForSingle()}</span>
+        {building.upgrades() > 1 && (
+          <span>
+            <small>
+              ({building.baseIncome}x{building.upgrades()})
+            </small>
+          </span>
+        )}
       </td>
 
-      <td>
-        <span>
-          {building.incomeForSingle()}
-        </span>
-        {building.upgrades() > 1 &&
-          <span><small>
-            ({building.baseIncome}x{building.upgrades()})
-          </small></span>
-        }
-      </td>
-
-      <td>
-        {building.income()}
-      </td>
+      <td>{building.income()}</td>
     </tr>
   )
 }
+
+export default BuildingLineItem

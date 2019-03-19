@@ -30,8 +30,12 @@ export default class PropertyView extends React.Component {
 
               {instances && (
                 <InstanceList
+                  property={property}
                   instances={instances}
                   tryCompleteInstance={tryCompleteInstance}
+                  clickInstance={id =>
+                    this.context.router.push(`/instance/${id}`)
+                  }
                 />
               )}
             </div>

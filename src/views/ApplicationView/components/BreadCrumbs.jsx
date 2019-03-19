@@ -12,7 +12,7 @@ export default function BreadCrumbs({ instance, property }) {
         <a href="#/property">Properties</a>
       </li>
 
-      {instance && (
+      {property && instance && (
         <li className="active">
           <a href={`#/instance/${instance}`}>
             {titleify(property.name)} {instance}
