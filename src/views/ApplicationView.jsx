@@ -22,8 +22,7 @@ const actionsToMap = Object.assign({},
   BuildingActions
 )
 
-const ApplicationView = React.createClass({
-
+export default class ApplicationView extends React.Component {
   render() {
     const { instances, properties, params, children } = this.props
 
@@ -82,7 +81,7 @@ const ApplicationView = React.createClass({
         </nav>
       </div>
     )
-  },
-})
+  }
+}
 
 export default connect(stateToMap, actionsToMap)(ApplicationView)

@@ -3,7 +3,7 @@ import { format as f, titleify, Color } from 'utils/helpers'
 import { ProgressBar } from 'react-bootstrap'
 import BuildingLineItem from 'views/components/BuildingLineItem'
 
-export default React.createClass({
+export default class InstanceView extends React.Component {
   render() {
     const instance = this.props.instances[this.props.params.instance]
 
@@ -11,7 +11,12 @@ export default React.createClass({
 
     let progressBar
 
-    const { tryBuildingPurchase, tryUpgradePurchase, _unlockBuilding, ui } = this.props
+    const {
+      tryBuildingPurchase,
+      tryUpgradePurchase,
+      _unlockBuilding,
+      ui,
+    } = this.props
     const { id, money, currencyName, goal } = instance
     const { researchMoney, researchName } = instance.property()
 
@@ -31,43 +36,32 @@ export default React.createClass({
     if (complete) {
       progressBar = (
         <div onClick={() => this.props.tryCompleteInstance(id)}>
-
           <ProgressBar
             className="pointer"
             now={autoCompleteProgress}
-            label={`${progress}%`}>
-          </ProgressBar>
+            label={`${progress}%`}
+          />
 
-          <h6>
-            Click bar to complete level or wait for auto-complete
-          </h6>
-
+          <h6>Click bar to complete level or wait for auto-complete</h6>
         </div>
       )
     } else {
-      progressBar = (
-        <ProgressBar now={progress} label={`${progress}%`} />
-      )
+      progressBar = <ProgressBar now={progress} label={`${progress}%`} />
     }
 
     return (
       <div className={instance.property().name}>
         <div className="text-center">
-
-          <h2>
-            {name}
-          </h2>
+          <h2>{name}</h2>
 
           {progressBar}
 
-          <h5>
-            Goal: {goal.description}
-          </h5>
-
+          <h5>Goal: {goal.description}</h5>
         </div>
 
         <p>
-          Contains {f(money, '0,0')} {currencyDiv} producing {income}  {currencyDiv} / sec
+          Contains {f(money, '0,0')} {currencyDiv} producing {income}{' '}
+          {currencyDiv} / sec
         </p>
 
         <p>
@@ -79,14 +73,15 @@ export default React.createClass({
         </a>
 
         <table className="table">
-
-          <thead><tr>
-            <th>Building</th>
-            <th>#</th>
-            <th>Cost</th>
-            <th>Income</th>
-            <th>/ Tick</th>
-          </tr></thead>
+          <thead>
+            <tr>
+              <th>Building</th>
+              <th>#</th>
+              <th>Cost</th>
+              <th>Income</th>
+              <th>/ Tick</th>
+            </tr>
+          </thead>
 
           <tbody>
             {instance.buildings().map((building, index) => {
@@ -99,14 +94,13 @@ export default React.createClass({
                   instance={instance}
                   tryUpgradePurchase={tryUpgradePurchase}
                   tryBuildingPurchase={tryBuildingPurchase}
-                  _unlockBuilding={_unlockBuilding}>
-                </BuildingLineItem>
+                  _unlockBuilding={_unlockBuilding}
+                />
               )
             })}
           </tbody>
-
         </table>
       </div>
     )
-  },
-})
+  }
+}
