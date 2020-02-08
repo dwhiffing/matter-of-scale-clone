@@ -1,7 +1,7 @@
 import { put, select, take, fork } from 'redux-saga/effects'
 import { tryCompleteInstance } from 'actions/InstanceActions'
 
-export const delay = (duration) => {
+export const delay = duration => {
   return new Promise(r => setTimeout(() => r(), duration))
 }
 
@@ -10,7 +10,7 @@ function* doTickSaga() {
     take('START_TICKING')
 
     while (true) {
-      yield delay(100)
+      yield delay(10)
       yield put({ type: 'DO_TICK' })
       const instances = yield select(state => Object.values(state.instances))
       const completeInstances = instances.filter(i => {
