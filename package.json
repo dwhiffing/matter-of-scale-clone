@@ -29,7 +29,7 @@
     "bootstrap": "^3.3.6",
     "classnames": "^2.2.1",
     "history": "^3.0.0",
-    "lodash": "^4.13.1",
+    "lodash": "^4.17.19",
     "numeral": "^1.5.3",
     "react": "^15.1.0",
     "react-bootstrap": "^0.29.4",
